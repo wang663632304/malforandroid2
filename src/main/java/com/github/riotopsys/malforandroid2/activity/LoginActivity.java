@@ -1,5 +1,7 @@
 package com.github.riotopsys.malforandroid2.activity;
 
+import java.util.List;
+
 import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -15,7 +17,8 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.github.riotopsys.malforandroid2.R;
-import com.github.riotopsys.malforandroid2.database.DBUpdateTask;
+import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs;
+import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs.Callback;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.github.riotopsys.malforandroid2.server.RestHelper;
@@ -25,7 +28,7 @@ import com.google.inject.Inject;
 import de.greenrobot.event.EventBus;
 
 public class LoginActivity extends BaseActivity implements OnClickListener,
-		OnEditorActionListener {
+		OnEditorActionListener, Callback<String> {
 
 	@InjectView(R.id.login_dipshit_button)
 	private Button dipshit;
@@ -55,6 +58,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setMessage(getString(R.string.loading));
 		progressDialog.setCanceledOnTouchOutside(false);
+
+		new ReadNameValuePairs<String>(getHelper(), this).execute("TOKEN");
 	}
 
 	@Override
@@ -108,12 +113,18 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 		}
 		progressDialog.show();
 		restHelper.setCredentials(user, pass);
-
-		new DBUpdateTask<NameValuePair>(getHelper()).execute(
-				new NameValuePair("username", user), 
-				new NameValuePair("password", pass));
-
 		ServerInterface.verifyCredentials(this);
 	}
 
+	@Override
+	public void onNameValuePairsReady(List<NameValuePair<String>> data) {
+		for (NameValuePair<String> pair : data) {
+			if ("TOKEN".equals(pair.name)) {
+				restHelper.setToken((String) pair.value);
+				startActivity(new Intent(this, HelloAndroidActivity.class));
+				finish();
+			}
+			break;
+		}
+	}
 }

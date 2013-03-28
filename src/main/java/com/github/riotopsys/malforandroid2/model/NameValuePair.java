@@ -7,15 +7,15 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "name_value_pairs")
-public class NameValuePair {
+public class NameValuePair<T extends Serializable> {
 
 	@DatabaseField(id = true)
 	public String name;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
-	public Serializable value;
+	public T value;
 	
-	public NameValuePair(String name, Serializable value) {
+	public NameValuePair(String name, T value) {
 		this.name = name;
 		this.value = value;
 	}

@@ -31,6 +31,7 @@ public class DBUpdateTask<T extends Object> extends AsyncTask<T, Void, Void> {
 		} catch (SQLException e) {
 			Log.e(TAG, "cannot create dao", e);
 		}
+		dbHelper = null;
 		return null;
 	}
 

@@ -15,6 +15,7 @@ import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
 import com.github.riotopsys.malforandroid2.model.AnimeListResponse;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -22,7 +23,6 @@ import com.j256.ormlite.dao.Dao;
 
 import de.greenrobot.event.EventBus;
 
-//public class MALapi extends IntentService {
 public class ServerInterface extends RoboIntentService {
 
 	private static final String TAG = ServerInterface.class.getSimpleName();
@@ -155,11 +155,14 @@ public class ServerInterface extends RoboIntentService {
 		}
 	}
 	
-	private void verifyCredentials() throws MalformedURLException {
+	private void verifyCredentials() throws MalformedURLException, SQLException {
 		
 		RestResult<String> result = restHelper.get(urlBuilder.getVerifyCredentialsUrl());
 		bus.post(new CredentialVerificationEvent(result.code));
-		
+		if ( result.code == 200 ){
+			Dao<NameValuePair<String>, String> dao = getHelper().getDao(NameValuePair.class);
+			dao.createOrUpdate(new NameValuePair<String>("TOKEN", restHelper.getToken()));
+		}
 	}
 	
 	public static void getAnimeList(Context context) {
