@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,12 +16,11 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
-import com.github.riotopsys.malforandroid2.runnable.ShowAlert;
 import com.github.riotopsys.malforandroid2.server.RestHelper;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.google.inject.Inject;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
+
+import de.greenrobot.event.EventBus;
 
 public class LoginActivity extends BaseActivity implements OnClickListener,
 		OnEditorActionListener {
@@ -40,12 +38,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 	private RestHelper restHelper;
 
 	@Inject
-	private Bus bus;
+	private EventBus bus;
 
 	private ProgressDialog progressDialog;
 	
-	private Handler handler = new Handler();
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,22 +67,19 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 		super.onResume();
 	}
 
-	@Subscribe
-	public void loginResults(CredentialVerificationEvent cve) {
+	public void onEventMainThread(CredentialVerificationEvent cve) {
 		progressDialog.cancel();
 		if (cve.code == 200) {
 			startActivity(new Intent(this, HelloAndroidActivity.class));
 			finish();
-//		} else if (cve.code == 401) {
-//			handler.post(new ShowAlert(new AlertDialog.Builder(this).setTitle("Login failed")
-//					.setMessage("Invalid user and password combination")
-//					.create()));
-//			;
+		} else if (cve.code == 401) {
+			new AlertDialog.Builder(this).setTitle("Login failed")
+					.setMessage("Invalid user and password combination")
+					.create().show();
 		} else {
-			handler.post(new ShowAlert(this, "Login failed", "Unknown server error. Please try again later") );
-//			handler.post(new ShowAlert(new AlertDialog.Builder(this).setTitle("Login failed")
-//					.setMessage("Unknown server error. Please try again later")
-//					.create()));
+			new AlertDialog.Builder(this).setTitle("Login failed")
+					.setMessage("Unknown server error. Please try again later")
+					.create().show();
 		}
 	}
 

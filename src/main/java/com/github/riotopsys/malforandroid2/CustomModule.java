@@ -4,8 +4,8 @@ import com.github.riotopsys.malforandroid2.server.RestHelper;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.squareup.otto.Bus;
-import com.squareup.otto.ThreadEnforcer;
+
+import de.greenrobot.event.EventBus;
 
 public class CustomModule extends AbstractModule {
 
@@ -14,11 +14,10 @@ public class CustomModule extends AbstractModule {
 		
 	}
 	
-	
 	@Provides
 	@Singleton
-	public Bus provideBus(){
-		return new Bus( ThreadEnforcer.ANY );
+	public EventBus provideBus(){
+		return new EventBus();
 	}
 	
 	@Provides

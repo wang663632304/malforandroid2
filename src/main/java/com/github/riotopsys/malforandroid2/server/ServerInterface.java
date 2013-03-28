@@ -19,7 +19,8 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.squareup.otto.Bus;
+
+import de.greenrobot.event.EventBus;
 
 //public class MALapi extends IntentService {
 public class ServerInterface extends RoboIntentService {
@@ -47,7 +48,7 @@ public class ServerInterface extends RoboIntentService {
 	private Gson gson;
 	
 	@Inject
-	private Bus bus;
+	private EventBus bus;
 
 	public ServerInterface() {
 		super(TAG);
@@ -122,12 +123,11 @@ public class ServerInterface extends RoboIntentService {
 			
 			AnimeRecord ar = gson.fromJson(result.result, AnimeRecord.class);
 			getHelper().getDao(AnimeRecord.class).createOrUpdate(ar);
-			postAnimeUpdated(id);
+			bus.post(new AnimeUpdateEvent(id));
 		}
 	}
 
 	private void getAnimeList() throws MalformedURLException, SQLException {
-		//TODO: need credential storage
 		RestResult<String> result = restHelper.get(urlBuilder.getAnimeListUrl("riotopsys"));
 		if (result.code == 200) {
 			Log.v(TAG, result.result);
@@ -138,7 +138,6 @@ public class ServerInterface extends RoboIntentService {
 			}
 			
 			Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
-//			PojoUpdater<AnimeRecord> pojoUpdater = new PojoUpdater<AnimeRecord>();
 			
 			for ( AnimeRecord ar : alr ){
 				AnimeRecord arOriginal = dao.queryForId(ar.id);
@@ -146,13 +145,12 @@ public class ServerInterface extends RoboIntentService {
 					arOriginal.status = ar.status;
 					arOriginal.score = ar.score;
 					arOriginal.episodes = ar.episodes;
-//					pojoUpdater.update(arOriginal, ar);
 					
 					dao.createOrUpdate(arOriginal);
 				} else {
 					dao.createOrUpdate(ar);
 				}
-				postAnimeUpdated(ar.id);
+				bus.post(new AnimeUpdateEvent(arOriginal.id));
 			}
 		}
 	}
@@ -164,14 +162,6 @@ public class ServerInterface extends RoboIntentService {
 		
 	}
 	
-	private void postAnimeUpdated(int id) {
-//		Intent i = new Intent(ANIME_UPDATED);
-//		i.putExtra(ID_KEY, id);
-//		sendBroadcast(i);
-		
-		bus.post(new AnimeUpdateEvent(id));
-	}
-
 	public static void getAnimeList(Context context) {
 		Intent serviceIntent = new Intent(context, ServerInterface.class);
 		Bundle bundle = new Bundle();

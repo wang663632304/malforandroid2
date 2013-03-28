@@ -18,8 +18,8 @@ import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.loader.AnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.google.inject.Inject;
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
+
+import de.greenrobot.event.EventBus;
 
 public class ItemListFragment extends RoboFragment implements LoaderManager.LoaderCallbacks<List<AnimeRecord>> {
 	
@@ -30,7 +30,7 @@ public class ItemListFragment extends RoboFragment implements LoaderManager.Load
 	private AnimeAdapter animeAdapter;
 	
 	@Inject 
-	private Bus bus;
+	private EventBus bus;
 	
 	private Loader<List<AnimeRecord>> animeLoader;
 	
@@ -63,8 +63,7 @@ public class ItemListFragment extends RoboFragment implements LoaderManager.Load
 		super.onResume();
 	}
 	
-	@Subscribe
-	public void updateReady( AnimeUpdateEvent aue ){
+	public void onEvent( AnimeUpdateEvent aue ){
 		if ( animeLoader != null ){
 			animeLoader.onContentChanged();
 		}
