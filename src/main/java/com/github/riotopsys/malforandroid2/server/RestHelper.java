@@ -30,10 +30,6 @@ public class RestHelper {
 	private static final String TAG = RestHelper.class.getSimpleName();
 	private String token = null;
 
-//	public RestHelper(String token) {
-//		mToken = token;
-//	}
-
 	public RestResult<String> get(URL url) {
 		HttpURLConnection con = null;
 		RestResult<String> result = new RestResult<String>();
@@ -136,6 +132,10 @@ public class RestHelper {
 
 	public void setCredentials(String username, String password) {
 		token = "Basic " + Base64.encodeToString((username + ":" + password).getBytes(), Base64.DEFAULT | Base64.NO_WRAP);
+	}
+	
+	public String getToken() {
+		return token;
 	}
 
 }

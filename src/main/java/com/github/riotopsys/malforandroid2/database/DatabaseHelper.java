@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
@@ -21,7 +22,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private static final int DB_VERSION = 1;
 	
 	@SuppressWarnings("rawtypes")
-	private static final List<Class> STORED_MODLES = Arrays.asList( (Class)AnimeRecord.class );
+	private static final List<Class> STORED_MODLES = Arrays.asList( (Class)AnimeRecord.class, (Class)NameValuePair.class );
 
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);

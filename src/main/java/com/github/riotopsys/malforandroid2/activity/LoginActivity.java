@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.github.riotopsys.malforandroid2.R;
+import com.github.riotopsys.malforandroid2.database.DBUpdateTask;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
+import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.github.riotopsys.malforandroid2.server.RestHelper;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.google.inject.Inject;
@@ -106,6 +108,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 		}
 		progressDialog.show();
 		restHelper.setCredentials(user, pass);
+
+		new DBUpdateTask<NameValuePair>(getHelper()).execute(
+				new NameValuePair("username", user), 
+				new NameValuePair("password", pass));
+
 		ServerInterface.verifyCredentials(this);
 	}
 

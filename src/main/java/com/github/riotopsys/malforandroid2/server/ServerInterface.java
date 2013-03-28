@@ -150,7 +150,7 @@ public class ServerInterface extends RoboIntentService {
 				} else {
 					dao.createOrUpdate(ar);
 				}
-				bus.post(new AnimeUpdateEvent(arOriginal.id));
+				bus.post(new AnimeUpdateEvent(ar.id));
 			}
 		}
 	}
