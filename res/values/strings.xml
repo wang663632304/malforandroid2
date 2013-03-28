@@ -5,4 +5,9 @@
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="login_button">Login</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="login_error_title">Login failed</string>
+    <string name="login_error_invalid_combo">Invalid user and password combination</string>
+    <string name="login_error_unknown_issue">Unknown server error. Please try again later</string>
+    <string name="login_error_no_creds">Please enter both a username and a password</string>
 </resources>

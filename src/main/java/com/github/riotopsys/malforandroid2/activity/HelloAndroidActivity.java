@@ -31,8 +31,6 @@ public class HelloAndroidActivity extends BaseActivity {
         transaction.replace(R.id.list_frame, new ItemListFragment());
         transaction.commit();
         
-//        ServerInterface.getAnimeList(this);
-//        ServerInterface.getAnimeRecord(this,9611);
     }
     
     @Override

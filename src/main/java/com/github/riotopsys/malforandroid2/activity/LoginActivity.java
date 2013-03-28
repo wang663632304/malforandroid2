@@ -41,7 +41,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 	private EventBus bus;
 
 	private ProgressDialog progressDialog;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,7 +51,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 		password.setOnEditorActionListener(this);
 
 		progressDialog = new ProgressDialog(this);
-		progressDialog.setMessage("Loading...");
+		progressDialog.setMessage(getString(R.string.loading));
 		progressDialog.setCanceledOnTouchOutside(false);
 	}
 
@@ -73,13 +73,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 			startActivity(new Intent(this, HelloAndroidActivity.class));
 			finish();
 		} else if (cve.code == 401) {
-			new AlertDialog.Builder(this).setTitle("Login failed")
-					.setMessage("Invalid user and password combination")
-					.create().show();
+			new AlertDialog.Builder(this).setTitle(R.string.login_error_title)
+					.setMessage(R.string.login_error_invalid_combo).create()
+					.show();
 		} else {
-			new AlertDialog.Builder(this).setTitle("Login failed")
-					.setMessage("Unknown server error. Please try again later")
-					.create().show();
+			new AlertDialog.Builder(this).setTitle(R.string.login_error_title)
+					.setMessage(R.string.login_error_unknown_issue).create()
+					.show();
 		}
 	}
 
@@ -97,9 +97,15 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 	}
 
 	public void processLogin() {
+		String user = username.getText().toString().trim();
+		String pass = password.getText().toString().trim();
+		if (user.equals("") || pass.equals("")) {
+			new AlertDialog.Builder(this).setTitle(R.string.login_error_title)
+					.setMessage(R.string.login_error_no_creds).create().show();
+			return;
+		}
 		progressDialog.show();
-		restHelper.setCredentials(username.getText().toString().trim(),
-				password.getText().toString().trim());
+		restHelper.setCredentials(user, pass);
 		ServerInterface.verifyCredentials(this);
 	}
 
