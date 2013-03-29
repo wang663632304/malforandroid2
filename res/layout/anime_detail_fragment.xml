@@ -13,19 +13,33 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="Large Text"
-            android:singleLine="true"
             android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <ImageView
             android:id="@+id/cover_image"
             android:layout_width="126dp"
             android:layout_height="192dp"
-            android:layout_below="@+id/title"
             android:layout_alignParentLeft="true"
-            android:scaleType="centerCrop" />
+            android:layout_below="@+id/title"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon" />
+
+        <TextView
+            android:id="@+id/synopsis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/cover_image"
+            android:layout_toRightOf="@+id/cover_image"
+            android:layout_alignBottom="@+id/cover_image"
+            android:gravity="top|left"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
         
+
     </RelativeLayout>
 
 </ScrollView>
