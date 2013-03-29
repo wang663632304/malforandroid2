@@ -10,18 +10,22 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.adapter.AnimeAdapter;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
+import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.loader.AnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.google.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class ItemListFragment extends RoboFragment implements LoaderManager.LoaderCallbacks<List<AnimeRecord>> {
+public class ItemListFragment extends RoboFragment implements
+		LoaderManager.LoaderCallbacks<List<AnimeRecord>>, OnItemClickListener {
 	
 	@InjectView(R.id.item_list_view)
 	private ListView itemListView;
@@ -45,6 +49,8 @@ public class ItemListFragment extends RoboFragment implements LoaderManager.Load
 		super.onViewCreated(view, savedInstanceState);
 		
 		itemListView.setAdapter(animeAdapter);
+		
+		itemListView.setOnItemClickListener(this);
 		
 		animeLoader = getLoaderManager().initLoader(0, null, this);
 		animeLoader.forceLoad();
@@ -79,12 +85,26 @@ public class ItemListFragment extends RoboFragment implements LoaderManager.Load
 	@Override
 	public void onLoadFinished(Loader<List<AnimeRecord>> loader,
 			List<AnimeRecord> data) {
+		if ( animeAdapter.isEmpty()){
+			if ( !data.isEmpty() ){
+				ChangeDetailViewRequest cdvr = new ChangeDetailViewRequest(data.get(0));
+				cdvr.forceIt = true;
+				bus.post(cdvr);
+			}
+		}
 		animeAdapter.addAll(data);
 	}
 
 	@Override
 	public void onLoaderReset(Loader<List<AnimeRecord>> loader) {
 		animeAdapter.addAll(null);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> view, View arg1, int position, long arg3) {
+		AnimeRecord ar = (AnimeRecord) view.getItemAtPosition(position);
+		bus.post(new ChangeDetailViewRequest(ar));
+		
 	}
 	
 }
