@@ -10,4 +10,7 @@
     <string name="login_error_invalid_combo">Invalid user and password combination</string>
     <string name="login_error_unknown_issue">Unknown server error. Please try again later</string>
     <string name="login_error_no_creds">Please enter both a username and a password</string>
+    
+    <string name="plus">+</string>
+    <string name="minus">-</string>
 </resources>

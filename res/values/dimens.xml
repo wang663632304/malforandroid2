@@ -6,7 +6,10 @@
     <dimen name="list_item_thumb_width">63dp</dimen>
     <dimen name="list_item_thumb_height">96dp</dimen>
     
+    <dimen name="item_bounds">200dp</dimen>
+    
     <dimen name="large_text">22sp</dimen>
     <dimen name="medium_text">18sp</dimen>
+    <dimen name="small_text">14sp</dimen>
     
 </resources>

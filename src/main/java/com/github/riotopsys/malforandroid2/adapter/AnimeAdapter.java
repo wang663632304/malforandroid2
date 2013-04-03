@@ -49,12 +49,6 @@ public class AnimeAdapter extends BaseAdapter {
 				((ImageView)convertView.findViewById(R.id.thumb_image)),
 				R.drawable.icon); 
 		
-		if ( position % 2 == 0){
-			convertView.setBackgroundResource(R.color.blue_even_item);
-		} else {
-			convertView.setBackgroundResource(R.color.blue_odd_item);			
-		}
-		
 		return convertView;
 	}
 	

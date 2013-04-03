@@ -4,12 +4,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:baselineAligned="false"
+    android:weightSum="3"
     >
 
     <FrameLayout
         android:id="@+id/list_frame"
-        android:layout_width="@dimen/left_hand_list_width"
-        
+        android:layout_width="0dp"
+        android:layout_weight="2"
         android:layout_height="match_parent" >
     </FrameLayout>
     

@@ -10,8 +10,10 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import com.github.riotopsys.malforandroid2.R;
@@ -28,7 +30,7 @@ public class ItemListFragment extends RoboFragment implements
 		LoaderManager.LoaderCallbacks<List<AnimeRecord>>, OnItemClickListener {
 	
 	@InjectView(R.id.item_list_view)
-	private ListView itemListView;
+	private AbsListView itemListView;
 	
 	@Inject
 	private AnimeAdapter animeAdapter;
