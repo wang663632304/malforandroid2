@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class AnimeAdapter extends BaseAdapter {
 			convertView = ((LayoutInflater)parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.anime_item, null);
 		}
 		AnimeRecord anime = animeList.get(position);
-		((TextView)convertView.findViewById(R.id.title)).setText(anime.title);
+		((TextView)convertView.findViewById(R.id.title)).setText(Html.fromHtml(anime.title));
 		lazyLoader.DisplayImage(anime.image_url,
 				((ImageView)convertView.findViewById(R.id.thumb_image)),
 				R.drawable.icon); 

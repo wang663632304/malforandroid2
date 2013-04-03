@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="hello">Hello MALForAndroid2!</string>
     <string name="app_name">MALForAndroid2</string>
     <string name="username_hint">Username</string>
@@ -10,7 +11,29 @@
     <string name="login_error_invalid_combo">Invalid user and password combination</string>
     <string name="login_error_unknown_issue">Unknown server error. Please try again later</string>
     <string name="login_error_no_creds">Please enter both a username and a password</string>
-    
     <string name="plus">+</string>
     <string name="minus">-</string>
+
+    <string-array name="anime_status_options">
+        <item>Watching</item>
+        <item>Completed</item>
+        <item>On-Hold</item>
+        <item>Dropped</item>
+        <item>Plan to Watch</item>
+    </string-array>
+    
+    <string-array name="anime_score_options">
+        <item>Select</item>
+        <item>(10) Masterpiece</item>
+        <item>(9) Great</item>
+        <item>(8) Very Good</item>
+        <item>(7) Good</item>
+        <item>(6) Fine</item>
+        <item>(5) Average</item>
+        <item>(4) Bad</item>
+        <item>(3) Very Bad</item>
+        <item>(2) Horrible</item>
+        <item>(1) Appalling</item>
+    </string-array>
+
 </resources>

@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_list_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:choiceMode="singleChoice"
     android:numColumns="auto_fit"
     android:fastScrollEnabled="true"
-    android:verticalSpacing="10dip"
-    android:horizontalSpacing="5dip"
-    android:columnWidth="@dimen/item_bounds"
-    android:stretchMode="spacingWidth"
-    
     android:scrollingCache="true"
-    android:smoothScrollbar="true"
-     
-    >
-    
-
-</GridView>
+    android:smoothScrollbar="true"/>

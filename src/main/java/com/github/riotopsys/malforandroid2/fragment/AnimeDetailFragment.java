@@ -9,7 +9,9 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.riotopsys.malforandroid2.R;
@@ -18,6 +20,7 @@ import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.github.riotopsys.malforandroid2.util.LazyLoader;
+import com.github.riotopsys.malforandroid2.view.NumberPicker;
 import com.google.inject.Inject;
 
 import de.greenrobot.event.EventBus;
@@ -33,6 +36,15 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@InjectView(R.id.synopsis)
 	private TextView synopsys;
+
+	@InjectView(R.id.anime_watched_status)
+	private Spinner watchedStatus;
+
+	@InjectView(R.id.anime_score_status)
+	private Spinner scoreStatus;
+
+	@InjectView(R.id.watched_count)
+	private NumberPicker watchedCount;
 
 	@Inject
 	private LazyLoader lazyLoader;
@@ -57,8 +69,16 @@ public class AnimeDetailFragment extends RoboFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
+		watchedStatus.setAdapter(ArrayAdapter.createFromResource(getActivity(),
+				R.array.anime_status_options,
+				android.R.layout.simple_spinner_dropdown_item));
+		scoreStatus.setAdapter(ArrayAdapter.createFromResource(getActivity(),
+				R.array.anime_score_options,
+				android.R.layout.simple_spinner_dropdown_item));
+
 		singleAnimeLoader = getLoaderManager().initLoader(0, null, this);
 		singleAnimeLoader.forceLoad();
+
 	}
 
 	@Override
@@ -83,14 +103,26 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	private void updateUI() {
 		lazyLoader.DisplayImage(activeRecord.image_url, cover, R.drawable.icon);
-		title.setText(activeRecord.title);
-		if ( activeRecord.synopsis != null ){
+		title.setText(Html.fromHtml(activeRecord.title));
+		if (activeRecord.synopsis != null) {
 			synopsys.setText(Html.fromHtml(activeRecord.synopsis));
 		}
 
 		if (activeRecord.synopsis == null) {
 			ServerInterface.getAnimeRecord(getActivity(), activeRecord.id);
 		}
+
+		watchedCount.setMaximumCount(activeRecord.episodes);
+		watchedCount.setCurrentCount(activeRecord.watched_episodes);
+
+		switch (activeRecord.score) {
+		case 0:
+			scoreStatus.setSelection(0);
+			break;
+		default:
+			scoreStatus.setSelection(11 - activeRecord.score  );
+		}
+
 	}
 
 	@Override

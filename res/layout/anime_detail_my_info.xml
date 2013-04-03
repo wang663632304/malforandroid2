@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
@@ -10,62 +11,65 @@
         android:text="My Info"
         android:textSize="@dimen/medium_text" />
 
-    <include layout="@layout/horizontal_divider" /> 
+    <include layout="@layout/horizontal_divider" />
 
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnCount="2"
-        android:rowCount="3" >
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="center_vertical|left"
-            android:layout_row="0"
-            android:text="Watched:"
-            android:textStyle="bold" />
+        <TableRow>
 
-        <com.github.riotopsys.malforandroid2.view.NumberPicker
-            android:id="@+id/numberPicker1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="center"
-            android:layout_row="0" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:text="Watched:"
+                android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="center_vertical|left"
-            android:layout_row="1"
-            android:text="Status:"
-            android:textStyle="bold" />
+            <com.github.riotopsys.malforandroid2.view.NumberPicker
+                android:id="@+id/watched_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </TableRow>
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="center"
-            android:layout_row="1" />
-        
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="center_vertical|left"
-            android:layout_row="2"
-            android:text="Your Score:"
-            android:textStyle="bold" />
+        <TableRow>
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="center"
-            android:layout_row="2" />
-    </GridLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:text="Status:"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/anime_watched_status"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:spinnerMode="dialog"
+                tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:text="Your Score:"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/anime_score_status"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:spinnerMode="dialog"
+                tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>

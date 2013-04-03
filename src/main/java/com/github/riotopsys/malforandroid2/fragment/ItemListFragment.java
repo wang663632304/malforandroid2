@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
-import android.widget.ListView;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.adapter.AnimeAdapter;

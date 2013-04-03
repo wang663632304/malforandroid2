@@ -1,42 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/item_bounds"
+    android:layout_width="fill_parent"
     android:layout_height="@dimen/item_bounds"
     android:background="@color/blue_even_item" >
 
     <ImageView
         android:id="@+id/thumb_image"
-        android:layout_width="@dimen/item_bounds"
+        android:layout_width="fill_parent"
         android:layout_height="@dimen/item_bounds"
         android:layout_alignParentLeft="true"
         android:scaleType="centerCrop"
         android:src="@drawable/icon" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="#A8000000"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="title"
-        android:textColor="#FFF"
-        android:textSize="@dimen/medium_text" />
-
-    <TextView
-        android:id="@+id/suplimentary_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true"
-        android:background="#A8000000"
-        android:gravity="right"
-        android:maxLines="2"
-        android:text="supplementary\ntext"
-        android:textColor="#FFF"
-        android:textSize="@dimen/small_text" />
+        android:background="#A8000000" 
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="title"
+            android:textColor="#FFF"
+            android:textSize="@dimen/medium_text" />
+
+        <TextView
+            android:id="@+id/suplimentary_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:maxLines="1"
+            android:text="supplementary text"
+            android:textColor="#FFF"
+            android:textSize="@dimen/small_text" />
+    </LinearLayout>
 
 </RelativeLayout>

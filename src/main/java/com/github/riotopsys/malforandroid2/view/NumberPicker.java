@@ -36,10 +36,12 @@ public class NumberPicker extends FrameLayout implements OnClickListener {
 	
 	public void setCurrentCount(int currentCount) {
 		this.currentCount = currentCount;
+		fixOutput();
 	}
 	
 	public void setMaximumCount(int maximumCount) {
 		this.maximumCount = maximumCount;
+		fixOutput();
 	}
 	
 	public int getCurrentCount() {
@@ -66,8 +68,10 @@ public class NumberPicker extends FrameLayout implements OnClickListener {
 		switch( v.getId() ){
 		case R.id.negative_button:
 			currentCount -= 1;
+			break;
 		case R.id.positive_button:
 			currentCount += 1;
+			break;
 		}
 		if ( maximumCount != 0  && ( currentCount > maximumCount )) {
 			currentCount = maximumCount;
@@ -75,6 +79,10 @@ public class NumberPicker extends FrameLayout implements OnClickListener {
 		if (  currentCount < 0  ) {
 			currentCount = 0;
 		}
+		fixOutput();
+	}
+
+	private void fixOutput() {
 		if ( maximumCount != 0 ) {
 			readout.setText(String.format("%d / %d",currentCount, maximumCount));
 		} else {
