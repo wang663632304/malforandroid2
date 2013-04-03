@@ -122,6 +122,8 @@ public class AnimeDetailFragment extends RoboFragment implements
 		default:
 			scoreStatus.setSelection(11 - activeRecord.score  );
 		}
+		
+		watchedStatus.setSelection(activeRecord.watched_status.ordinal());
 
 	}
 

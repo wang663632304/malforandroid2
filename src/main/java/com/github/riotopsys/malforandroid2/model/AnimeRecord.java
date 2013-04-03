@@ -53,7 +53,7 @@ public class AnimeRecord {
 	public HashMap<String, LinkedList<String>> other_titles;
 	
 	@DatabaseField( )
-	public String watched_status;
+	public AnimeWatchedStatus watched_status;
 	
 	@DatabaseField( )
 	public int members_count;
