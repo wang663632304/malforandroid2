@@ -19,9 +19,9 @@ import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
-import com.github.riotopsys.malforandroid2.util.LazyLoader;
 import com.github.riotopsys.malforandroid2.view.NumberPicker;
 import com.google.inject.Inject;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import de.greenrobot.event.EventBus;
 
@@ -47,7 +47,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 	private NumberPicker watchedCount;
 
 	@Inject
-	private LazyLoader lazyLoader;
+	private ImageLoader lazyLoader;
 
 	@Inject
 	private EventBus bus;
@@ -102,7 +102,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 	}
 
 	private void updateUI() {
-		lazyLoader.DisplayImage(activeRecord.image_url, cover, R.drawable.icon);
+		lazyLoader.displayImage(activeRecord.image_url, cover);
 		title.setText(Html.fromHtml(activeRecord.title));
 		if (activeRecord.synopsis != null) {
 			synopsys.setText(Html.fromHtml(activeRecord.synopsis));

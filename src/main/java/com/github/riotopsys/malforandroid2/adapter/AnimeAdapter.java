@@ -14,13 +14,13 @@ import android.widget.TextView;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
-import com.github.riotopsys.malforandroid2.util.LazyLoader;
 import com.google.inject.Inject;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class AnimeAdapter extends BaseAdapter {
 	
 	@Inject
-	private LazyLoader lazyLoader;
+	private ImageLoader lazyLoader;
 	
 	private List<AnimeRecord> animeList = new LinkedList<AnimeRecord>();
 
@@ -46,9 +46,10 @@ public class AnimeAdapter extends BaseAdapter {
 		}
 		AnimeRecord anime = animeList.get(position);
 		((TextView)convertView.findViewById(R.id.title)).setText(Html.fromHtml(anime.title));
-		lazyLoader.DisplayImage(anime.image_url,
-				((ImageView)convertView.findViewById(R.id.thumb_image)),
-				R.drawable.icon); 
+		
+		ImageView imageView = (ImageView)convertView.findViewById(R.id.thumb_image);
+		imageView.setImageBitmap(null);
+		lazyLoader.displayImage(anime.image_url,imageView ); 
 		
 		return convertView;
 	}

@@ -21,6 +21,8 @@ import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.loader.AnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.google.inject.Inject;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
 import de.greenrobot.event.EventBus;
 
@@ -35,6 +37,9 @@ public class ItemListFragment extends RoboFragment implements
 	
 	@Inject 
 	private EventBus bus;
+	
+	@Inject
+	private ImageLoader lazyLoader;
 	
 	private Loader<List<AnimeRecord>> animeLoader;
 	
@@ -51,6 +56,9 @@ public class ItemListFragment extends RoboFragment implements
 		itemListView.setAdapter(animeAdapter);
 		
 		itemListView.setOnItemClickListener(this);
+		
+		PauseOnScrollListener listener = new PauseOnScrollListener(lazyLoader, false, true);
+		itemListView.setOnScrollListener(listener);
 		
 		animeLoader = getLoaderManager().initLoader(0, null, this);
 		animeLoader.forceLoad();

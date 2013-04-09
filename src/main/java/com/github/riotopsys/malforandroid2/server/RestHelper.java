@@ -29,16 +29,14 @@ public class RestHelper {
 
 	private static final String TAG = RestHelper.class.getSimpleName();
 	private String token = null;
+	private String userAgent = null;
 
 	public RestResult<String> get(URL url) {
 		HttpURLConnection con = null;
 		RestResult<String> result = new RestResult<String>();
 		try {
 			con = (HttpURLConnection) url.openConnection();
-			if ( token != null ){
-				con.addRequestProperty("Authorization", token);
-			}
-			con.addRequestProperty("Content-Type", "application/json");
+			setupBoilerPlate(con);
 
 			result.result = readToString(con);
 			result.code = con.getResponseCode();
@@ -54,22 +52,29 @@ public class RestHelper {
 		return result;
 	}
 
+	private void setupBoilerPlate(HttpURLConnection con) {
+		if (token != null) {
+			con.addRequestProperty("Authorization", token);
+		}
+		if (userAgent != null) {
+			con.addRequestProperty("User-Agent", userAgent);
+		}
+	}
+
 	public RestResult<String> post(URL url, String data) {
 		HttpURLConnection con = null;
 		RestResult<String> result = new RestResult<String>();
 		try {
 
 			con = (HttpURLConnection) url.openConnection();
-			if ( token != null ){
-				con.addRequestProperty("Authorization", token);
-			}
-			con.addRequestProperty("Content-Type", "application/json");
+			setupBoilerPlate(con);
 
 			con.setRequestMethod("POST");
 			con.setDoOutput(true);
 
-			OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-			if ( data != null ){
+			OutputStreamWriter wr = new OutputStreamWriter(
+					con.getOutputStream());
+			if (data != null) {
 				wr.write(data);
 			}
 			wr.flush();
@@ -109,14 +114,12 @@ public class RestHelper {
 		RestResult<String> result = new RestResult<String>();
 		try {
 			con = (HttpURLConnection) url.openConnection();
-			if ( token != null ){
-				con.addRequestProperty("Authorization", token);
-			}
-			
-			con.setRequestMethod("DELETE");
-			con.setDoOutput(true);
+			setupBoilerPlate(con);
 
-			result.result = readToString(con);
+			con.setRequestMethod("DELETE");
+
+			con.connect();
+
 			result.code = con.getResponseCode();
 
 		} catch (Exception e) {
@@ -131,15 +134,56 @@ public class RestHelper {
 	}
 
 	public void setCredentials(String username, String password) {
-		token = "Basic " + Base64.encodeToString((username + ":" + password).getBytes(), Base64.DEFAULT | Base64.NO_WRAP);
+		if (username == null || password == null) {
+			return;
+		}
+		token = "Basic "
+				+ Base64.encodeToString((username + ":" + password).getBytes(),
+						Base64.DEFAULT | Base64.NO_WRAP);
 	}
-	
+
 	public String getToken() {
 		return token;
 	}
-	
+
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public void applyUserAgent(String userAgent) {
+		this.userAgent = userAgent;
+	}
+
+	public RestResult<String> put(URL url, String data) {
+		HttpURLConnection con = null;
+		RestResult<String> result = new RestResult<String>();
+		try {
+
+			con = (HttpURLConnection) url.openConnection();
+			setupBoilerPlate(con);
+
+			con.setRequestMethod("PUT");
+			con.setDoOutput(true);
+
+			OutputStreamWriter wr = new OutputStreamWriter(
+					con.getOutputStream());
+			if (data != null) {
+				wr.write(data);
+			}
+			wr.flush();
+			wr.close();
+
+			result.result = readToString(con);
+			result.code = con.getResponseCode();
+
+		} catch (Exception e) {
+			Log.e(TAG, "post", e);
+		} finally {
+			if (con != null) {
+				con.disconnect();
+			}
+		}
+		return result;
 	}
 
 }

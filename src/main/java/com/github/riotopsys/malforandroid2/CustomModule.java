@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import de.greenrobot.event.EventBus;
 
@@ -28,6 +29,11 @@ public class CustomModule extends AbstractModule {
 	@Singleton
 	public RestHelper provideRestHelper() {
 		return new RestHelper();
+	}
+	
+	@Provides
+	public ImageLoader provideImageLoader(){
+		return ImageLoader.getInstance();
 	}
 
 	@Provides
