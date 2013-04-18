@@ -1,0 +1,3 @@
+[submodule "thirdParty/PannelLayout"]
+	path = thirdParty/PannelLayout
+	url = git@github.com:riotopsys/PannelLayout.git
