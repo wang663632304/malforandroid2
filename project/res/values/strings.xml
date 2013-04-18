@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <string name="ipsum">quam massa, semper malesuada ante. Donec suscipit facilisis urna sit amet ullamcorper. Maecenas in lectus mauris, id aliquet elit. Phasellus non sem risus. Aliquam erat volutpat. Mauris nisi nulla, congue sed aliquam vel, consectetur bibendum massa. Mauris eleifend commodo bibendum. Donec pellentesque vehicula nibh a aliquet. Suspendisse consequat, eros ac ornare volutpat, metus diam feugiat diam, a mollis dui purus ac tortor.
+
+Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel facilisis nulla neque a tellus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat blandit augue et eleifend. Cras facilisis, dui vel luctus viverra, metus mi aliquam nibh, ac pharetra est arcu non sem. Fusce ac dolor sed leo iaculis pellentesque vel at tellus. Curabitur et justo ligula. Vivamus velit odio, volutpat id facilisis quis, pulvinar ut nulla. Pellentesque facilisis malesuada lacus ultrices euismod.</string>
 
     <string name="hello">Hello MALForAndroid2!</string>
     <string name="app_name">MALForAndroid2</string>
