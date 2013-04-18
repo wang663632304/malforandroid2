@@ -1,5 +1,7 @@
 package com.github.riotopsys.malforandroid2.adapter;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class AnimeAdapter extends BaseAdapter {
 	
 	@Inject
 	private ImageLoader lazyLoader;
+	
+	@Inject
+	private Comparator<AnimeRecord> comparator;
 	
 	private List<AnimeRecord> animeList = new LinkedList<AnimeRecord>();
 
@@ -58,6 +63,7 @@ public class AnimeAdapter extends BaseAdapter {
 		animeList.clear();
 		if ( anime != null ){
 			animeList.addAll(anime);
+			Collections.sort( animeList, comparator );
 		}
 		notifyDataSetChanged();
 	}

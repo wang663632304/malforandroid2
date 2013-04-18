@@ -120,6 +120,14 @@
                     android:spinnerMode="dialog"
                     tools:listitem="@android:layout/simple_spinner_dropdown_item" />
             </LinearLayout>
+            <!-- test block -->
+            <View
+                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#666"
+                app:column_span="5"
+                app:row_span="6"
+                />
         </com.github.riotopsys.pannellayout.PannelLayout>
     </ScrollView>
 
