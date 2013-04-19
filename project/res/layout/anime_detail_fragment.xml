@@ -41,10 +41,7 @@
                 app:row_span="4" />
 
             <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:padding="4dp"
+                style="@style/detail_item"
                 app:column_span="3"
                 app:row_span="4" >
 
@@ -56,31 +53,28 @@
             </ScrollView>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:orientation="vertical" 
-                app:column_span="1"
-                app:row_span="1">
+                style="@style/detail_item"
+                android:gravity="center"
+                app:column_span="1" >
 
                 <TextView
+                    android:id="@+id/watched_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:text="Watched:"
                     android:textStyle="bold" />
 
-                <com.github.riotopsys.malforandroid2.view.NumberPicker
-                    android:id="@+id/watched_count"
+                <Button
+                    android:id="@+id/plus_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/plus_one" />
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
+                style="@style/detail_item"
                 app:column_span="1" >
 
                 <TextView
@@ -100,9 +94,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
+                style="@style/detail_item"
                 app:column_span="1" >
 
                 <TextView
@@ -121,13 +113,13 @@
                     tools:listitem="@android:layout/simple_spinner_dropdown_item" />
             </LinearLayout>
             <!-- test block -->
+
             <View
-                 android:layout_width="match_parent"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#666"
                 app:column_span="5"
-                app:row_span="6"
-                />
+                app:row_span="6" />
         </com.github.riotopsys.pannellayout.PannelLayout>
     </ScrollView>
 

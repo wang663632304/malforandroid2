@@ -44,7 +44,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 	private Spinner scoreStatus;
 
 	@InjectView(R.id.watched_count)
-	private NumberPicker watchedCount;
+	private TextView watchedCount;
 
 	@Inject
 	private ImageLoader lazyLoader;
@@ -112,8 +112,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			ServerInterface.getAnimeRecord(getActivity(), activeRecord.id);
 		}
 
-		watchedCount.setMaximumCount(activeRecord.episodes);
-		watchedCount.setCurrentCount(activeRecord.watched_episodes);
+		watchedCount.setText(getString(R.string.watched_format, activeRecord.watched_episodes, activeRecord.episodes ));
 
 		switch (activeRecord.score) {
 		case 0:
