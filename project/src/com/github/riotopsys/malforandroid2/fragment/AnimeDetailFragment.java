@@ -22,10 +22,15 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,15 +39,17 @@ import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
-import com.github.riotopsys.malforandroid2.view.NumberPicker;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import de.greenrobot.event.EventBus;
 
 public class AnimeDetailFragment extends RoboFragment implements
-		LoaderManager.LoaderCallbacks<AnimeRecord> {
+		LoaderManager.LoaderCallbacks<AnimeRecord>, OnItemSelectedListener, OnClickListener {
+
+	private static final String TAG = null;
 
 	@InjectView(R.id.title)
 	private TextView title;
@@ -61,6 +68,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@InjectView(R.id.watched_count)
 	private TextView watchedCount;
+	
+	@InjectView(R.id.plus_one)
+	private Button plusOne;
 
 	@Inject
 	private ImageLoader lazyLoader;
@@ -78,6 +88,8 @@ public class AnimeDetailFragment extends RoboFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		idToDisplay = getArguments().getInt("id");
+		
+		Log.e(TAG, String.format("onCreateView %d", idToDisplay));
 		return inflater.inflate(R.layout.anime_detail_fragment, null);
 	}
 
@@ -88,12 +100,19 @@ public class AnimeDetailFragment extends RoboFragment implements
 		watchedStatus.setAdapter(ArrayAdapter.createFromResource(getActivity(),
 				R.array.anime_status_options,
 				android.R.layout.simple_spinner_dropdown_item));
+		
+		watchedStatus.setOnItemSelectedListener(this);
+		
 		scoreStatus.setAdapter(ArrayAdapter.createFromResource(getActivity(),
 				R.array.anime_score_options,
 				android.R.layout.simple_spinner_dropdown_item));
+		
+		scoreStatus.setOnItemSelectedListener(this);
 
 		singleAnimeLoader = getLoaderManager().initLoader(0, null, this);
 		singleAnimeLoader.forceLoad();
+		
+		plusOne.setOnClickListener(this);
 
 	}
 
@@ -154,7 +173,53 @@ public class AnimeDetailFragment extends RoboFragment implements
 	}
 
 	@Override
-	public void onLoaderReset(Loader<AnimeRecord> loader) {
+	public void onLoaderReset(Loader<AnimeRecord> loader) {}
+
+	@Override
+	public void onItemSelected(AdapterView<?> adapter, View view, int position, long id) {
+		Log.e(TAG, String.format("onItemSelected %d", idToDisplay));
+		if ( activeRecord == null){
+			return;
+		}
+		switch ( adapter.getId() ){
+		case R.id.anime_watched_status:
+			AnimeWatchedStatus newStatus = AnimeWatchedStatus.values()[position];
+			if ( activeRecord.watched_status != newStatus ){
+				activeRecord.watched_status = AnimeWatchedStatus.values()[position];
+				//save
+			}
+			break;
+		case R.id.anime_score_status:
+			int newScore;
+			switch (position) {
+			case 0:
+				newScore = position;
+				break;
+			default:
+				newScore = 11 - position;
+			}
+			if ( activeRecord.score != newScore ){
+				activeRecord.score = newScore;
+				//save
+			}
+			break;
+		}
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {}
+
+	@Override
+	public void onClick(View v) {
+		switch ( v.getId() ){
+		case R.id.plus_one:
+			activeRecord.watched_episodes++;
+			if ( activeRecord.watched_episodes > activeRecord.episodes ){
+				activeRecord.watched_episodes = activeRecord.episodes;
+				//save
+			}
+			break;
+		}
 	}
 
 }

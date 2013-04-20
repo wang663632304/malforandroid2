@@ -106,7 +106,11 @@ public class RestHelper {
 		while ((read = rd.read(buf)) > 0) {
 			sb.append(buf, 0, read);
 		}
-		return sb.toString();
+		
+		String result = sb.toString();
+		Log.i(TAG, String.format("data %s", result));
+		
+		return result;
 	}
 
 	public RestResult<String> delete(URL url) {
