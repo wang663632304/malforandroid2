@@ -52,8 +52,6 @@ import de.greenrobot.event.EventBus;
 public class AnimeDetailFragment extends RoboFragment implements
 		LoaderManager.LoaderCallbacks<AnimeRecord>, OnItemSelectedListener, OnClickListener, OnDismissListener {
 
-	private static final String TAG = null;
-
 	@InjectView(R.id.title)
 	private TextView title;
 
