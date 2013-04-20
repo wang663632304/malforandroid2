@@ -19,10 +19,10 @@ package com.github.riotopsys.malforandroid2.fragment;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +39,7 @@ import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.activity.BaseActivity;
 import com.github.riotopsys.malforandroid2.database.DBUpdateTask;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
+import com.github.riotopsys.malforandroid2.fragment.NumberPickerFragment.OnDismissListener;
 import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
@@ -49,7 +50,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import de.greenrobot.event.EventBus;
 
 public class AnimeDetailFragment extends RoboFragment implements
-		LoaderManager.LoaderCallbacks<AnimeRecord>, OnItemSelectedListener, OnClickListener {
+		LoaderManager.LoaderCallbacks<AnimeRecord>, OnItemSelectedListener, OnClickListener, OnDismissListener {
 
 	private static final String TAG = null;
 
@@ -70,6 +71,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@InjectView(R.id.watched_count)
 	private TextView watchedCount;
+	
+	@InjectView(R.id.watched_pannel)
+	private View watchedPannel;
 	
 	@InjectView(R.id.plus_one)
 	private Button plusOne;
@@ -114,6 +118,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		singleAnimeLoader.forceLoad();
 		
 		plusOne.setOnClickListener(this);
+		watchedPannel.setOnClickListener(this);
 
 	}
 
@@ -190,7 +195,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			if ( activeRecord.watched_status != newStatus ){
 				activeRecord.watched_status = AnimeWatchedStatus.values()[position];
 				//save
-				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext() ).execute(activeRecord);
+				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
 			}
 			break;
 		case R.id.anime_score_status:
@@ -205,7 +210,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			if ( activeRecord.score != newScore ){
 				activeRecord.score = newScore;
 				//save
-				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext() ).execute(activeRecord);
+				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
 			}
 			break;
 		}
@@ -216,16 +221,42 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@Override
 	public void onClick(View v) {
-		BaseActivity ba = (BaseActivity)getActivity();
-		switch ( v.getId() ){
+		BaseActivity ba = (BaseActivity) getActivity();
+		switch (v.getId()) {
 		case R.id.plus_one:
 			activeRecord.watched_episodes++;
-			if ( activeRecord.watched_episodes > activeRecord.episodes ){
+			if (activeRecord.watched_episodes > activeRecord.episodes) {
 				activeRecord.watched_episodes = activeRecord.episodes;
-				//save
-				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext() ).execute(activeRecord);
+				// save
+				new DBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
+						.execute(activeRecord);
 			}
 			break;
+		case R.id.watched_pannel:
+			FragmentManager fm = getActivity().getSupportFragmentManager();
+			NumberPickerFragment numberPickerFragment = new NumberPickerFragment();
+			if ( activeRecord.episodes != 0 ){
+				numberPickerFragment.setMaximum(activeRecord.episodes);
+			} else {
+				numberPickerFragment.setMaximum(Integer.MAX_VALUE);
+			}
+			numberPickerFragment.setValue( activeRecord.watched_episodes);		
+			
+			numberPickerFragment.show(fm,"numberpicker");
+			
+			numberPickerFragment.setOnDismissListener(this);
+			break;
+		}
+	}
+
+	@Override
+	public void onDismiss(NumberPickerFragment numberPickerFragment) {
+		int value = numberPickerFragment.getValue();
+		if ( activeRecord.watched_episodes != value ){
+			activeRecord.watched_episodes = value;
+			//save
+			BaseActivity ba = (BaseActivity)getActivity();
+			new DBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
 		}
 	}
 

@@ -68,6 +68,7 @@
             </ScrollView>
 
             <LinearLayout
+                android:id="@+id/watched_pannel"
                 style="@style/detail_item"
                 android:gravity="center"
                 app:column_span="1" >

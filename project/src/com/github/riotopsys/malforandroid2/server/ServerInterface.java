@@ -116,6 +116,7 @@ public class ServerInterface extends RoboIntentService {
 				break;
 			case UPDATE_ANIME_RECORD:
 				updateAnimeRecord(id);
+				break;
 			default:
 				Log.v(TAG, String.format("Invalid Request: %s", action.name()));
 			}

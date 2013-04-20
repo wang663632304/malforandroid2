@@ -22,9 +22,12 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.j256.ormlite.dao.Dao;
+
+import de.greenrobot.event.EventBus;
 
 public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 
@@ -34,9 +37,12 @@ public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 
 	private Context ctx;
 
-	public DBUpdateTask(DatabaseHelper dbHelper, Context ctx) {
+	private EventBus bus;
+
+	public DBUpdateTask(DatabaseHelper dbHelper, Context ctx, EventBus bus) {
 		this.dbHelper = dbHelper;
 		this.ctx = ctx;
+		this.bus = bus;
 	}
 
 	@Override
@@ -47,6 +53,7 @@ public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 				try {
 					dao.createOrUpdate(p);
 					ServerInterface.updateAnimeRecord(ctx, p.id);
+					bus.post(new AnimeUpdateEvent(p.id));
 				} catch (SQLException e) {
 					Log.e(TAG, "cannot save item", e);
 				}
