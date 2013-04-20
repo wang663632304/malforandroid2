@@ -34,7 +34,7 @@ public class BaseActivity extends RoboFragmentActivity {
 	    }
 	}
 
-	protected DatabaseHelper getHelper() {
+	public DatabaseHelper getHelper() {
 	    if (databaseHelper == null) {
 	        databaseHelper =
 	            OpenHelperManager.getHelper(this, DatabaseHelper.class);

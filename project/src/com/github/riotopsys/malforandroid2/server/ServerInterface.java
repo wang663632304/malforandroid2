@@ -128,8 +128,9 @@ public class ServerInterface extends RoboIntentService {
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 		AnimeRecord anime = dao.queryForId(id);
 		String value = String.format("status=%s&episodes=%d&score=%d",
-				anime.watched_status, anime.watched_episodes, anime.score);
-		restHelper.post(urlBuilder.getAnimeUpdateUrl(id), value);
+				anime.watched_status.getServerKey(), anime.watched_episodes, anime.score);
+		Log.v(TAG, String.format("url %s data %s",  urlBuilder.getAnimeUpdateUrl(id), value));
+		restHelper.put(urlBuilder.getAnimeUpdateUrl(id), value);
 	}
 
 	private void getAnimeRecord(int id) throws MalformedURLException, SQLException {
@@ -158,9 +159,9 @@ public class ServerInterface extends RoboIntentService {
 			for ( AnimeRecord ar : alr ){
 				AnimeRecord arOriginal = dao.queryForId(ar.id);
 				if ( arOriginal != null ){
-					arOriginal.status = ar.status;
+					arOriginal.watched_status = ar.watched_status;
 					arOriginal.score = ar.score;
-					arOriginal.episodes = ar.episodes;
+					arOriginal.watched_episodes = ar.watched_episodes;
 					
 					dao.createOrUpdate(arOriginal);
 				} else {

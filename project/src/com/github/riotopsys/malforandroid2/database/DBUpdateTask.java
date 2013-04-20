@@ -18,28 +18,35 @@ package com.github.riotopsys.malforandroid2.database;
 
 import java.sql.SQLException;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.j256.ormlite.dao.Dao;
 
-public class DBUpdateTask<T extends Object> extends AsyncTask<T, Void, Void> {
+public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 
 	private static final String TAG = DBUpdateTask.class.getSimpleName();
 
 	private DatabaseHelper dbHelper;
 
-	public DBUpdateTask(DatabaseHelper dbHelper) {
+	private Context ctx;
+
+	public DBUpdateTask(DatabaseHelper dbHelper, Context ctx) {
 		this.dbHelper = dbHelper;
+		this.ctx = ctx;
 	}
 
 	@Override
-	protected Void doInBackground(T... params) {
+	protected Void doInBackground(AnimeRecord... params) {
 		try {
-			Dao<T, ?> dao = dbHelper.getDao(params[0].getClass());
-			for (T p : params) {
+			Dao<AnimeRecord, ?> dao = dbHelper.getDao(params[0].getClass());
+			for (AnimeRecord p : params) {
 				try {
 					dao.createOrUpdate(p);
+					ServerInterface.updateAnimeRecord(ctx, p.id);
 				} catch (SQLException e) {
 					Log.e(TAG, "cannot save item", e);
 				}

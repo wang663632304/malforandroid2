@@ -108,7 +108,7 @@ public class RestHelper {
 		}
 		
 		String result = sb.toString();
-		Log.i(TAG, String.format("data %s", result));
+		Log.v(TAG, String.format("data %s", result));
 		
 		return result;
 	}

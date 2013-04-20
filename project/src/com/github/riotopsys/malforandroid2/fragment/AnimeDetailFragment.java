@@ -36,6 +36,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.riotopsys.malforandroid2.R;
+import com.github.riotopsys.malforandroid2.activity.BaseActivity;
+import com.github.riotopsys.malforandroid2.database.DBUpdateTask;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
@@ -89,7 +91,6 @@ public class AnimeDetailFragment extends RoboFragment implements
 			Bundle savedInstanceState) {
 		idToDisplay = getArguments().getInt("id");
 		
-		Log.e(TAG, String.format("onCreateView %d", idToDisplay));
 		return inflater.inflate(R.layout.anime_detail_fragment, null);
 	}
 
@@ -177,16 +178,19 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@Override
 	public void onItemSelected(AdapterView<?> adapter, View view, int position, long id) {
-		Log.e(TAG, String.format("onItemSelected %d", idToDisplay));
 		if ( activeRecord == null){
 			return;
 		}
+		
+		BaseActivity ba = (BaseActivity)getActivity();
+		
 		switch ( adapter.getId() ){
 		case R.id.anime_watched_status:
 			AnimeWatchedStatus newStatus = AnimeWatchedStatus.values()[position];
 			if ( activeRecord.watched_status != newStatus ){
 				activeRecord.watched_status = AnimeWatchedStatus.values()[position];
 				//save
+				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext() ).execute(activeRecord);
 			}
 			break;
 		case R.id.anime_score_status:
@@ -201,6 +205,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			if ( activeRecord.score != newScore ){
 				activeRecord.score = newScore;
 				//save
+				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext() ).execute(activeRecord);
 			}
 			break;
 		}
@@ -211,12 +216,14 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@Override
 	public void onClick(View v) {
+		BaseActivity ba = (BaseActivity)getActivity();
 		switch ( v.getId() ){
 		case R.id.plus_one:
 			activeRecord.watched_episodes++;
 			if ( activeRecord.watched_episodes > activeRecord.episodes ){
 				activeRecord.watched_episodes = activeRecord.episodes;
 				//save
+				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext() ).execute(activeRecord);
 			}
 			break;
 		}
