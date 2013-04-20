@@ -57,6 +57,7 @@
 
             <ScrollView
                 style="@style/detail_item"
+                android:id="@+id/synopsis_container"
                 app:column_span="3"
                 app:row_span="4" >
 

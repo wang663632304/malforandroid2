@@ -23,15 +23,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -50,7 +54,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import de.greenrobot.event.EventBus;
 
 public class AnimeDetailFragment extends RoboFragment implements
-		LoaderManager.LoaderCallbacks<AnimeRecord>, OnItemSelectedListener, OnClickListener, OnDismissListener {
+		LoaderManager.LoaderCallbacks<AnimeRecord>, OnItemSelectedListener, OnClickListener, OnDismissListener, OnTouchListener {
+
+	private static final String TAG = AnimeDetailFragment.class.getSimpleName();
 
 	@InjectView(R.id.title)
 	private TextView title;
@@ -61,6 +67,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 	@InjectView(R.id.synopsis)
 	private TextView synopsys;
 
+	@InjectView(R.id.synopsis_container)
+	private View synopsysContainer;
+	
 	@InjectView(R.id.anime_watched_status)
 	private Spinner watchedStatus;
 
@@ -117,9 +126,11 @@ public class AnimeDetailFragment extends RoboFragment implements
 		
 		plusOne.setOnClickListener(this);
 		watchedPannel.setOnClickListener(this);
+		
+		synopsysContainer.setOnTouchListener(this);
 
 	}
-
+	
 	@Override
 	public void onPause() {
 		bus.unregister(this);
@@ -255,6 +266,32 @@ public class AnimeDetailFragment extends RoboFragment implements
 			//save
 			BaseActivity ba = (BaseActivity)getActivity();
 			new DBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+		}
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		ViewGroup vg = (ViewGroup)v;
+		if ( vg.getChildAt(0).getHeight() > v.getHeight()) {
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				requestDisallowParentInterceptTouchEvent(v, true);
+			} else if (event.getAction() == MotionEvent.ACTION_UP
+					|| event.getAction() == MotionEvent.ACTION_CANCEL) {
+				requestDisallowParentInterceptTouchEvent(v, false);
+			}
+		}
+		return false;
+	}
+	
+
+	private void requestDisallowParentInterceptTouchEvent(View v,
+			Boolean disallowIntercept) {
+		while (v.getParent() != null && v.getParent() instanceof View) {
+			if (v.getParent() instanceof ScrollView) {
+				v.getParent().requestDisallowInterceptTouchEvent(
+						disallowIntercept);
+			}
+			v = (View) v.getParent();
 		}
 	}
 
