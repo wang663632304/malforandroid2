@@ -129,7 +129,17 @@
                     android:spinnerMode="dialog"
                     tools:listitem="@android:layout/simple_spinner_dropdown_item" />
             </LinearLayout>
-            <!-- test block -->
+            
+            <TextView
+                android:id="@+id/prequel"
+                style="@style/detail_item"
+                android:text="Prequel"
+                android:textStyle="bold"
+                app:column_span="1" 
+                android:gravity="center"
+                android:visibility="gone"
+                />
+<!-- test block -->
 
             <View
                 android:layout_width="match_parent"

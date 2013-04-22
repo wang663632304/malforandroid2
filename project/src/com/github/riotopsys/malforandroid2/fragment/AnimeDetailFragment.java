@@ -84,6 +84,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 	
 	@InjectView(R.id.plus_one)
 	private Button plusOne;
+	
+	@InjectView(R.id.prequel)
+	private TextView prequel;
 
 	@Inject
 	private ImageLoader lazyLoader;
@@ -128,7 +131,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		watchedPannel.setOnClickListener(this);
 		
 		synopsysContainer.setOnTouchListener(this);
-
+		
 	}
 	
 	@Override
@@ -173,6 +176,13 @@ public class AnimeDetailFragment extends RoboFragment implements
 		}
 		
 		watchedStatus.setSelection(activeRecord.watched_status.ordinal());
+		
+		if ( activeRecord.prequels.size() >0 ){
+			prequel.setText(getString(R.string.prequel_format, activeRecord.prequels.get(0).title));
+			prequel.setVisibility(View.VISIBLE);
+		} else {
+			prequel.setVisibility(View.GONE);
+		}
 
 	}
 

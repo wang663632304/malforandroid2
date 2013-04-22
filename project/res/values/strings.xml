@@ -63,6 +63,7 @@ Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel 
     </string-array>
     
     <string name="watched_format">Watched %1$d/%2$d</string>
+    <string name="prequel_format">Prequel %1$s</string>
     <string name="plus_one">+1</string>
 
 </resources>

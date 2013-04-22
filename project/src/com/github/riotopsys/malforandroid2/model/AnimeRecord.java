@@ -39,7 +39,7 @@ public class AnimeRecord {
 	public String status;
 	
 	@DatabaseField( )
-	public String image_url;//
+	public String image_url;
 	
 	@DatabaseField( )
 	public String type;
@@ -84,7 +84,7 @@ public class AnimeRecord {
 	public int favorited_count;
 	
 	@DatabaseField( )
-	public String title;//
+	public String title;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
 	public LinkedList<CrossReferance> prequels;
@@ -96,6 +96,6 @@ public class AnimeRecord {
 	public int episodes;
 	
 	@DatabaseField( )
-	public String synopsis;//
+	public String synopsis;
 
 }
