@@ -24,7 +24,7 @@ public class AnimeTitleComparator implements Comparator<AnimeRecord> {
 
 	@Override
 	public int compare(AnimeRecord lhs, AnimeRecord rhs) {
-		return lhs.title.compareTo(rhs.title);
+		return lhs.title.toUpperCase().compareTo(rhs.title.toUpperCase());
 	}
 
 }
