@@ -21,7 +21,7 @@ import java.io.Serializable;
 public class CrossReferance implements Serializable{
 	private static final long serialVersionUID = 3149665958016305430L;
 
-	public int ref_id;
+	public int anime_id;
 	
 	public String url;
 	

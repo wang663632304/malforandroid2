@@ -43,6 +43,7 @@ import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.activity.BaseActivity;
 import com.github.riotopsys.malforandroid2.database.DBUpdateTask;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
+import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.fragment.NumberPickerFragment.OnDismissListener;
 import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
@@ -129,6 +130,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		
 		plusOne.setOnClickListener(this);
 		watchedPannel.setOnClickListener(this);
+		prequel.setOnClickListener(this);
 		
 		synopsysContainer.setOnTouchListener(this);
 		
@@ -148,7 +150,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	public void onEvent(AnimeUpdateEvent aue) {
 		if (singleAnimeLoader != null) {
-			if (aue.id == activeRecord.id) {
+			if (aue.id == idToDisplay) {
 				singleAnimeLoader.onContentChanged();
 			}
 		}
@@ -175,7 +177,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 			scoreStatus.setSelection(11 - activeRecord.score  );
 		}
 		
-		watchedStatus.setSelection(activeRecord.watched_status.ordinal());
+		if (activeRecord.watched_status != null ){
+			watchedStatus.setSelection(activeRecord.watched_status.ordinal());
+		}
 		
 		if ( activeRecord.prequels.size() >0 ){
 			prequel.setText(getString(R.string.prequel_format, activeRecord.prequels.get(0).title));
@@ -194,7 +198,11 @@ public class AnimeDetailFragment extends RoboFragment implements
 	@Override
 	public void onLoadFinished(Loader<AnimeRecord> loader, AnimeRecord data) {
 		activeRecord = data;
-		updateUI();
+		if ( activeRecord == null ){
+			ServerInterface.getAnimeRecord(getActivity(), idToDisplay);
+		} else {
+			updateUI();
+		}
 	}
 
 	@Override
@@ -264,6 +272,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 			numberPickerFragment.show(fm,"numberpicker");
 			
 			numberPickerFragment.setOnDismissListener(this);
+			break;
+		case R.id.prequel:
+			bus.post(new ChangeDetailViewRequest(activeRecord.prequels.get(0).anime_id));
 			break;
 		}
 	}

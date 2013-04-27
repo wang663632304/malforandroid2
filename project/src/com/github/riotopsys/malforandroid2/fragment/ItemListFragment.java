@@ -111,9 +111,7 @@ public class ItemListFragment extends RoboFragment implements
 			List<AnimeRecord> data) {
 		if ( animeAdapter.isEmpty()){
 			if ( !data.isEmpty() ){
-				ChangeDetailViewRequest cdvr = new ChangeDetailViewRequest(data.get(0));
-				cdvr.forceIt = true;
-				bus.post(cdvr);
+				bus.post(new ChangeDetailViewRequest(data.get(0).id, true));
 			}
 		}
 		animeAdapter.addAll(data);
@@ -127,7 +125,7 @@ public class ItemListFragment extends RoboFragment implements
 	@Override
 	public void onItemClick(AdapterView<?> view, View arg1, int position, long arg3) {
 		AnimeRecord ar = (AnimeRecord) view.getItemAtPosition(position);
-		bus.post(new ChangeDetailViewRequest(ar));
+		bus.post(new ChangeDetailViewRequest(ar.id));
 		
 	}
 	

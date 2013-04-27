@@ -82,7 +82,7 @@ public class HelloAndroidActivity extends BaseActivity {
     	FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment fragment = new AnimeDetailFragment();
         Bundle args = new Bundle();
-        args.putInt("id", cdvr.record.id);
+        args.putInt("id", cdvr.id);
 		fragment.setArguments(args );
 		transaction.replace(R.id.detail_frame, fragment );
         if ( !cdvr.forceIt ){
