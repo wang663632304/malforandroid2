@@ -100,6 +100,15 @@ public class AnimeDetailFragment extends RoboFragment implements
 	
 	@InjectView(R.id.side_story)
 	private TextView sideStory;
+	
+	@InjectView(R.id.spin_offs)
+	private TextView spinOffs;
+	
+	@InjectView(R.id.summaries)
+	private TextView summaries;
+	
+	@InjectView(R.id.alternative_versions)
+	private TextView alternativeVersions;
 
 	@Inject
 	private ImageLoader lazyLoader;
@@ -145,6 +154,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 		prequel.setOnClickListener(this);
 		sequel.setOnClickListener(this);
 		sideStory.setOnClickListener(this);
+		spinOffs.setOnClickListener(this);
+		summaries.setOnClickListener(this);
+		alternativeVersions.setOnClickListener(this);
 		
 		synopsysContainer.setOnTouchListener(this);
 		
@@ -218,7 +230,28 @@ public class AnimeDetailFragment extends RoboFragment implements
 		} else {
 			sideStory.setVisibility(View.GONE);
 		}
+		
+		if ( activeRecord.spin_offs.size() >0 ){
+			spinOffs.setText(getString(R.string.spin_off_format, activeRecord.spin_offs.size()));
+			spinOffs.setVisibility(View.VISIBLE);
+		} else {
+			spinOffs.setVisibility(View.GONE);
+		}
 
+		if ( activeRecord.summaries.size() >0 ){
+			summaries.setText(getString(R.string.summaries_format, activeRecord.summaries.size()));
+			summaries.setVisibility(View.VISIBLE);
+		} else {
+			summaries.setVisibility(View.GONE);
+		}
+		
+		if ( activeRecord.alternative_versions.size() >0 ){
+			alternativeVersions.setText(getString(R.string.alternative_versions_format, activeRecord.alternative_versions.size()));
+			alternativeVersions.setVisibility(View.VISIBLE);
+		} else {
+			alternativeVersions.setVisibility(View.GONE);
+		}
+		
 		
 	}
 
@@ -253,7 +286,6 @@ public class AnimeDetailFragment extends RoboFragment implements
 			AnimeWatchedStatus newStatus = AnimeWatchedStatus.values()[position];
 			if ( activeRecord.watched_status != null && activeRecord.watched_status != newStatus ){
 				activeRecord.watched_status = AnimeWatchedStatus.values()[position];
-				//save
 				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
 			}
 			break;
@@ -268,7 +300,6 @@ public class AnimeDetailFragment extends RoboFragment implements
 			}
 			if ( activeRecord.score != newScore ){
 				activeRecord.score = newScore;
-				//save
 				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
 			}
 			break;
@@ -280,7 +311,6 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@Override
 	public void onClick(View v) {
-//		List<String> titles = new LinkedList<String>();
 		BaseActivity ba = (BaseActivity) getActivity();
 		
 		switch (v.getId()) {
@@ -316,17 +346,26 @@ public class AnimeDetailFragment extends RoboFragment implements
 		case R.id.side_story:
 			createPickerDialog( activeRecord.side_stories ).show();
 			break;
+		case R.id.spin_offs:
+			createPickerDialog( activeRecord.spin_offs ).show();
+			break;
+		case R.id.summaries:
+			createPickerDialog( activeRecord.summaries ).show();
+			break;
+		case R.id.alternative_versions:
+			createPickerDialog( activeRecord.alternative_versions ).show();
+			break;
 		}
 	}
 
 	private Dialog createPickerDialog(final LinkedList<CrossReferance> crefs) {
-		List<String> titles = new LinkedList<String>();
+		List<CharSequence> titles = new LinkedList<CharSequence>();
 		
 		for ( CrossReferance cr : crefs ){
-			titles.add(cr.title);
+			titles.add(Html.fromHtml(cr.title));
 		}
 		
-		return new AlertDialog.Builder(getActivity()).setItems(titles.toArray(new String[0]), new DialogInterface.OnClickListener() {
+		return new AlertDialog.Builder(getActivity()).setItems(titles.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

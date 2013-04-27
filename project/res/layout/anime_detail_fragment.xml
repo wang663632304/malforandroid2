@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
  Copyright 2013 C. A. Fitzgerald
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License. 
---> 
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res/com.github.riotopsys.malforandroid2"
@@ -56,8 +56,8 @@
                 app:row_span="4" />
 
             <ScrollView
-                style="@style/detail_item"
                 android:id="@+id/synopsis_container"
+                style="@style/detail_item"
                 app:column_span="3"
                 app:row_span="4" >
 
@@ -129,37 +129,62 @@
                     android:spinnerMode="dialog"
                     tools:listitem="@android:layout/simple_spinner_dropdown_item" />
             </LinearLayout>
-            
+
             <TextView
                 android:id="@+id/prequel"
                 style="@style/detail_item"
+                android:gravity="center"
                 android:text="Prequel"
                 android:textStyle="bold"
-                app:column_span="1" 
-                android:gravity="center"
                 android:visibility="gone"
-                />
-            
+                app:column_span="1" />
+
             <TextView
                 android:id="@+id/sequel"
                 style="@style/detail_item"
+                android:gravity="center"
                 android:text="sequels"
                 android:textStyle="bold"
-                app:column_span="1" 
-                android:gravity="center"
                 android:visibility="gone"
-                />
-            
+                app:column_span="1" />
+
             <TextView
                 android:id="@+id/side_story"
                 style="@style/detail_item"
+                android:gravity="center"
                 android:text="side_story"
                 android:textStyle="bold"
-                app:column_span="1" 
-                android:gravity="center"
                 android:visibility="gone"
-                />
-<!-- test block -->
+                app:column_span="1" />
+            
+            <TextView
+                android:id="@+id/spin_offs"
+                style="@style/detail_item"
+                android:gravity="center"
+                android:text="spin_offs"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:column_span="1" />
+            
+            <TextView
+                android:id="@+id/summaries"
+                style="@style/detail_item"
+                android:gravity="center"
+                android:text="summaries"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:column_span="1" />
+            
+            <TextView
+                android:id="@+id/alternative_versions"
+                style="@style/detail_item"
+                android:gravity="center"
+                android:text="alternative_versions"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:column_span="1" />
+            
+            <!-- test block -->
 
             <View
                 android:layout_width="match_parent"

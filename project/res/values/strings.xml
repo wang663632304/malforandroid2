@@ -66,6 +66,9 @@ Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel 
     <string name="prequel_format">Prequels: %1$d</string>
     <string name="sequel_format">Sequels: %1$d</string>
     <string name="side_story_format">Side Stories: %1$d</string>
+    <string name="spin_off_format">Spin Offs: %1$d</string>
+    <string name="summaries_format">Summaries: %1$d</string>
+    <string name="alternative_versions_format">Alternates: %1$d</string>
     <string name="plus_one">+1</string>
 
 </resources>
