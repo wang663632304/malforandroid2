@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.github.riotopsys.malforandroid2.R;
@@ -35,7 +36,7 @@ import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class AnimeAdapter extends BaseAdapter {
+public class AnimeAdapter extends BaseAdapter implements SectionIndexer{
 	
 	@Inject
 	private ImageLoader lazyLoader;
@@ -44,7 +45,8 @@ public class AnimeAdapter extends BaseAdapter {
 	private Comparator<AnimeRecord> comparator;
 	
 	private List<AnimeRecord> animeList = new LinkedList<AnimeRecord>();
-
+	private Section[] sections = new Section[0];
+	
 	@Override
 	public int getCount() {
 		return animeList.size();
@@ -80,8 +82,84 @@ public class AnimeAdapter extends BaseAdapter {
 		if ( anime != null ){
 			animeList.addAll(anime);
 			Collections.sort( animeList, comparator );
+			buildSections();
 		}
 		notifyDataSetChanged();
+	}
+	
+	private static class Section{
+		public String tag;
+		
+		/**
+		 * Inclusive
+		 */
+		public int start; 
+		
+		/**
+		 * Exclusive, or start of next
+		 */
+		public int end;
+		
+		@Override
+		public String toString() {
+			return tag;
+		}
+	}
+
+	private void buildSections() {
+		LinkedList<Section> scratch = new LinkedList<Section>();
+		if ( animeList.size() == 0 ){
+			return;
+		}
+		
+		Section s = new Section();
+		s.tag=makeTag(animeList.get(0));
+		s.start = 0;
+		s.end = 0;
+		scratch.add(s);
+		for ( int c = 1; c < animeList.size(); c++){
+			String tag = makeTag(animeList.get(c));
+			if ( !tag.equals(s.tag)){
+				s.end = c;
+				s = new Section();
+				s.tag=tag;
+				s.start = c;
+				scratch.add(s);
+			}
+		}
+		sections = scratch.toArray(sections);
+	}
+
+	private String makeTag(AnimeRecord animeRecord) {
+		char result = animeRecord.title.toUpperCase().charAt(0);
+		if ( Character.isDigit(result) ){
+			result = '#';
+		}
+		return Character.toString(result);
+	}
+
+	@Override
+	public int getPositionForSection(int section) {
+		if ( section >= sections.length ){
+			return sections[sections.length-1].start;
+		}
+		return sections[section].start;
+	}
+
+	@Override
+	public int getSectionForPosition(int position) {
+		for ( int c = 0; c < sections.length; c++  ){
+			Section s = sections[c];
+			if ( position >= s.start && position < s.end ){
+				return c;
+			}
+		}
+		return sections.length-1;
+	}
+
+	@Override
+	public Object[] getSections() {
+		return sections;
 	}
 
 }
