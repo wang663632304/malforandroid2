@@ -179,6 +179,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 		
 		if (activeRecord.watched_status != null ){
 			watchedStatus.setSelection(activeRecord.watched_status.ordinal());
+			//TODO: make containers visible 
+		} else {
+			//TODO: make containers gone 
 		}
 		
 		if ( activeRecord.prequels.size() >0 ){
@@ -219,7 +222,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		switch ( adapter.getId() ){
 		case R.id.anime_watched_status:
 			AnimeWatchedStatus newStatus = AnimeWatchedStatus.values()[position];
-			if ( activeRecord.watched_status != newStatus ){
+			if ( activeRecord.watched_status != null && activeRecord.watched_status != newStatus ){
 				activeRecord.watched_status = AnimeWatchedStatus.values()[position];
 				//save
 				new DBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
