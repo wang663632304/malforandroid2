@@ -139,6 +139,26 @@
                 android:gravity="center"
                 android:visibility="gone"
                 />
+            
+            <TextView
+                android:id="@+id/sequel"
+                style="@style/detail_item"
+                android:text="sequels"
+                android:textStyle="bold"
+                app:column_span="1" 
+                android:gravity="center"
+                android:visibility="gone"
+                />
+            
+            <TextView
+                android:id="@+id/side_story"
+                style="@style/detail_item"
+                android:text="side_story"
+                android:textStyle="bold"
+                app:column_span="1" 
+                android:gravity="center"
+                android:visibility="gone"
+                />
 <!-- test block -->
 
             <View

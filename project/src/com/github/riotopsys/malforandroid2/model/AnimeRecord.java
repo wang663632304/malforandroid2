@@ -97,5 +97,14 @@ public class AnimeRecord {
 	
 	@DatabaseField( )
 	public String synopsis;
+	
+	@DatabaseField(dataType=DataType.SERIALIZABLE)
+	public LinkedList<CrossReferance> spin_offs;
+	
+	@DatabaseField(dataType=DataType.SERIALIZABLE)
+	public LinkedList<CrossReferance> summaries;
+    
+	@DatabaseField(dataType=DataType.SERIALIZABLE)
+	public LinkedList<CrossReferance> alternative_versions;
 
 }

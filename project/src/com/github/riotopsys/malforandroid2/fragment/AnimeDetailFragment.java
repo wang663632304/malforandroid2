@@ -16,14 +16,19 @@
 
 package com.github.riotopsys.malforandroid2.fragment;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectView;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -48,6 +53,7 @@ import com.github.riotopsys.malforandroid2.fragment.NumberPickerFragment.OnDismi
 import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
+import com.github.riotopsys.malforandroid2.model.CrossReferance;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -88,6 +94,12 @@ public class AnimeDetailFragment extends RoboFragment implements
 	
 	@InjectView(R.id.prequel)
 	private TextView prequel;
+	
+	@InjectView(R.id.sequel)
+	private TextView sequel;
+	
+	@InjectView(R.id.side_story)
+	private TextView sideStory;
 
 	@Inject
 	private ImageLoader lazyLoader;
@@ -131,6 +143,8 @@ public class AnimeDetailFragment extends RoboFragment implements
 		plusOne.setOnClickListener(this);
 		watchedPannel.setOnClickListener(this);
 		prequel.setOnClickListener(this);
+		sequel.setOnClickListener(this);
+		sideStory.setOnClickListener(this);
 		
 		synopsysContainer.setOnTouchListener(this);
 		
@@ -185,12 +199,27 @@ public class AnimeDetailFragment extends RoboFragment implements
 		}
 		
 		if ( activeRecord.prequels.size() >0 ){
-			prequel.setText(getString(R.string.prequel_format, activeRecord.prequels.get(0).title));
+			prequel.setText(getString(R.string.prequel_format, activeRecord.prequels.size()));
 			prequel.setVisibility(View.VISIBLE);
 		} else {
 			prequel.setVisibility(View.GONE);
 		}
+		
+		if ( activeRecord.sequels.size() >0 ){
+			sequel.setText(getString(R.string.sequel_format, activeRecord.sequels.size()));
+			sequel.setVisibility(View.VISIBLE);
+		} else {
+			sequel.setVisibility(View.GONE);
+		}
+		
+		if ( activeRecord.side_stories.size() >0 ){
+			sideStory.setText(getString(R.string.side_story_format, activeRecord.side_stories.size()));
+			sideStory.setVisibility(View.VISIBLE);
+		} else {
+			sideStory.setVisibility(View.GONE);
+		}
 
+		
 	}
 
 	@Override
@@ -251,7 +280,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@Override
 	public void onClick(View v) {
+//		List<String> titles = new LinkedList<String>();
 		BaseActivity ba = (BaseActivity) getActivity();
+		
 		switch (v.getId()) {
 		case R.id.plus_one:
 			activeRecord.watched_episodes++;
@@ -277,9 +308,32 @@ public class AnimeDetailFragment extends RoboFragment implements
 			numberPickerFragment.setOnDismissListener(this);
 			break;
 		case R.id.prequel:
-			bus.post(new ChangeDetailViewRequest(activeRecord.prequels.get(0).anime_id));
+			createPickerDialog( activeRecord.prequels ).show();
+			break;
+		case R.id.sequel:
+			createPickerDialog( activeRecord.sequels ).show();
+			break;
+		case R.id.side_story:
+			createPickerDialog( activeRecord.side_stories ).show();
 			break;
 		}
+	}
+
+	private Dialog createPickerDialog(final LinkedList<CrossReferance> crefs) {
+		List<String> titles = new LinkedList<String>();
+		
+		for ( CrossReferance cr : crefs ){
+			titles.add(cr.title);
+		}
+		
+		return new AlertDialog.Builder(getActivity()).setItems(titles.toArray(new String[0]), new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				bus.post(new ChangeDetailViewRequest(crefs.get(which).anime_id));
+			}
+		}).create();
+		
 	}
 
 	@Override
