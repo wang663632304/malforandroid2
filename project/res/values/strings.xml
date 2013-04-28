@@ -36,6 +36,7 @@ Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel 
     <string name="watched_status_onhold">On-Hold</string>
     <string name="watched_status_dropped">Dropped</string>
     <string name="watched_status_plan">Plan to Watch</string>
+    <string name="placard_text">Select an item for details</string>
 
     <string-array name="anime_status_options">
         <item>Watching</item>

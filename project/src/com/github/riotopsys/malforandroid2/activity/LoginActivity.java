@@ -93,7 +93,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 	public void onEventMainThread(CredentialVerificationEvent cve) {
 		progressDialog.cancel();
 		if (cve.code == 200) {
-			startActivity(new Intent(this, HelloAndroidActivity.class));
+			startActivity(new Intent(this, HubActivity.class));
 			finish();
 		} else if (cve.code == 401) {
 			new AlertDialog.Builder(this).setTitle(R.string.login_error_title)
@@ -137,7 +137,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,
 		for (NameValuePair<String> pair : data) {
 			if ("TOKEN".equals(pair.name)) {
 				restHelper.setToken((String) pair.value);
-				startActivity(new Intent(this, HelloAndroidActivity.class));
+				startActivity(new Intent(this, HubActivity.class));
 				finish();
 			}
 			break;

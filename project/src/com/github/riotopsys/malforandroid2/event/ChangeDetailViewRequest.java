@@ -20,15 +20,9 @@ package com.github.riotopsys.malforandroid2.event;
 public class ChangeDetailViewRequest {
 
 	public int id;
-	public boolean forceIt = false;
 
 	public ChangeDetailViewRequest(int id) {
 		this.id = id;
-	}
-	
-	public ChangeDetailViewRequest(int id, boolean forceIt) {
-		this.id = id;
-		this.forceIt = forceIt;
 	}
 
 }

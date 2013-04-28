@@ -110,11 +110,6 @@ public class ItemListFragment extends RoboFragment implements
 	@Override
 	public void onLoadFinished(Loader<List<AnimeRecord>> loader,
 			List<AnimeRecord> data) {
-		if ( animeAdapter.isEmpty()){
-			if ( !data.isEmpty() ){
-				bus.post(new ChangeDetailViewRequest(data.get(0).id, true));
-			}
-		}
 		animeAdapter.addAll(data);
 	}
 
