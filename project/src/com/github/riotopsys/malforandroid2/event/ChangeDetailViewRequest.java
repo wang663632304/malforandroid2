@@ -24,5 +24,18 @@ public class ChangeDetailViewRequest {
 	public ChangeDetailViewRequest(int id) {
 		this.id = id;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if ( o instanceof ChangeDetailViewRequest ){
+			return id == ((ChangeDetailViewRequest)o).id;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Integer.valueOf(id).hashCode();
+	}
 
 }

@@ -106,6 +106,9 @@ public class HubActivity extends BaseActivity {
 	}
 
 	public void onEventMainThread(ChangeDetailViewRequest cdvr) {
+		if ( cdvr.equals(currentDetail)){
+			return;
+		}
 		manualBackStack.push(currentDetail);
 		transitionDetail(cdvr);
 	}
