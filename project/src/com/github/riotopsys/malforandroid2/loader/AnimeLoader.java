@@ -25,6 +25,7 @@ import android.util.Log;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.Where;
 
 public class AnimeLoader extends DBLoader<List<AnimeRecord>> {
 
@@ -40,8 +41,11 @@ public class AnimeLoader extends DBLoader<List<AnimeRecord>> {
 	public List<AnimeRecord> loadInBackground() {
 		try {
 			Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
-			
-			return dao.queryBuilder().where().isNotNull("watched_status").and().eq("watched_status", filter).query();
+			Where<AnimeRecord, Integer> where = dao.queryBuilder().where().isNotNull("watched_status");
+			if ( filter != null ){
+				where.and().eq("watched_status", filter);
+			} 
+			return where.query();
 		} catch (SQLException e) {
 			Log.e(TAG, "", e);
 		}
