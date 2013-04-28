@@ -36,6 +36,7 @@ import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.loader.AnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
@@ -101,7 +102,7 @@ public class ItemListFragment extends RoboFragment implements
 	
 	@Override
 	public Loader<List<AnimeRecord>> onCreateLoader(int id, Bundle args) {
-		AnimeLoader loader = new AnimeLoader(getActivity());
+		AnimeLoader loader = new AnimeLoader(getActivity(), (AnimeWatchedStatus)getArguments().getSerializable("filter"));
 //		loader.setUpdateThrottle(1000/24);
 		return loader;
 	}

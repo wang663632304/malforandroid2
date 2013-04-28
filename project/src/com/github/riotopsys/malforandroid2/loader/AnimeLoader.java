@@ -23,14 +23,17 @@ import android.content.Context;
 import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.j256.ormlite.dao.Dao;
 
 public class AnimeLoader extends DBLoader<List<AnimeRecord>> {
 
 	private static final String TAG = AnimeLoader.class.getSimpleName();
+	private AnimeWatchedStatus filter;
 
-	public AnimeLoader(Context context) {
+	public AnimeLoader(Context context, AnimeWatchedStatus filter) {
 		super(context);
+		this.filter = filter;
 	}
 
 	@Override
@@ -38,7 +41,7 @@ public class AnimeLoader extends DBLoader<List<AnimeRecord>> {
 		try {
 			Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 			
-			return dao.queryBuilder().where().isNotNull("watched_status").query();
+			return dao.queryBuilder().where().isNotNull("watched_status").and().eq("watched_status", filter).query();
 		} catch (SQLException e) {
 			Log.e(TAG, "", e);
 		}

@@ -1,6 +1,7 @@
 package com.github.riotopsys.malforandroid2.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,7 +22,13 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) {
-		return new ItemListFragment();
+		Fragment f = new ItemListFragment();
+		
+		Bundle args = new Bundle();
+		args.putSerializable("filter", AnimeWatchedStatus.values()[position]);
+		
+		f.setArguments(args);
+		return f;
 	}
 
 	@Override
