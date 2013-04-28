@@ -86,7 +86,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 	@InjectView(R.id.watched_count)
 	private TextView watchedCount;
 	
-	@InjectView(R.id.watched_pannel)
+	@InjectView(R.id.watched_panel)
 	private View watchedPannel;
 	
 	@InjectView(R.id.plus_one)
@@ -133,6 +133,21 @@ public class AnimeDetailFragment extends RoboFragment implements
 	
 	@InjectView(R.id.favorited_count)
 	private TextView favoritedCount;
+	
+	@InjectView(R.id.information_container)
+	private View informationContainer;
+	
+	@InjectView(R.id.statistics_container)
+	private View statisticsContainer;
+	
+	@InjectView(R.id.watched_panel)
+	private View watchedPanel;
+	
+	@InjectView(R.id.status_panel)
+	private View statusPanel;
+	
+	@InjectView(R.id.score_panel)
+	private View scorePanel;
 
 	@Inject
 	private ImageLoader lazyLoader;
@@ -220,6 +235,11 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 		if (activeRecord.synopsis == null) {
 			ServerInterface.getAnimeRecord(getActivity(), activeRecord.id);
+			informationContainer.setVisibility(View.GONE);
+			statisticsContainer.setVisibility(View.GONE);
+		} else {
+			informationContainer.setVisibility(View.VISIBLE);
+			statisticsContainer.setVisibility(View.VISIBLE);
 		}
 
 		watchedCount.setText(getString(R.string.watched_format, activeRecord.watched_episodes, activeRecord.episodes ));
@@ -243,9 +263,13 @@ public class AnimeDetailFragment extends RoboFragment implements
 		
 		if (activeRecord.watched_status != null ){
 			watchedStatus.setSelection(activeRecord.watched_status.ordinal());
-			//TODO: make containers visible 
+			watchedPanel.setVisibility(View.VISIBLE);
+			statusPanel.setVisibility(View.VISIBLE);
+			scorePanel.setVisibility(View.VISIBLE); 
 		} else {
-			//TODO: make containers gone 
+			watchedPanel.setVisibility(View.GONE);
+			statusPanel.setVisibility(View.GONE);
+			scorePanel.setVisibility(View.GONE);
 		}
 		
 		if ( activeRecord.prequels.size() >0 ){
@@ -361,7 +385,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 						.execute(activeRecord);
 			}
 			break;
-		case R.id.watched_pannel:
+		case R.id.watched_panel:
 			FragmentManager fm = getActivity().getSupportFragmentManager();
 			NumberPickerFragment numberPickerFragment = new NumberPickerFragment();
 			if ( activeRecord.episodes != 0 ){
