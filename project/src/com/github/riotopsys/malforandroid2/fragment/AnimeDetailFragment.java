@@ -109,6 +109,30 @@ public class AnimeDetailFragment extends RoboFragment implements
 	
 	@InjectView(R.id.alternative_versions)
 	private TextView alternativeVersions;
+	
+	@InjectView(R.id.type)
+	private TextView type;
+	
+	@InjectView(R.id.status)
+	private TextView status;
+	
+	@InjectView(R.id.classification)
+	private TextView classification;
+	
+	@InjectView(R.id.rank)
+	private TextView rank;
+	
+	@InjectView(R.id.popularity)
+	private TextView popularity;
+	
+	@InjectView(R.id.member_score)
+	private TextView memberScore;
+	
+	@InjectView(R.id.member_count)
+	private TextView memberCount;
+	
+	@InjectView(R.id.favorited_count)
+	private TextView favoritedCount;
 
 	@Inject
 	private ImageLoader lazyLoader;
@@ -194,6 +218,15 @@ public class AnimeDetailFragment extends RoboFragment implements
 		}
 
 		watchedCount.setText(getString(R.string.watched_format, activeRecord.watched_episodes, activeRecord.episodes ));
+		
+		type.setText(getString(R.string.type_format, activeRecord.type ));
+		status.setText(getString(R.string.status_format, activeRecord.status ));
+		classification.setText(getString(R.string.classification_format, activeRecord.classification ));
+		rank.setText(getString(R.string.rank_format, activeRecord.rank ));
+		popularity.setText(getString(R.string.popularity_format, activeRecord.popularity_rank ));
+		memberScore.setText(getString(R.string.members_score_format, activeRecord.members_score ));
+		memberCount.setText(getString(R.string.members_count_format, activeRecord.members_count ));
+		favoritedCount.setText(getString(R.string.favorited_count_format, activeRecord.favorited_count ));
 
 		switch (activeRecord.score) {
 		case 0:

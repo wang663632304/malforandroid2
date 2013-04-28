@@ -29,7 +29,8 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -130,6 +131,116 @@
                     tools:listitem="@android:layout/simple_spinner_dropdown_item" />
             </LinearLayout>
 
+            <LinearLayout
+                style="@style/detail_item"
+                android:text="alternative_versions"
+                app:column_span="1"
+                app:row_span="2"
+                android:orientation="vertical" 
+                >
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Information"
+                    android:textStyle="bold" 
+                    android:layout_marginBottom="4dp"
+                    />
+                
+                <TextView
+                    android:id="@+id/type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Type: TV"
+                    android:layout_marginBottom="4dp"
+                    />
+                
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Status: finished airing"
+                    android:layout_marginBottom="4dp"
+                    />
+                
+                <TextView
+                    android:id="@+id/classification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="classification: R - 17+ (violence &amp; profanity)"
+                    android:layout_marginBottom="4dp"
+                    />
+                
+             </LinearLayout>
+             
+            <LinearLayout
+                style="@style/detail_item"
+                android:text="alternative_versions"
+                app:column_span="1"
+                app:row_span="2"
+                android:orientation="vertical" 
+                >
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Statistics"
+                    android:textStyle="bold" 
+                    android:layout_marginBottom="4dp"
+                    />
+                
+                <TextView
+                    android:id="@+id/rank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Rank: 3733"
+                    android:layout_marginBottom="4dp"
+                    />
+                
+                <TextView
+                    android:id="@+id/popularity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Popularity: 3733"
+                    android:layout_marginBottom="4dp"
+                    />
+                
+                <TextView
+                    android:id="@+id/member_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Member Score: 6.78"
+                    android:layout_marginBottom="4dp"
+                    />
+                
+                <TextView
+                    android:id="@+id/member_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Member Count: 52423"
+                    android:layout_marginBottom="4dp"
+                    />
+                
+                <TextView
+                    android:id="@+id/favorited_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Favorited Count: 244"
+                    android:layout_marginBottom="4dp"
+                    />
+                
+             </LinearLayout>
+             
             <TextView
                 android:id="@+id/prequel"
                 style="@style/detail_item"
@@ -184,14 +295,6 @@
                 android:visibility="gone"
                 app:column_span="1" />
             
-            <!-- test block -->
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#666"
-                app:column_span="5"
-                app:row_span="6" />
         </com.github.riotopsys.pannellayout.PannelLayout>
     </ScrollView>
 
