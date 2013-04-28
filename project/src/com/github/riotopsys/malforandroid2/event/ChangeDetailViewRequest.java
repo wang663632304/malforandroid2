@@ -16,8 +16,10 @@
 
 package com.github.riotopsys.malforandroid2.event;
 
+import java.io.Serializable;
 
-public class ChangeDetailViewRequest {
+
+public class ChangeDetailViewRequest implements Serializable {
 
 	public int id;
 

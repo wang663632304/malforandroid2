@@ -207,6 +207,11 @@ public class AnimeDetailFragment extends RoboFragment implements
 	}
 
 	private void updateUI() {
+		
+		if ( !isAdded() ){
+			return;
+		}
+		
 		lazyLoader.displayImage(activeRecord.image_url, cover);
 		title.setText(Html.fromHtml(activeRecord.title));
 		if (activeRecord.synopsis != null) {

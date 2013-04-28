@@ -16,7 +16,7 @@
 
 package com.github.riotopsys.malforandroid2.activity;
 
-import java.util.Deque;
+import java.util.Collection;
 import java.util.LinkedList;
 
 import roboguice.inject.InjectView;
@@ -51,10 +51,11 @@ public class HubActivity extends BaseActivity {
 	@Inject
 	private ListPagerAdapter adapter;
 
-	private Deque<ChangeDetailViewRequest> manualBackStack = new LinkedList<ChangeDetailViewRequest>();
+	private LinkedList<ChangeDetailViewRequest> manualBackStack = new LinkedList<ChangeDetailViewRequest>();
 
 	private ChangeDetailViewRequest currentDetail = null;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,12 +63,22 @@ public class HubActivity extends BaseActivity {
 		setContentView(R.layout.main);
 
 		listPager.setAdapter(adapter);
-
-		FragmentTransaction transaction = getSupportFragmentManager()
-				.beginTransaction();
-		transaction.replace(R.id.detail_frame, new PlacardFragment());
-		transaction.commit();
-
+		
+		if ( savedInstanceState != null){
+			currentDetail = (ChangeDetailViewRequest) savedInstanceState.get("currentDetail");
+			manualBackStack.clear();
+			manualBackStack.addAll((Collection<ChangeDetailViewRequest>) savedInstanceState.get("manualBackStack"));
+		}
+		
+		transitionDetail(currentDetail);
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		outState.putSerializable("currentDetail", currentDetail);
+		outState.putSerializable("manualBackStack", manualBackStack);
+		
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
