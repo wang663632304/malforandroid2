@@ -49,4 +49,8 @@ public class UrlBuilder {
 		return String.format("%s/anime/search?q=%s", baseUrl, URLEncoder.encode(criteria, "utf-8"));
 	}
 
+	public URL getAnimeAddUrl() throws MalformedURLException {
+		return new URL( String.format("%s/animelist/anime", baseUrl));
+	}
+
 }

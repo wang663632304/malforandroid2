@@ -135,6 +135,38 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/add_panel"
+                style="@style/detail_item"
+                android:gravity="center"
+                android:visibility="gone"
+                android:weightSum="5"
+                app:column_span="5" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Add as:"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/anime_watched_status_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:spinnerMode="dialog"
+                    tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+
+                <Button
+                    android:id="@+id/add_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="Add" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/information_container"
                 style="@style/detail_item"
                 android:orientation="vertical"

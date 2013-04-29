@@ -39,10 +39,19 @@ public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 
 	private EventBus bus;
 
+	private boolean isAdd = false;
+
 	public DBUpdateTask(DatabaseHelper dbHelper, Context ctx, EventBus bus) {
 		this.dbHelper = dbHelper;
 		this.ctx = ctx;
 		this.bus = bus;
+	}
+	
+	public DBUpdateTask(DatabaseHelper dbHelper, Context ctx, EventBus bus, boolean isAdd) {
+		this.dbHelper = dbHelper;
+		this.ctx = ctx;
+		this.bus = bus;
+		this.isAdd = isAdd;
 	}
 
 	@Override
@@ -52,7 +61,11 @@ public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 			for (AnimeRecord p : params) {
 				try {
 					dao.createOrUpdate(p);
-					ServerInterface.updateAnimeRecord(ctx, p.id);
+					if ( isAdd  ){
+						ServerInterface.addAnimeRecord(ctx, p.id);
+					} else {
+						ServerInterface.updateAnimeRecord(ctx, p.id);
+					}
 					bus.post(new AnimeUpdateEvent(p.id));
 				} catch (SQLException e) {
 					Log.e(TAG, "cannot save item", e);

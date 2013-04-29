@@ -51,7 +51,7 @@ public class ServerInterface extends RoboIntentService {
 			.getCanonicalName() + ".id";
 	
 	private enum Action {
-		GET_ANIME_LIST, GET_ANIME_RECORD, VERIFY_CREDENTIALS, UPDATE_ANIME_RECORD
+		GET_ANIME_LIST, GET_ANIME_RECORD, VERIFY_CREDENTIALS, UPDATE_ANIME_RECORD, ADD_ANIME
 	};
 
 	@Inject
@@ -117,12 +117,24 @@ public class ServerInterface extends RoboIntentService {
 			case UPDATE_ANIME_RECORD:
 				updateAnimeRecord(id);
 				break;
+			case ADD_ANIME:
+				addAnimeRecord(id);
+				break;
 			default:
 				Log.v(TAG, String.format("Invalid Request: %s", action.name()));
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "", e);
 		}
+	}
+	
+	private void addAnimeRecord(int id) throws SQLException, MalformedURLException {
+		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
+		AnimeRecord anime = dao.queryForId(id);
+		String value = String.format("status=%s&anime_id=%d",
+				anime.watched_status.getServerKey(), anime.id);
+		Log.v(TAG, String.format("url %s data %s",  urlBuilder.getAnimeAddUrl(), value));
+		restHelper.post(urlBuilder.getAnimeAddUrl(), value);
 	}
 
 	private void updateAnimeRecord(int id) throws SQLException, MalformedURLException {
@@ -204,6 +216,15 @@ public class ServerInterface extends RoboIntentService {
 		Intent serviceIntent = new Intent(context, ServerInterface.class);
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(ACTION_KEY, Action.UPDATE_ANIME_RECORD);
+		bundle.putInt(ID_KEY, id);
+		serviceIntent.putExtras(bundle);
+		context.startService(serviceIntent);
+	}
+	
+	public static void addAnimeRecord(Context context, int id) {
+		Intent serviceIntent = new Intent(context, ServerInterface.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(ACTION_KEY, Action.ADD_ANIME);
 		bundle.putInt(ID_KEY, id);
 		serviceIntent.putExtras(bundle);
 		context.startService(serviceIntent);

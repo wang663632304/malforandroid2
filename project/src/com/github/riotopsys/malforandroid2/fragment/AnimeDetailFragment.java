@@ -148,7 +148,16 @@ public class AnimeDetailFragment extends RoboFragment implements
 	
 	@InjectView(R.id.score_panel)
 	private View scorePanel;
-
+	
+	@InjectView(R.id.add_panel)
+	private View addPanel;
+	
+	@InjectView(R.id.anime_watched_status_add)
+	private Spinner addSpinner;
+	
+	@InjectView(R.id.add_button)
+	private Button addButton;
+	
 	@Inject
 	private ImageLoader lazyLoader;
 
@@ -183,6 +192,10 @@ public class AnimeDetailFragment extends RoboFragment implements
 				R.array.anime_score_options,
 				android.R.layout.simple_spinner_dropdown_item));
 		
+		addSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(),
+				R.array.anime_status_options,
+				android.R.layout.simple_spinner_dropdown_item));
+		
 		scoreStatus.setOnItemSelectedListener(this);
 
 		singleAnimeLoader = getLoaderManager().initLoader(0, null, this);
@@ -196,6 +209,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		spinOffs.setOnClickListener(this);
 		summaries.setOnClickListener(this);
 		alternativeVersions.setOnClickListener(this);
+		addButton.setOnClickListener(this);
 		
 		synopsysContainer.setOnTouchListener(this);
 		
@@ -266,10 +280,14 @@ public class AnimeDetailFragment extends RoboFragment implements
 			watchedPanel.setVisibility(View.VISIBLE);
 			statusPanel.setVisibility(View.VISIBLE);
 			scorePanel.setVisibility(View.VISIBLE); 
+			
+			addPanel.setVisibility(View.GONE);
 		} else {
 			watchedPanel.setVisibility(View.GONE);
 			statusPanel.setVisibility(View.GONE);
 			scorePanel.setVisibility(View.GONE);
+			
+			addPanel.setVisibility(View.VISIBLE);
 		}
 		
 		if ( activeRecord.prequels.size() >0 ){
@@ -381,9 +399,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 			if (activeRecord.watched_episodes > activeRecord.episodes) {
 				activeRecord.watched_episodes = activeRecord.episodes;
 				// save
-				new DBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
-						.execute(activeRecord);
 			}
+			new DBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
+				.execute(activeRecord);
 			break;
 		case R.id.watched_panel:
 			FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -398,6 +416,12 @@ public class AnimeDetailFragment extends RoboFragment implements
 			numberPickerFragment.show(fm,"numberpicker");
 			
 			numberPickerFragment.setOnDismissListener(this);
+			break;
+		case R.id.add_button:
+			activeRecord.watched_status = AnimeWatchedStatus.values()[addSpinner.getSelectedItemPosition()];
+
+			new DBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus, true)
+					.execute(activeRecord);
 			break;
 		case R.id.prequel:
 			createPickerDialog( activeRecord.prequels ).show();
