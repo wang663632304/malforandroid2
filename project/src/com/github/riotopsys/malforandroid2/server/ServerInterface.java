@@ -18,7 +18,9 @@ package com.github.riotopsys.malforandroid2.server;
 
 import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import roboguice.service.RoboIntentService;
 import android.content.Context;
@@ -36,6 +38,7 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.GenericRawResults;
 
 import de.greenrobot.event.EventBus;
 
@@ -158,6 +161,7 @@ public class ServerInterface extends RoboIntentService {
 	}
 
 	private void getAnimeList() throws MalformedURLException, SQLException {
+		//get list from server
 		RestResult<String> result = restHelper.get(urlBuilder.getAnimeListUrl("riotopsys"));
 		if (result.code == 200) {
 			Log.v(TAG, result.result);
@@ -169,7 +173,18 @@ public class ServerInterface extends RoboIntentService {
 			
 			Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 			
+			//get ids that may have been removed, a.k.a. all ids  
+			GenericRawResults<String[]> data = dao.queryBuilder().selectColumns("id").where().isNotNull("watched_status").queryRaw();
+			Set<Integer> deletedIds = new HashSet<Integer>();
+			
+			for ( String[] s: data.getResults()){
+				deletedIds.add(Integer.parseInt(s[0]));
+			}
+			
+			//update local items
 			for ( AnimeRecord ar : alr ){
+				//remove form suspect list 
+				deletedIds.remove(ar.id);
 				AnimeRecord arOriginal = dao.queryForId(ar.id);
 				if ( arOriginal != null ){
 					arOriginal.watched_status = ar.watched_status;
@@ -181,6 +196,16 @@ public class ServerInterface extends RoboIntentService {
 					dao.createOrUpdate(ar);
 				}
 				bus.post(new AnimeUpdateEvent(ar.id));
+			}
+			
+			//any items still in deletedIds need to be cleared
+			for ( int id : deletedIds){
+				AnimeRecord arOriginal = dao.queryForId(id);
+				arOriginal.watched_status = null;
+				arOriginal.score = 0;
+				arOriginal.watched_episodes = 0;
+				dao.createOrUpdate(arOriginal);
+				bus.post(new AnimeUpdateEvent(id));
 			}
 		}
 	}
