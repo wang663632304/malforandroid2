@@ -29,6 +29,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -174,6 +175,8 @@ public class AnimeDetailFragment extends RoboFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		idToDisplay = getArguments().getInt("id");
+		
+		Log.v(TAG, String.format("ID: %d", idToDisplay));
 		
 		return inflater.inflate(R.layout.anime_detail_fragment, null);
 	}

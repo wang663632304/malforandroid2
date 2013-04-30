@@ -79,7 +79,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:text="Watched:"
+                    android:text="@string/watched"
                     android:textStyle="bold" />
 
                 <Button
@@ -100,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:text="Status:"
+                    android:text="@string/status"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -122,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:text="Your Score:"
+                    android:text="@string/your_score"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -146,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:text="Add as:"
+                    android:text="@string/add_as"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -163,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:text="Add" />
+                    android:text="@string/add" />
             </LinearLayout>
 
             <LinearLayout
@@ -179,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="Information"
+                    android:text="@string/information"
                     android:textStyle="bold" />
 
                 <TextView
@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="Type: TV" />
+                     />
 
                 <TextView
                     android:id="@+id/status"
@@ -196,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="Status: finished airing" />
+                    />
 
                 <TextView
                     android:id="@+id/classification"
@@ -204,7 +204,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="classification: R - 17+ (violence &amp; profanity)" />
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -220,8 +220,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="Statistics"
-                    android:textStyle="bold" />
+                    android:text="@string/statistics"
+                    android:textStyle="bold" 
+                    />
 
                 <TextView
                     android:id="@+id/rank"
@@ -229,7 +230,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="Rank: 3733" />
+                    />
 
                 <TextView
                     android:id="@+id/popularity"
@@ -237,7 +238,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="Popularity: 3733" />
+                    />
 
                 <TextView
                     android:id="@+id/member_score"
@@ -245,7 +246,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="Member Score: 6.78" />
+                    />
 
                 <TextView
                     android:id="@+id/member_count"
@@ -253,7 +254,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="Member Count: 52423" />
+                    />
 
                 <TextView
                     android:id="@+id/favorited_count"
@@ -261,14 +262,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
                     android:layout_marginBottom="4dp"
-                    android:text="Favorited Count: 244" />
+                    />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/prequel"
                 style="@style/detail_item"
                 android:gravity="center"
-                android:text="Prequel"
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:column_span="1" />
@@ -277,7 +277,6 @@
                 android:id="@+id/sequel"
                 style="@style/detail_item"
                 android:gravity="center"
-                android:text="sequels"
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:column_span="1" />
@@ -286,7 +285,6 @@
                 android:id="@+id/side_story"
                 style="@style/detail_item"
                 android:gravity="center"
-                android:text="side_story"
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:column_span="1" />
@@ -295,7 +293,6 @@
                 android:id="@+id/spin_offs"
                 style="@style/detail_item"
                 android:gravity="center"
-                android:text="spin_offs"
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:column_span="1" />
@@ -304,7 +301,6 @@
                 android:id="@+id/summaries"
                 style="@style/detail_item"
                 android:gravity="center"
-                android:text="summaries"
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:column_span="1" />
@@ -313,7 +309,6 @@
                 android:id="@+id/alternative_versions"
                 style="@style/detail_item"
                 android:gravity="center"
-                android:text="alternative_versions"
                 android:textStyle="bold"
                 android:visibility="gone"
                 app:column_span="1" />

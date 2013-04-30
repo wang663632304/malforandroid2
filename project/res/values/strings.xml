@@ -74,5 +74,14 @@ Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel 
     <string name="favorited_count_format">Favorited: %1$d</string>
     <string name="alternative_versions_format">Alternates: %1$d</string>
     <string name="plus_one">+1</string>
+    
+    <string name="add_as">Add as:</string>
+    <string name="add">Add</string>
+    <string name="statistics">Statistics</string>
+	<string name="information">Information</string>
+	<string name="status">Status:</string>
+	<string name="watched">Watched:</string>
+	<string name="your_score">Your Score:</string>
+	<string name="refresh_list">Refresh List</string>
 
 </resources>

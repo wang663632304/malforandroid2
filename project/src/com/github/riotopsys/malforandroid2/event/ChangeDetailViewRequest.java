@@ -21,6 +21,8 @@ import java.io.Serializable;
 
 public class ChangeDetailViewRequest implements Serializable {
 
+	private static final long serialVersionUID = 3599241799270950826L;
+	
 	public int id;
 
 	public ChangeDetailViewRequest(int id) {

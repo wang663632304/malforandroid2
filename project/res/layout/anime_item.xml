@@ -41,7 +41,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="title"
             android:textColor="#FFF"
             android:textSize="@dimen/medium_text" />
 
@@ -51,7 +50,6 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:maxLines="1"
-            android:text="supplementary text"
             android:textColor="#FFF"
             android:textSize="@dimen/small_text" />
     </LinearLayout>
