@@ -29,7 +29,7 @@ public class UrlBuilder {
 	}
 
 	public URL getAnimeListUrl(String username) throws MalformedURLException {
-		return new URL( String.format("%s/animelist/%s?mine=1", baseUrl, username));
+		return new URL( String.format("%s/animelist/%s", baseUrl, username));
 	}
 
 	

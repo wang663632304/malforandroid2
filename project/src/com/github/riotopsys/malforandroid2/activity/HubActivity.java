@@ -18,6 +18,7 @@ package com.github.riotopsys.malforandroid2.activity;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import roboguice.inject.InjectView;
 import android.os.Bundle;
@@ -28,17 +29,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.adapter.ListPagerAdapter;
+import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs;
+import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs.Callback;
 import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.fragment.AnimeDetailFragment;
+import com.github.riotopsys.malforandroid2.fragment.LoginFragment;
 import com.github.riotopsys.malforandroid2.fragment.PlacardFragment;
+import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.google.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class HubActivity extends BaseActivity {
+public class HubActivity extends BaseActivity implements Callback<String> {
 
 	private static String TAG = HubActivity.class.getSimpleName();
 
@@ -50,7 +56,13 @@ public class HubActivity extends BaseActivity {
 
 	@Inject
 	private ListPagerAdapter adapter;
-
+	
+	@Inject 
+	private GlobalState state;
+	
+	@Inject
+	private LoginFragment login;
+	
 	private LinkedList<ChangeDetailViewRequest> manualBackStack = new LinkedList<ChangeDetailViewRequest>();
 
 	private ChangeDetailViewRequest currentDetail = null;
@@ -71,6 +83,8 @@ public class HubActivity extends BaseActivity {
 		}
 		
 		transitionDetail(currentDetail);
+		
+		new ReadNameValuePairs<String>(getHelper(), this).execute("USER","PASS");
 	}
 	
 	@Override
@@ -97,6 +111,9 @@ public class HubActivity extends BaseActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (item.getItemId() == R.id.refresh_menu_item) {
 			ServerInterface.getAnimeList(this);
+			if ( !state.loginSet() ){
+				login.show(getSupportFragmentManager(), null);
+			}
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
@@ -141,6 +158,22 @@ public class HubActivity extends BaseActivity {
 		}
 		transaction.replace(R.id.detail_frame, fragment);
 		transaction.commit();
+	}
+
+	@Override
+	public void onNameValuePairsReady(List<NameValuePair<String>> data) {
+		for (NameValuePair<String> pair : data) {
+			if ("USER".equals(pair.name)) {
+				state.setUser(pair.value);
+			}
+			if ("PASS".equals(pair.name)) {
+				state.setPass(pair.value);
+			}
+		}
+		if ( !state.loginSet() ){
+			login.show(getSupportFragmentManager(), null);
+		}
+		
 	}
 
 }

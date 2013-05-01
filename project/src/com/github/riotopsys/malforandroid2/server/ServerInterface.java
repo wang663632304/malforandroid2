@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.database.DatabaseHelper;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
@@ -68,6 +69,9 @@ public class ServerInterface extends RoboIntentService {
 	
 	@Inject
 	private EventBus bus;
+	
+	@Inject
+	private GlobalState state;
 
 	public ServerInterface() {
 		super(TAG);
@@ -161,8 +165,13 @@ public class ServerInterface extends RoboIntentService {
 	}
 
 	private void getAnimeList() throws MalformedURLException, SQLException {
+		String user = state.getUser();
+		if ( user == null ){
+			return;
+		}
+		
 		//get list from server
-		RestResult<String> result = restHelper.get(urlBuilder.getAnimeListUrl("riotopsys"));
+		RestResult<String> result = restHelper.get(urlBuilder.getAnimeListUrl(user ));
 		if (result.code == 200) {
 			Log.v(TAG, result.result);
 
@@ -216,7 +225,8 @@ public class ServerInterface extends RoboIntentService {
 		bus.post(new CredentialVerificationEvent(result.code));
 		if ( result.code == 200 ){
 			Dao<NameValuePair<String>, String> dao = getHelper().getDao(NameValuePair.class);
-			dao.createOrUpdate(new NameValuePair<String>("TOKEN", restHelper.getToken()));
+			dao.createOrUpdate(new NameValuePair<String>("USER", state.getUser()));
+			dao.createOrUpdate(new NameValuePair<String>("PASS", state.getPass()));
 		}
 	}
 	
@@ -262,5 +272,7 @@ public class ServerInterface extends RoboIntentService {
 		serviceIntent.putExtras(bundle);
 		context.startService(serviceIntent);
 	}
+	
+	
 
 }

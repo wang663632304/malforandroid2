@@ -22,14 +22,18 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.github.riotopsys.malforandroid2.GlobalState;
+import com.google.inject.Inject;
+
 import android.util.Base64;
 import android.util.Log;
 
 public class RestHelper {
+	
+	@Inject 
+	private GlobalState state;
 
 	private static final String TAG = RestHelper.class.getSimpleName();
-	private String token = null;
-	private String userAgent = null;
 
 	public RestResult<String> get(URL url) {
 		HttpURLConnection con = null;
@@ -53,11 +57,9 @@ public class RestHelper {
 	}
 
 	private void setupBoilerPlate(HttpURLConnection con) {
+		String token = generateCredentials(state.getUser(), state.getPass());
 		if (token != null) {
-			con.addRequestProperty("Authorization", token);
-		}
-		if (userAgent != null) {
-			con.addRequestProperty("User-Agent", userAgent);
+				con.addRequestProperty("Authorization", token);
 		}
 	}
 
@@ -137,25 +139,13 @@ public class RestHelper {
 		return result;
 	}
 
-	public void setCredentials(String username, String password) {
+	private String generateCredentials(String username, String password) {
 		if (username == null || password == null) {
-			return;
+			return null;
 		}
-		token = "Basic "
+		return "Basic "
 				+ Base64.encodeToString((username + ":" + password).getBytes(),
 						Base64.DEFAULT | Base64.NO_WRAP);
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public void applyUserAgent(String userAgent) {
-		this.userAgent = userAgent;
 	}
 
 	public RestResult<String> put(URL url, String data) {

@@ -20,7 +20,6 @@ import java.util.Comparator;
 
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
-import com.github.riotopsys.malforandroid2.server.RestHelper;
 import com.github.riotopsys.malforandroid2.util.AnimeTitleComparator;
 import com.github.riotopsys.malforandroid2.util.AnimeWatchedStatusTypeAdapter;
 import com.google.gson.Gson;
@@ -48,8 +47,8 @@ public class CustomModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	public RestHelper provideRestHelper() {
-		return new RestHelper();
+	public GlobalState provideGlobalState(){
+		return new GlobalState();
 	}
 	
 	@Provides
