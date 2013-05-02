@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.fragment.ItemListFragment;
+import com.github.riotopsys.malforandroid2.fragment.SearchListFragment;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.google.inject.Inject;
 
@@ -23,13 +24,19 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) {
-		Fragment f = new ItemListFragment();
+		Fragment f = null;
 		
 		Bundle args = new Bundle();
-		if ( AnimeWatchedStatus.values().length != position ){
+		if ( AnimeWatchedStatus.values().length > position ){
 			args.putSerializable("filter", AnimeWatchedStatus.values()[position]);
-		} else {
+			f = new ItemListFragment();
+		} else if ( AnimeWatchedStatus.values().length == position )  {
+			//handle "all" condition
 			args.putSerializable("filter", null);
+			f = new ItemListFragment();
+		} else {
+			//handle "search" condition
+			f = new SearchListFragment();
 		}
 		
 		f.setArguments(args);
@@ -38,15 +45,19 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		return AnimeWatchedStatus.values().length+1;
+		return AnimeWatchedStatus.values().length+2;//account for all and search
 	}
 	
 	@Override
 	public CharSequence getPageTitle(int position) {
-		if ( AnimeWatchedStatus.values().length != position ){
+		if ( AnimeWatchedStatus.values().length > position ){
 			return ctx.getString(AnimeWatchedStatus.values()[position].getResource());
-		} else {
+		} else if ( AnimeWatchedStatus.values().length == position ) {
+			//handle "all" condition
 			return ctx.getString(R.string.all);
+		} else {
+			//handle "search" condition
+			return ctx.getString(R.string.search);			
 		}
 	}
 

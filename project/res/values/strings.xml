@@ -83,5 +83,6 @@ Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel 
 	<string name="watched">Watched:</string>
 	<string name="your_score">Your Score:</string>
 	<string name="refresh_list">Refresh List</string>
+	<string name="search">Search</string>
 
 </resources>
