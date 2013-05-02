@@ -53,4 +53,9 @@ public class UrlBuilder {
 		return new URL( String.format("%s/animelist/anime", baseUrl));
 	}
 
+	public URL getSearchAnimeUrl(String criteria) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

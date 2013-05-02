@@ -19,6 +19,7 @@ package com.github.riotopsys.malforandroid2.server;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,12 +31,14 @@ import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.database.DatabaseHelper;
+import com.github.riotopsys.malforandroid2.event.AnimeSearchResult;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
 import com.github.riotopsys.malforandroid2.model.AnimeListResponse;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -53,9 +56,11 @@ public class ServerInterface extends RoboIntentService {
 			.getCanonicalName() + ".anime_updated";
 	public static final String ID_KEY = ServerInterface.class
 			.getCanonicalName() + ".id";
+	private static final String ID_CRITERIA = ServerInterface.class
+			.getCanonicalName() + ".criteria";
 	
 	private enum Action {
-		GET_ANIME_LIST, GET_ANIME_RECORD, VERIFY_CREDENTIALS, UPDATE_ANIME_RECORD, ADD_ANIME
+		GET_ANIME_LIST, GET_ANIME_RECORD, VERIFY_CREDENTIALS, UPDATE_ANIME_RECORD, ADD_ANIME, SEARCH_ANIME
 	};
 
 	@Inject
@@ -104,10 +109,16 @@ public class ServerInterface extends RoboIntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Bundle extras = intent.getExtras();
+		
 		Action action = (Action) extras.getSerializable(ACTION_KEY);
+		
 		int id = 0;
 		if (extras.containsKey(ID_KEY)) {
 			id = extras.getInt(ID_KEY);
+		}
+		String criteria = null;
+		if (extras.containsKey(ID_CRITERIA)) {
+			criteria = extras.getString(ID_CRITERIA);
 		}
 
 		try {
@@ -127,6 +138,8 @@ public class ServerInterface extends RoboIntentService {
 			case ADD_ANIME:
 				addAnimeRecord(id);
 				break;
+			case SEARCH_ANIME:
+				searchAnime(criteria);
 			default:
 				Log.v(TAG, String.format("Invalid Request: %s", action.name()));
 			}
@@ -219,6 +232,36 @@ public class ServerInterface extends RoboIntentService {
 		}
 	}
 	
+	private void searchAnime( String criteria ) throws MalformedURLException, SQLException {
+		RestResult<String> result = restHelper.get(urlBuilder.getSearchAnimeUrl( criteria ));
+		if (result.code == 200) {
+			Log.v(TAG, result.result);
+			
+			List<AnimeRecord> alr = gson.fromJson(result.result, new TypeToken<List<AnimeRecord>>(){}.getType());
+			if (alr == null || alr.isEmpty()) {
+				return;
+			}
+			
+			Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
+			
+			List<Integer> ids = new LinkedList<Integer>();
+			
+			for ( AnimeRecord ar : alr ){
+				ar.synopsis = null;//silence the partial synopsis so we can fetch the full later
+				AnimeRecord arOriginal = dao.queryForId(ar.id);
+				
+				ids.add(ar.id);
+				
+				if ( arOriginal == null || arOriginal.watched_status == null){
+					//limit additions to items not in the list.
+					dao.createOrUpdate(ar);
+				}
+			}
+			bus.post(new AnimeSearchResult(ids));
+		}
+	}
+	
+	
 	private void verifyCredentials() throws MalformedURLException, SQLException {
 		
 		RestResult<String> result = restHelper.get(urlBuilder.getVerifyCredentialsUrl());
@@ -264,11 +307,20 @@ public class ServerInterface extends RoboIntentService {
 		serviceIntent.putExtras(bundle);
 		context.startService(serviceIntent);
 	}
+	
+	public static void searchAnime(Context context, String criteria) {
+		Intent serviceIntent = new Intent(context, ServerInterface.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(ACTION_KEY, Action.ADD_ANIME);
+		bundle.putString(ID_CRITERIA, criteria);
+		serviceIntent.putExtras(bundle);
+		context.startService(serviceIntent);
+	}
 
 	public static void verifyCredentials(Context context) {
 		Intent serviceIntent = new Intent(context, ServerInterface.class);
 		Bundle bundle = new Bundle();
-		bundle.putSerializable(ACTION_KEY, Action.VERIFY_CREDENTIALS);
+		bundle.putSerializable(ACTION_KEY, Action.SEARCH_ANIME);
 		serviceIntent.putExtras(bundle);
 		context.startService(serviceIntent);
 	}
