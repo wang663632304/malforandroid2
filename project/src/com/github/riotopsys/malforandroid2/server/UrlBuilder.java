@@ -45,17 +45,12 @@ public class UrlBuilder {
 		return new URL( String.format("%s/account/verify_credentials", baseUrl) );
 	}
 
-	public String getSearchUrl(String criteria) throws UnsupportedEncodingException {
-		return String.format("%s/anime/search?q=%s", baseUrl, URLEncoder.encode(criteria, "utf-8"));
+	public URL getSearchUrl(String criteria) throws UnsupportedEncodingException, MalformedURLException {
+		return new URL( String.format("%s/anime/search?q=%s", baseUrl, URLEncoder.encode(criteria, "utf-8")));
 	}
 
 	public URL getAnimeAddUrl() throws MalformedURLException {
 		return new URL( String.format("%s/animelist/anime", baseUrl));
-	}
-
-	public URL getSearchAnimeUrl(String criteria) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

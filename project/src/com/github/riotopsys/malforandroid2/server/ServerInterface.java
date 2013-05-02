@@ -16,6 +16,7 @@
 
 package com.github.riotopsys.malforandroid2.server;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -232,8 +233,8 @@ public class ServerInterface extends RoboIntentService {
 		}
 	}
 	
-	private void searchAnime( String criteria ) throws MalformedURLException, SQLException {
-		RestResult<String> result = restHelper.get(urlBuilder.getSearchAnimeUrl( criteria ));
+	private void searchAnime( String criteria ) throws MalformedURLException, SQLException, UnsupportedEncodingException {
+		RestResult<String> result = restHelper.get(urlBuilder.getSearchUrl( criteria ));
 		if (result.code == 200) {
 			Log.v(TAG, result.result);
 			
