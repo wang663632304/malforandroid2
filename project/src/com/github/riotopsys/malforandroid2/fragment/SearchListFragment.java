@@ -21,15 +21,18 @@ import java.util.List;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 
-import com.github.riotopsys.malforandroid2.loader.AnimeLoader;
+import com.github.riotopsys.malforandroid2.GlobalState;
+import com.github.riotopsys.malforandroid2.loader.SearchLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
-import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
+import com.google.inject.Inject;
 
-public class ItemListFragment extends AbstractListFragment  {
+public class SearchListFragment extends AbstractListFragment  {
+	
+	@Inject GlobalState state;
 	
 	@Override
 	public Loader<List<AnimeRecord>> onCreateLoader(int id, Bundle args) {
-		AnimeLoader loader = new AnimeLoader(getActivity(), (AnimeWatchedStatus)getArguments().getSerializable("filter"));
+		SearchLoader loader = new SearchLoader(getActivity(), state );
 //		loader.setUpdateThrottle(1000/24);
 		return loader;
 	}

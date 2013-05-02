@@ -32,7 +32,7 @@ import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.database.DatabaseHelper;
-import com.github.riotopsys.malforandroid2.event.AnimeSearchResult;
+import com.github.riotopsys.malforandroid2.event.AnimeSearchUpdated;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
 import com.github.riotopsys.malforandroid2.model.AnimeListResponse;
@@ -253,12 +253,14 @@ public class ServerInterface extends RoboIntentService {
 				
 				ids.add(ar.id);
 				
-				if ( arOriginal == null || arOriginal.watched_status == null){
-					//limit additions to items not in the list.
-					dao.createOrUpdate(ar);
+				if ( arOriginal == null ){
+					//limit additions to items not in the database.
+					dao.create(ar);
 				}
 			}
-			bus.post(new AnimeSearchResult(ids));
+			state.setSearchResults(ids);
+			
+			bus.post(new AnimeSearchUpdated());
 		}
 	}
 	
