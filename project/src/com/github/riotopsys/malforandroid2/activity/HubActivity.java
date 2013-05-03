@@ -28,6 +28,8 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 
 import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.R;
@@ -44,7 +46,7 @@ import com.google.inject.Inject;
 
 import de.greenrobot.event.EventBus;
 
-public class HubActivity extends BaseActivity implements Callback<String> {
+public class HubActivity extends BaseActivity implements Callback<String>, OnQueryTextListener {
 
 	private static String TAG = HubActivity.class.getSimpleName();
 
@@ -66,6 +68,9 @@ public class HubActivity extends BaseActivity implements Callback<String> {
 	private LinkedList<ChangeDetailViewRequest> manualBackStack = new LinkedList<ChangeDetailViewRequest>();
 
 	private ChangeDetailViewRequest currentDetail = null;
+
+	private SearchView searchView;
+	private MenuItem searchItem;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -121,8 +126,17 @@ public class HubActivity extends BaseActivity implements Callback<String> {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.base, menu);
-		return true;
+		
+		searchItem =  menu.findItem(R.id.menu_search);
+		
+		searchView = (SearchView) searchItem.getActionView();
+		searchView.setOnQueryTextListener(this);
+		
+		
+		return super.onCreateOptionsMenu(menu);
 	}
+	
+
 
 	@Override
 	public void onBackPressed() {
@@ -174,6 +188,19 @@ public class HubActivity extends BaseActivity implements Callback<String> {
 			login.show(getSupportFragmentManager(), null);
 		}
 		
+	}
+
+	@Override
+	public boolean onQueryTextChange(String newText) {
+		return false;
+	}
+
+	@Override
+	public boolean onQueryTextSubmit(String query) {
+		searchItem.collapseActionView();
+		ServerInterface.searchAnime(this, query);
+		listPager.setCurrentItem(adapter.getCount()-1,true);
+		return true;
 	}
 
 }

@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.v4.content.Loader;
 
 import com.github.riotopsys.malforandroid2.GlobalState;
+import com.github.riotopsys.malforandroid2.event.AnimeSearchUpdated;
 import com.github.riotopsys.malforandroid2.loader.SearchLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.google.inject.Inject;
@@ -35,6 +36,13 @@ public class SearchListFragment extends AbstractListFragment  {
 		SearchLoader loader = new SearchLoader(getActivity(), state );
 //		loader.setUpdateThrottle(1000/24);
 		return loader;
+	}
+	
+	public void onEventMainThread( AnimeSearchUpdated asu ){
+		if ( animeLoader != null ){
+			itemListView.setSelection(0);
+			animeLoader.onContentChanged();
+		}
 	}
 	
 }

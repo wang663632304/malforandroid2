@@ -150,6 +150,9 @@ public class AnimeAdapter extends BaseAdapter implements SectionIndexer{
 	public int getSectionForPosition(int position) {
 		for ( int c = 0; c < sections.length; c++  ){
 			Section s = sections[c];
+			if ( s == null ){
+				continue;
+			}
 			if ( position >= s.start && position < s.end ){
 				return c;
 			}

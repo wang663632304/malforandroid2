@@ -48,7 +48,7 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	private static final String TAG = AbstractListFragment.class.getSimpleName();
 
 	@InjectView(R.id.item_list_view)
-	private AbsListView itemListView;
+	protected AbsListView itemListView;
 	
 	@Inject
 	private AnimeAdapter animeAdapter;
@@ -59,7 +59,7 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	@Inject
 	private ImageLoader lazyLoader;
 	
-	private Loader<List<AnimeRecord>> animeLoader;
+	protected Loader<List<AnimeRecord>> animeLoader;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

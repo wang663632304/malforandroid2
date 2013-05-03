@@ -141,6 +141,7 @@ public class ServerInterface extends RoboIntentService {
 				break;
 			case SEARCH_ANIME:
 				searchAnime(criteria);
+				break;
 			default:
 				Log.v(TAG, String.format("Invalid Request: %s", action.name()));
 			}
@@ -314,7 +315,7 @@ public class ServerInterface extends RoboIntentService {
 	public static void searchAnime(Context context, String criteria) {
 		Intent serviceIntent = new Intent(context, ServerInterface.class);
 		Bundle bundle = new Bundle();
-		bundle.putSerializable(ACTION_KEY, Action.ADD_ANIME);
+		bundle.putSerializable(ACTION_KEY, Action.SEARCH_ANIME);
 		bundle.putString(ID_CRITERIA, criteria);
 		serviceIntent.putExtras(bundle);
 		context.startService(serviceIntent);
