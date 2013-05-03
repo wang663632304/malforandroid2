@@ -32,6 +32,8 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.github.riotopsys.malforandroid2.R;
+import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ProgressText;
+import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -46,6 +48,8 @@ public class AnimeAdapter extends BaseAdapter implements SectionIndexer{
 	
 	private List<AnimeRecord> animeList = new LinkedList<AnimeRecord>();
 	private Section[] sections = new Section[0];
+
+	private SupplementaryTextFactory textFactory;
 	
 	@Override
 	public int getCount() {
@@ -64,11 +68,15 @@ public class AnimeAdapter extends BaseAdapter implements SectionIndexer{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		Context ctx = parent.getContext();
 		if ( convertView == null ){
-			convertView = ((LayoutInflater)parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.anime_item, null);
+			convertView = ((LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.anime_item, null);
 		}
 		AnimeRecord anime = animeList.get(position);
+		
 		((TextView)convertView.findViewById(R.id.title)).setText(Html.fromHtml(anime.title));
+		
+		((TextView)convertView.findViewById(R.id.suplimentary_text)).setText( textFactory.getSupplementaryText(ctx, anime) );
 		
 		ImageView imageView = (ImageView)convertView.findViewById(R.id.thumb_image);
 		imageView.setImageBitmap(null);
@@ -163,6 +171,10 @@ public class AnimeAdapter extends BaseAdapter implements SectionIndexer{
 	@Override
 	public Object[] getSections() {
 		return sections;
+	}
+
+	public void setSupplementaryTextFactory(SupplementaryTextFactory textFactory) {
+		this.textFactory = textFactory;
 	}
 
 }

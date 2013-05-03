@@ -32,9 +32,12 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.adapter.AnimeAdapter;
+import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ProgressText;
+import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
@@ -70,17 +73,22 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+
+		// AnimeWatchedStatus filter =
+		// (AnimeWatchedStatus)getArguments().getSerializable("filter");
 		
+		animeAdapter.setSupplementaryTextFactory(getSupplementaryTextFactory());
+
 		itemListView.setAdapter(animeAdapter);
-		
+
 		itemListView.setOnItemClickListener(this);
-		
+
 		PauseOnScrollListener listener = new PauseOnScrollListener(lazyLoader, false, true);
 		itemListView.setOnScrollListener(listener);
-		
+
 		animeLoader = getLoaderManager().initLoader(0, null, this);
 		animeLoader.forceLoad();
-		
+
 	}
 	
 	@Override
@@ -101,6 +109,8 @@ public abstract class AbstractListFragment extends RoboFragment implements
 		}
 	}
 	
+	protected abstract SupplementaryTextFactory getSupplementaryTextFactory(); 
+		
 	public abstract Loader<List<AnimeRecord>> onCreateLoader(int id, Bundle args); 
 	
 	@Override

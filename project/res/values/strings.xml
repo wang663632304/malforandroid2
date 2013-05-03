@@ -73,8 +73,9 @@ Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel 
     <string name="members_count_format">Member Count: %1$d</string>
     <string name="favorited_count_format">Favorited: %1$d</string>
     <string name="alternative_versions_format">Alternates: %1$d</string>
-    <string name="plus_one">+1</string>
+    <string name="score_format">Score: %1$d</string>
     
+    <string name="plus_one">+1</string>
     <string name="add_as">Add as:</string>
     <string name="add">Add</string>
     <string name="statistics">Statistics</string>
