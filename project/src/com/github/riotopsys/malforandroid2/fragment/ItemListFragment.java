@@ -56,7 +56,7 @@ public class ItemListFragment extends AbstractListFragment  {
 		case PLAN:
 			return new RankText();
 		case WATCHING:
-			return new ProgressText();
+			return new WatchedStatusText();
 		default:
 			return new WatchedStatusText();
 		}

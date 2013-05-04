@@ -58,7 +58,7 @@ Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel 
         <item>(1) Appalling</item>
     </string-array>
 
-    <string name="watched_format">Watched %1$d/%2$d</string>
+    <string name="watched_format">Watching %1$d/%2$d</string>
     <string name="prequel_format">Prequels: %1$d</string>
     <string name="sequel_format">Sequels: %1$d</string>
     <string name="side_story_format">Side Stories: %1$d</string>
@@ -85,5 +85,6 @@ Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel 
 	<string name="your_score">Your Score:</string>
 	<string name="refresh_list">Refresh List</string>
 	<string name="search">Search</string>
+	<string name="not_in_list">Not in your list</string>
 
 </resources>

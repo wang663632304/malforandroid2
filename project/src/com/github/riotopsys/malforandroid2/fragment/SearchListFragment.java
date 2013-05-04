@@ -22,8 +22,8 @@ import android.os.Bundle;
 import android.support.v4.content.Loader;
 
 import com.github.riotopsys.malforandroid2.GlobalState;
-import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ProgressText;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
+import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.WatchedStatusText;
 import com.github.riotopsys.malforandroid2.event.AnimeSearchUpdated;
 import com.github.riotopsys.malforandroid2.loader.SearchLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
@@ -49,7 +49,7 @@ public class SearchListFragment extends AbstractListFragment  {
 
 	@Override
 	protected SupplementaryTextFactory getSupplementaryTextFactory() {
-		return new ProgressText();
+		return new WatchedStatusText();
 	}
 	
 }

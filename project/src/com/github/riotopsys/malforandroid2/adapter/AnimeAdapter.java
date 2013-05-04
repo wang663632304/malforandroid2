@@ -32,7 +32,6 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.github.riotopsys.malforandroid2.R;
-import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ProgressText;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.google.inject.Inject;
