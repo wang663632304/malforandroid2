@@ -24,6 +24,7 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.drm.DrmStore.Action;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -31,6 +32,9 @@ import android.support.v4.content.Loader;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,6 +51,7 @@ import android.widget.TextView;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.activity.BaseActivity;
+import com.github.riotopsys.malforandroid2.database.DBDeleteTask;
 import com.github.riotopsys.malforandroid2.database.DBUpdateTask;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
@@ -178,6 +183,8 @@ public class AnimeDetailFragment extends RoboFragment implements
 		
 		Log.v(TAG, String.format("ID: %d", idToDisplay));
 		
+		setHasOptionsMenu(true);
+		
 		return inflater.inflate(R.layout.anime_detail_fragment, null);
 	}
 
@@ -216,6 +223,30 @@ public class AnimeDetailFragment extends RoboFragment implements
 		
 		synopsysContainer.setOnTouchListener(this);
 		
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.detail_fragment_menu, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.remove_anime){
+			BaseActivity ba = (BaseActivity)getActivity();
+			new DBDeleteTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		if ( activeRecord != null ){
+			menu.findItem(R.id.remove_anime).setEnabled(activeRecord.watched_status != null);
+		}
 	}
 	
 	@Override

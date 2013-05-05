@@ -86,5 +86,6 @@ Nam mattis, justo tincidunt aliquam eleifend, nibh velit sollicitudin eros, vel 
 	<string name="refresh_list">Refresh List</string>
 	<string name="search">Search</string>
 	<string name="not_in_list">Not in your list</string>
+	<string name="remove_anime">Remove Anime</string>
 
 </resources>
