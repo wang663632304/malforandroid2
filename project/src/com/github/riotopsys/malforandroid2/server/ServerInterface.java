@@ -157,7 +157,7 @@ public class ServerInterface extends RoboIntentService {
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 		
 		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
-		journalDao.createOrUpdate(new JournalEntry(id, UpdateType.ADD_TO_LIST));
+		journalUpdate(journalDao, new JournalEntry(id, UpdateType.ADD_TO_LIST) );
 		
 		AnimeRecord anime = dao.queryForId(id);
 		String value = String.format("status=%s&anime_id=%d",
@@ -174,7 +174,7 @@ public class ServerInterface extends RoboIntentService {
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 		
 		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
-		journalDao.createOrUpdate(new JournalEntry(id, UpdateType.UPDATED));
+		journalUpdate(journalDao, new JournalEntry(id, UpdateType.UPDATED) );
 		
 		AnimeRecord anime = dao.queryForId(id);
 		String value = String.format("status=%s&episodes=%d&score=%d",
@@ -184,6 +184,30 @@ public class ServerInterface extends RoboIntentService {
 		RestResult<String> result = restHelper.put(urlBuilder.getAnimeUpdateUrl(id), value);
 		if ( result.code == 200 ){
 			journalDao.deleteById(id);
+		}
+	}
+
+	private void journalUpdate(Dao<JournalEntry, Integer> journalDao, JournalEntry journalEntry) throws SQLException {
+		JournalEntry original = journalDao.queryForId(journalEntry.recordId);
+		if ( original == null ){
+			// id has no out standing operations so add it
+			journalDao.create(journalEntry);
+		} else {
+			if ( original.updateType == UpdateType.ADD_TO_LIST && journalEntry.updateType == UpdateType.DELETE_FROM_LIST){
+				//this indicates a noop condition, the user added a list then removed it we no longer need this in the journal
+				journalDao.deleteById(original.recordId);
+			} else if ( original.updateType == UpdateType.DELETE_FROM_LIST && journalEntry.updateType == UpdateType.ADD_TO_LIST ){
+				//this indicates a noop condition, the user removed a list then added it back we no longer need this in the journal
+				journalDao.deleteById(original.recordId);
+			} else if ( original.updateType == UpdateType.UPDATED && journalEntry.updateType == UpdateType.DELETE_FROM_LIST ){
+				//delete takes precedence
+				journalDao.update(journalEntry);
+			}
+			// add && update = keep add
+			// update && add = WFT?
+			// delete && update = WTF?
+			
+			//This system leaves a hole if the sequence is update, delete, add causing the original update to become orphaned.  
 		}
 	}
 
