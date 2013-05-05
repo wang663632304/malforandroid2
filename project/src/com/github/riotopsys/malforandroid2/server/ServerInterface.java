@@ -175,14 +175,15 @@ public class ServerInterface extends RoboIntentService {
 		journalUpdate(journalDao, new JournalEntry(id, UpdateType.ADD_TO_LIST) );
 		
 		AnimeRecord anime = dao.queryForId(id);
-		String value = String.format("status=%s&anime_id=%d",
-				anime.watched_status.getServerKey(), anime.id);
+		String value = String.format("anime_id=%d&status=%s&episodes=%d&score=%d", anime.id, anime.watched_status.getServerKey(), anime.watched_episodes, anime.score);
 		URL url = urlBuilder.getAnimeAddUrl();
 		Log.v(TAG, String.format("url %s data %s", url, value));
 		RestResult<String> result = restHelper.post(url, value);
 		if ( result.code == 200 ){
 			journalDao.deleteById(id);
 		}
+		
+		Log.v(TAG, String.format("addAnimeRecord: journal size, %d ",  journalDao.countOf()));
 	}
 
 	private void updateAnimeRecord(int id) throws SQLException, MalformedURLException {
@@ -200,6 +201,7 @@ public class ServerInterface extends RoboIntentService {
 		if ( result.code == 200 ){
 			journalDao.deleteById(id);
 		}
+		Log.v(TAG, String.format("updateAnimeRecord: journal size, %d ",  journalDao.countOf()));
 	}
 
 	private void journalUpdate(Dao<JournalEntry, Integer> journalDao, JournalEntry journalEntry) throws SQLException {
@@ -252,6 +254,7 @@ public class ServerInterface extends RoboIntentService {
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
 		
+		Log.v(TAG, String.format("getAnimeList: journal size before, %d ",  journalDao.countOf()));
 		//push outstanding journal entries to server
 		List<JournalEntry> journal = journalDao.queryForAll();
 		for( JournalEntry je : journal ){
@@ -267,6 +270,7 @@ public class ServerInterface extends RoboIntentService {
 				break;
 			}
 		}
+		Log.v(TAG, String.format("getAnimeList: journal size after, %d ",  journalDao.countOf()));
 		
 		//get list from server
 		RestResult<String> result = restHelper.get(urlBuilder.getAnimeListUrl(user ));
@@ -408,7 +412,7 @@ public class ServerInterface extends RoboIntentService {
 	public static void verifyCredentials(Context context) {
 		Intent serviceIntent = new Intent(context, ServerInterface.class);
 		Bundle bundle = new Bundle();
-		bundle.putSerializable(ACTION_KEY, Action.SEARCH_ANIME);
+		bundle.putSerializable(ACTION_KEY, Action.VERIFY_CREDENTIALS);
 		serviceIntent.putExtras(bundle);
 		context.startService(serviceIntent);
 	}
