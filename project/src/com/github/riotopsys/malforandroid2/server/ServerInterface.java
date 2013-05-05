@@ -18,6 +18,7 @@ package com.github.riotopsys.malforandroid2.server;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -37,7 +38,9 @@ import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
 import com.github.riotopsys.malforandroid2.model.AnimeListResponse;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.JournalEntry;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
+import com.github.riotopsys.malforandroid2.model.UpdateType;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
@@ -152,29 +155,47 @@ public class ServerInterface extends RoboIntentService {
 	
 	private void addAnimeRecord(int id) throws SQLException, MalformedURLException {
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
+		
+		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
+		journalDao.createOrUpdate(new JournalEntry(id, UpdateType.ADD_TO_LIST));
+		
 		AnimeRecord anime = dao.queryForId(id);
 		String value = String.format("status=%s&anime_id=%d",
 				anime.watched_status.getServerKey(), anime.id);
-		Log.v(TAG, String.format("url %s data %s",  urlBuilder.getAnimeAddUrl(), value));
-		restHelper.post(urlBuilder.getAnimeAddUrl(), value);
+		URL url = urlBuilder.getAnimeAddUrl();
+		Log.v(TAG, String.format("url %s data %s", url, value));
+		RestResult<String> result = restHelper.post(url, value);
+		if ( result.code == 200 ){
+			journalDao.deleteById(id);
+		}
 	}
 
 	private void updateAnimeRecord(int id) throws SQLException, MalformedURLException {
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
+		
+		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
+		journalDao.createOrUpdate(new JournalEntry(id, UpdateType.UPDATED));
+		
 		AnimeRecord anime = dao.queryForId(id);
 		String value = String.format("status=%s&episodes=%d&score=%d",
 				anime.watched_status.getServerKey(), anime.watched_episodes, anime.score);
+		
 		Log.v(TAG, String.format("url %s data %s",  urlBuilder.getAnimeUpdateUrl(id), value));
-		restHelper.put(urlBuilder.getAnimeUpdateUrl(id), value);
+		RestResult<String> result = restHelper.put(urlBuilder.getAnimeUpdateUrl(id), value);
+		if ( result.code == 200 ){
+			journalDao.deleteById(id);
+		}
 	}
 
 	private void getAnimeRecord(int id) throws MalformedURLException, SQLException {
 		RestResult<String> result = restHelper.get(urlBuilder.getAnimeRecordUrl(id));
 		if (result.code == 200) {
-			Log.v(TAG, result.result);
 			
 			AnimeRecord ar = gson.fromJson(result.result, AnimeRecord.class);
 			getHelper().getDao(AnimeRecord.class).createOrUpdate(ar);
+			
+			Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
+			journalDao.deleteById(ar.id);
 			bus.post(new AnimeUpdateEvent(id));
 		}
 	}
@@ -183,6 +204,24 @@ public class ServerInterface extends RoboIntentService {
 		String user = state.getUser();
 		if ( user == null ){
 			return;
+		}
+		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
+		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
+		
+		//push outstanding journal entries to server
+		List<JournalEntry> journal = journalDao.queryForAll();
+		for( JournalEntry je : journal ){
+			switch (je.updateType) {
+			case ADD_TO_LIST:
+				addAnimeRecord(je.recordId);
+				break;
+			case DELETE_FROM_LIST:
+				//unimplemented
+				break;
+			case UPDATED:
+				updateAnimeRecord(je.recordId);
+				break;
+			}
 		}
 		
 		//get list from server
@@ -195,7 +234,6 @@ public class ServerInterface extends RoboIntentService {
 				return;
 			}
 			
-			Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 			
 			//get ids that may have been removed, a.k.a. all ids  
 			GenericRawResults<String[]> data = dao.queryBuilder().selectColumns("id").where().isNotNull("watched_status").queryRaw();
@@ -219,6 +257,7 @@ public class ServerInterface extends RoboIntentService {
 				} else {
 					dao.createOrUpdate(ar);
 				}
+				journalDao.deleteById(ar.id);
 				bus.post(new AnimeUpdateEvent(ar.id));
 			}
 			
@@ -229,6 +268,7 @@ public class ServerInterface extends RoboIntentService {
 				arOriginal.score = 0;
 				arOriginal.watched_episodes = 0;
 				dao.createOrUpdate(arOriginal);
+				journalDao.deleteById(id);
 				bus.post(new AnimeUpdateEvent(id));
 			}
 		}
