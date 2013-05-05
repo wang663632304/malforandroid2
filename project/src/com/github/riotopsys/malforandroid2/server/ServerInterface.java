@@ -66,7 +66,7 @@ public class ServerInterface extends RoboIntentService {
 			.getCanonicalName() + ".criteria";
 	
 	private enum Action {
-		GET_ANIME_LIST, GET_ANIME_RECORD, VERIFY_CREDENTIALS, UPDATE_ANIME_RECORD, ADD_ANIME, SEARCH_ANIME, SYNC
+		GET_ANIME_LIST, GET_ANIME_RECORD, VERIFY_CREDENTIALS, UPDATE_ANIME_RECORD, ADD_ANIME, SEARCH_ANIME, SYNC, RM_ANIME
 	};
 
 	@Inject
@@ -144,6 +144,9 @@ public class ServerInterface extends RoboIntentService {
 			case ADD_ANIME:
 				addAnimeRecord(id);
 				break;
+			case RM_ANIME:
+				removeAnimeRecord(id);
+				break;
 			case SEARCH_ANIME:
 				searchAnime(criteria);
 				break;
@@ -202,6 +205,18 @@ public class ServerInterface extends RoboIntentService {
 			journalDao.deleteById(id);
 		}
 		Log.v(TAG, String.format("updateAnimeRecord: journal size, %d ",  journalDao.countOf()));
+	}
+	
+	private void removeAnimeRecord(int id) throws SQLException, MalformedURLException {
+		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
+		journalUpdate(journalDao, new JournalEntry(id, UpdateType.DELETE_FROM_LIST) );
+		
+		Log.v(TAG, String.format("url %s",  urlBuilder.getAnimeUpdateUrl(id)));
+		RestResult<String> result = restHelper.delete(urlBuilder.getAnimeUpdateUrl(id));
+		if ( result.code == 200 ){
+			journalDao.deleteById(id);
+		}
+		Log.v(TAG, String.format("removeAnimeRecord: journal size, %d ",  journalDao.countOf()));
 	}
 
 	private void journalUpdate(Dao<JournalEntry, Integer> journalDao, JournalEntry journalEntry) throws SQLException {
@@ -263,7 +278,7 @@ public class ServerInterface extends RoboIntentService {
 				addAnimeRecord(je.recordId);
 				break;
 			case DELETE_FROM_LIST:
-				//unimplemented
+				removeAnimeRecord(je.recordId);
 				break;
 			case UPDATED:
 				updateAnimeRecord(je.recordId);
@@ -395,6 +410,15 @@ public class ServerInterface extends RoboIntentService {
 		Intent serviceIntent = new Intent(context, ServerInterface.class);
 		Bundle bundle = new Bundle();
 		bundle.putSerializable(ACTION_KEY, Action.ADD_ANIME);
+		bundle.putInt(ID_KEY, id);
+		serviceIntent.putExtras(bundle);
+		context.startService(serviceIntent);
+	}
+	
+	public static void removeAnimeRecord(Context context, int id) {
+		Intent serviceIntent = new Intent(context, ServerInterface.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(ACTION_KEY, Action.RM_ANIME);
 		bundle.putInt(ID_KEY, id);
 		serviceIntent.putExtras(bundle);
 		context.startService(serviceIntent);

@@ -32,7 +32,7 @@ public class UrlBuilder {
 		return new URL( String.format("%s/animelist/%s", baseUrl, username));
 	}
 
-	
+	//same structure required for delete
 	public URL getAnimeUpdateUrl(int id) throws MalformedURLException {
 		return new URL( String.format("%s/animelist/anime/%d", baseUrl, id));
 	}
