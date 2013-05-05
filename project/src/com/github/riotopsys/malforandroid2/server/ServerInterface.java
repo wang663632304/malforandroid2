@@ -28,6 +28,8 @@ import java.util.Set;
 import roboguice.service.RoboIntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -64,7 +66,7 @@ public class ServerInterface extends RoboIntentService {
 			.getCanonicalName() + ".criteria";
 	
 	private enum Action {
-		GET_ANIME_LIST, GET_ANIME_RECORD, VERIFY_CREDENTIALS, UPDATE_ANIME_RECORD, ADD_ANIME, SEARCH_ANIME
+		GET_ANIME_LIST, GET_ANIME_RECORD, VERIFY_CREDENTIALS, UPDATE_ANIME_RECORD, ADD_ANIME, SEARCH_ANIME, SYNC
 	};
 
 	@Inject
@@ -145,6 +147,9 @@ public class ServerInterface extends RoboIntentService {
 			case SEARCH_ANIME:
 				searchAnime(criteria);
 				break;
+			case SYNC:
+				sync();
+				break;
 			default:
 				Log.v(TAG, String.format("Invalid Request: %s", action.name()));
 			}
@@ -153,6 +158,16 @@ public class ServerInterface extends RoboIntentService {
 		}
 	}
 	
+	private void sync() throws MalformedURLException, SQLException {
+		//limit autosync operations to wifi only  
+		ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+		NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		if (mWifi.isConnected()) {
+		    getAnimeList();
+		}
+	}
+
 	private void addAnimeRecord(int id) throws SQLException, MalformedURLException {
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 		
@@ -207,7 +222,12 @@ public class ServerInterface extends RoboIntentService {
 			// update && add = WFT?
 			// delete && update = WTF?
 			
-			//This system leaves a hole if the sequence is update, delete, add causing the original update to become orphaned.  
+			/*
+			 * This system leaves a hole if the sequence is update, delete, add
+			 * causing the original update to become orphaned. As this is a one
+			 * entry per record journal I'm going to consider this acceptable.
+			 * Otherwise we will have to use a more complicated journal.
+			 */
 		}
 	}
 
@@ -393,6 +413,12 @@ public class ServerInterface extends RoboIntentService {
 		context.startService(serviceIntent);
 	}
 	
-	
+	public static Intent getSyncIntent(Context context){
+		Intent serviceIntent = new Intent(context, ServerInterface.class);
+		Bundle bundle = new Bundle();
+		bundle.putSerializable(ACTION_KEY, Action.SYNC);
+		serviceIntent.putExtras(bundle);
+		return serviceIntent;
+	}
 
 }

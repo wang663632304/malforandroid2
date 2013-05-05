@@ -12,6 +12,8 @@ public class GlobalState {
 	private String user = null;
 	private String pass = null;
 	
+	private boolean syncScheduled = false;
+	
 	private LinkedList<Integer> searchResults = new LinkedList<Integer>();
 	
 	public String getUser() {
@@ -52,7 +54,13 @@ public class GlobalState {
 			this.searchResults.addAll(ids);
 		}
 	}
-	
-	
 
+	public boolean isSyncScheduled() {
+		return syncScheduled;
+	}
+
+	public void setSyncScheduled(boolean syncScheduled) {
+		this.syncScheduled = syncScheduled;
+	}
+	
 }

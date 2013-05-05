@@ -41,6 +41,7 @@ import com.github.riotopsys.malforandroid2.fragment.AnimeDetailFragment;
 import com.github.riotopsys.malforandroid2.fragment.LoginFragment;
 import com.github.riotopsys.malforandroid2.fragment.PlacardFragment;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
+import com.github.riotopsys.malforandroid2.server.BootReciever;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.google.inject.Inject;
 
@@ -90,6 +91,11 @@ public class HubActivity extends BaseActivity implements Callback<String>, OnQue
 		transitionDetail(currentDetail);
 		
 		new ReadNameValuePairs<String>(getHelper(), this).execute("USER","PASS");
+		
+		if ( !state.isSyncScheduled()){
+			//somehow we hit this point with out starting the sync, so we'll do it now
+			BootReciever.scheduleSync(state, this);
+		}
 	}
 	
 	@Override
