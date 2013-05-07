@@ -16,12 +16,13 @@
 --> 
 <resources>
     <dimen name="left_hand_list_width">250dp</dimen>
-    <dimen name="list_item_padding">4dp</dimen>
-    <dimen name="list_item_height">104dp</dimen>
+    <dimen name="corner_rounding">6dp</dimen>
+    <dimen name="standard_padding">4dp</dimen>
     <dimen name="list_item_thumb_width">63dp</dimen>
     <dimen name="list_item_thumb_height">96dp</dimen>
     
     <dimen name="item_bounds">150dp</dimen>
+    <dimen name="drop_shadow_width">4dp</dimen>
     
     <dimen name="large_text">22sp</dimen>
     <dimen name="medium_text">18sp</dimen>

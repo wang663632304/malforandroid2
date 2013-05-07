@@ -32,7 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="#A8000000" 
+        android:paddingLeft="@dimen/standard_padding"
+        android:paddingRight="@dimen/standard_padding"
+        android:background="@color/transparent_dark_blue" 
         android:orientation="vertical">
 
         <TextView
@@ -41,7 +43,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textColor="#FFF"
+            android:textColor="@color/white"
             android:textSize="@dimen/medium_text" />
 
         <TextView
@@ -50,7 +52,7 @@
             android:layout_height="wrap_content"
             android:gravity="right"
             android:maxLines="1"
-            android:textColor="#FFF"
+            android:textColor="@color/white"
             android:textSize="@dimen/small_text" />
     </LinearLayout>
 

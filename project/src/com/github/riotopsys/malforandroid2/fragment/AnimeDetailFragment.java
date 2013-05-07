@@ -274,7 +274,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			return;
 		}
 		
-		lazyLoader.displayImage(activeRecord.image_url, cover);
+		lazyLoader.displayImage(activeRecord.image_url, cover );
 		title.setText(Html.fromHtml(activeRecord.title));
 		if (activeRecord.synopsis != null) {
 			synopsys.setText(Html.fromHtml(activeRecord.synopsis));

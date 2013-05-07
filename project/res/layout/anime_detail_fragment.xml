@@ -18,7 +18,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res/com.github.riotopsys.malforandroid2"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="@color/dark_blue" >
 
     <TextView
         android:id="@+id/title"
@@ -26,7 +27,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/standard_padding"
+        android:background="@drawable/rounded_item"
         android:ellipsize="end"
+        android:gravity="center"
         android:maxLines="2"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -39,10 +43,10 @@
         <com.github.riotopsys.pannellayout.PannelLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:padding="4dp"
+            android:paddingLeft="@dimen/standard_padding"
+            android:paddingBottom="@dimen/standard_padding"
             app:columns="6"
-            app:divider_size="4dp" >
+            app:divider_size="@dimen/standard_padding" >
 
             <ImageView
                 android:id="@+id/cover_image"
@@ -178,7 +182,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginBottom="@dimen/standard_padding"
                     android:text="@string/information"
                     android:textStyle="bold" />
 
@@ -187,21 +191,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="@dimen/standard_padding" />
 
                 <TextView
                     android:id="@+id/status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="@dimen/standard_padding" />
 
                 <TextView
                     android:id="@+id/classification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="@dimen/standard_padding" />
             </LinearLayout>
 
             <LinearLayout
@@ -216,7 +220,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp"
+                    android:layout_marginBottom="@dimen/standard_padding"
                     android:text="@string/statistics"
                     android:textStyle="bold" />
 
@@ -225,35 +229,35 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="@dimen/standard_padding" />
 
                 <TextView
                     android:id="@+id/popularity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="@dimen/standard_padding" />
 
                 <TextView
                     android:id="@+id/member_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="@dimen/standard_padding" />
 
                 <TextView
                     android:id="@+id/member_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="@dimen/standard_padding" />
 
                 <TextView
                     android:id="@+id/favorited_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="@dimen/standard_padding" />
             </LinearLayout>
 
             <TextView

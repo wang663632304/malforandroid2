@@ -20,4 +20,8 @@
     <color name="clear">#00000000</color>
     <color name="black">#F000</color> 
     <color name="white">#FFFF</color> 
+    
+    <color name="transparent_dark_blue">#A81E98D0</color>
+    <color name="dark_blue">#1E98D0</color>
+    <color name="light_blue">#E3F4FC</color>
 </resources>
