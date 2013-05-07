@@ -24,6 +24,7 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -62,11 +63,13 @@ import com.github.riotopsys.malforandroid2.model.CrossReferance;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 import de.greenrobot.event.EventBus;
 
 public class AnimeDetailFragment extends RoboFragment implements
-		LoaderManager.LoaderCallbacks<AnimeRecord>, OnItemSelectedListener, OnClickListener, OnDismissListener, OnTouchListener {
+		LoaderManager.LoaderCallbacks<AnimeRecord>, OnItemSelectedListener, OnClickListener, OnDismissListener, OnTouchListener, ImageLoadingListener {
 
 	private static final String TAG = AnimeDetailFragment.class.getSimpleName();
 
@@ -162,6 +165,12 @@ public class AnimeDetailFragment extends RoboFragment implements
 	
 	@InjectView(R.id.add_button)
 	private Button addButton;
+	
+	@InjectView(R.id.cover_progress_bar)
+	private View coverProgressbar;
+	
+	@InjectView(R.id.synopsis_progress_bar)
+	private View synopsisProgressbar;
 	
 	@Inject
 	private ImageLoader lazyLoader;
@@ -274,10 +283,13 @@ public class AnimeDetailFragment extends RoboFragment implements
 			return;
 		}
 		
-		lazyLoader.displayImage(activeRecord.image_url, cover );
+		lazyLoader.displayImage(activeRecord.image_url, cover, this );
 		title.setText(Html.fromHtml(activeRecord.title));
 		if (activeRecord.synopsis != null) {
 			synopsys.setText(Html.fromHtml(activeRecord.synopsis));
+			synopsisProgressbar.setVisibility(View.GONE);
+		} else {
+			synopsisProgressbar.setVisibility(View.VISIBLE);
 		}
 
 		if (activeRecord.synopsis == null) {
@@ -529,6 +541,26 @@ public class AnimeDetailFragment extends RoboFragment implements
 			}
 			v = (View) v.getParent();
 		}
+	}
+
+	@Override
+	public void onLoadingCancelled(String arg0, View arg1) {
+		coverProgressbar.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
+		coverProgressbar.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
+		coverProgressbar.setVisibility(View.GONE);
+	}
+
+	@Override
+	public void onLoadingStarted(String arg0, View arg1) {
+		coverProgressbar.setVisibility(View.VISIBLE);
 	}
 
 }
