@@ -17,7 +17,10 @@
 package com.github.riotopsys.malforandroid2.fragment;
 
 import roboguice.fragment.RoboDialogFragment;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,13 +39,32 @@ public class NumberPickerFragment extends RoboDialogFragment {
 	public interface OnDismissListener{
 		public void onDismiss( NumberPickerFragment numberPickerFragment);
 	}
-
+	
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-		view = (NumberPicker) inflater.inflate(R.layout.number_picker, container);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+       
+		view = (NumberPicker) View.inflate(getActivity(), R.layout.number_picker, null);
 		
-		getDialog().setTitle("Watched Episodes");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+        .setView(view)
+        .setTitle("Watched Episodes")
+        .setPositiveButton("Ok", new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				value = view.getValue();
+				
+				listener.onDismiss(NumberPickerFragment.this);
+				dialog.dismiss();
+			}
+		})
+        .setNegativeButton("Cancel", new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
         
         view.setMinValue(0);
         view.setMaxValue(maximum);
@@ -50,8 +72,15 @@ public class NumberPickerFragment extends RoboDialogFragment {
         view.setWrapSelectorWheel(false);
         
         view.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        
+        return builder.create();
+    }
 
-        return view;
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+
+        return null;
     }
 
 	public void setMaximum(int number) {
@@ -66,19 +95,8 @@ public class NumberPickerFragment extends RoboDialogFragment {
 		return value;
 	}
 	
-	@Override
-	public void onDismiss(DialogInterface dialog) {
-		super.onDismiss(dialog);
-		
-		if ( listener != null ){
-			value = view.getValue();
-			
-			listener.onDismiss(this);
-		}
-	}
-
 	public void setOnDismissListener(OnDismissListener listener) {
 		this.listener = listener;
 	}
-
+	
 }
