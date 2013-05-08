@@ -23,5 +23,6 @@
     
     <color name="transparent_dark_blue">#A81E98D0</color>
     <color name="dark_blue">#1E98D0</color>
-    <color name="light_blue">#E3F4FC</color>
+    <color name="light_blue">#ABDFF6</color>
+    <color name="mid_blue">#8FD4F3</color>
 </resources>
