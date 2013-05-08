@@ -81,6 +81,7 @@ public class HubActivity extends BaseActivity implements Callback<String>, OnQue
 		setContentView(R.layout.main);
 
 		listPager.setAdapter(adapter);
+		listPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
 		
 		if ( savedInstanceState != null){
 			currentDetail = (ChangeDetailViewRequest) savedInstanceState.get("currentDetail");
