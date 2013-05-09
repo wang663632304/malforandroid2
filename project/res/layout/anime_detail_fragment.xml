@@ -51,7 +51,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_blue"
+                android:background="@drawable/rounded_item"
                 app:layout_columnSpan="1"
                 app:layout_rowSpan="4" >
 
@@ -59,7 +59,7 @@
                     android:id="@+id/cover_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitCenter" />
 
                 <ProgressBar
                     android:id="@+id/cover_progress_bar"

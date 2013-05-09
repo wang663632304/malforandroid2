@@ -14,18 +14,13 @@
  See the License for the specific language governing permissions and
  limitations under the License. 
 --> 
-<resources>
-    <dimen name="left_hand_list_width">250dp</dimen>
-    <dimen name="item_width">250dp</dimen>
-    <dimen name="corner_rounding">6dp</dimen>
-    <dimen name="standard_padding">4dp</dimen>
-    <dimen name="item_width">248dp</dimen>
-    
-    <dimen name="item_bounds">150dp</dimen>
-    <dimen name="drop_shadow_width">4dp</dimen>
-    
-    <dimen name="large_text">22sp</dimen>
-    <dimen name="medium_text">18sp</dimen>
-    <dimen name="small_text">14sp</dimen>
-    
-</resources>
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_list_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:choiceMode="singleChoice"
+    android:numColumns="auto_fit"
+    android:fastScrollEnabled="true"
+    android:scrollingCache="true"
+    android:smoothScrollbar="true"
+    android:horizontalSpacing="@dimen/standard_padding"/>
