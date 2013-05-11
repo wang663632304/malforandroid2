@@ -16,11 +16,10 @@
 
 package com.github.riotopsys.malforandroid2.activity;
 
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import roboguice.inject.InjectView;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -45,17 +44,12 @@ import com.github.riotopsys.malforandroid2.server.BootReciever;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.google.inject.Inject;
 
-import de.greenrobot.event.EventBus;
-
-public class HubActivity extends BaseActivity implements Callback<String>, OnQueryTextListener {
+public class HubActivity extends BaseDetailActivity implements Callback<String>, OnQueryTextListener {
 
 	private static String TAG = HubActivity.class.getSimpleName();
 
 	@InjectView(R.id.list_pager)
 	private ViewPager listPager;
-
-	@Inject
-	private EventBus bus;
 
 	@Inject
 	private ListPagerAdapter adapter;
@@ -66,14 +60,9 @@ public class HubActivity extends BaseActivity implements Callback<String>, OnQue
 	@Inject
 	private LoginFragment login;
 	
-	private LinkedList<ChangeDetailViewRequest> manualBackStack = new LinkedList<ChangeDetailViewRequest>();
-
-	private ChangeDetailViewRequest currentDetail = null;
-
 	private SearchView searchView;
 	private MenuItem searchItem;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -83,42 +72,18 @@ public class HubActivity extends BaseActivity implements Callback<String>, OnQue
 		listPager.setAdapter(adapter);
 		listPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
 		
-		if ( savedInstanceState != null){
-			currentDetail = (ChangeDetailViewRequest) savedInstanceState.get("currentDetail");
-			manualBackStack.clear();
-			manualBackStack.addAll((Collection<ChangeDetailViewRequest>) savedInstanceState.get("manualBackStack"));
-		}
-		
-		transitionDetail(currentDetail);
-		
 		new ReadNameValuePairs<String>(getHelper(), this).execute("USER","PASS");
 		
 		if ( !state.isSyncScheduled()){
 			//somehow we hit this point with out starting the sync, so we'll do it now
 			BootReciever.scheduleSync(state, this);
 		}
+		
+		if ( detailFrame != null ){
+			transitionDetail(currentDetail);
+		}
 	}
 	
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		outState.putSerializable("currentDetail", currentDetail);
-		outState.putSerializable("manualBackStack", manualBackStack);
-		
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
-	public void onPause() {
-		bus.unregister(this);
-		super.onPause();
-	}
-
-	@Override
-	public void onResume() {
-		bus.register(this);
-		super.onResume();
-	}
-
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (item.getItemId() == R.id.refresh_menu_item) {
@@ -143,44 +108,6 @@ public class HubActivity extends BaseActivity implements Callback<String>, OnQue
 		return super.onCreateOptionsMenu(menu);
 	}
 	
-
-
-	@Override
-	public void onBackPressed() {
-		if (manualBackStack.isEmpty()) {
-			super.onBackPressed();
-		} else {
-			transitionDetail(manualBackStack.pop());
-		}
-	}
-
-	public void onEventMainThread(ChangeDetailViewRequest cdvr) {
-		if ( cdvr.equals(currentDetail)){
-			return;
-		}
-		manualBackStack.push(currentDetail);
-		transitionDetail(cdvr);
-	}
-
-	private void transitionDetail(ChangeDetailViewRequest cdvr) {
-
-		currentDetail = cdvr;
-
-		FragmentTransaction transaction = getSupportFragmentManager()
-				.beginTransaction();
-		Fragment fragment;
-		if (cdvr != null) {
-			fragment = new AnimeDetailFragment();
-			Bundle args = new Bundle();
-			args.putInt("id", cdvr.id);
-			fragment.setArguments(args);
-		} else {
-			fragment = new PlacardFragment();
-		}
-		transaction.replace(R.id.detail_frame, fragment);
-		transaction.commit();
-	}
-
 	@Override
 	public void onNameValuePairsReady(List<NameValuePair<String>> data) {
 		for (NameValuePair<String> pair : data) {
@@ -208,6 +135,37 @@ public class HubActivity extends BaseActivity implements Callback<String>, OnQue
 		ServerInterface.searchAnime(this, query);
 		listPager.setCurrentItem(adapter.getCount()-1,true);
 		return true;
+	}
+	
+	protected void transitionDetail(ChangeDetailViewRequest cdvr) {
+		if ( detailFrame != null ){
+			transitionDetailTofragment();
+		} else {
+			transitionDetailToActivity();
+		}
+	}
+	
+	private void transitionDetailToActivity() {
+		Intent intent = new Intent(this, DetailActivity.class);
+		intent.putExtra("ITEM", currentDetail);
+		startActivity(intent);
+		purgeFakeBackStack();
+	}
+
+	private void transitionDetailTofragment() {
+		FragmentTransaction transaction = getSupportFragmentManager()
+				.beginTransaction();
+		Fragment fragment;
+		if (currentDetail != null) {
+			fragment = new AnimeDetailFragment();
+			Bundle args = new Bundle();
+			args.putInt("id", currentDetail.id);
+			fragment.setArguments(args);
+		} else {
+			fragment = new PlacardFragment();
+		}
+		transaction.replace(R.id.detail_frame, fragment);
+		transaction.commit();
 	}
 
 }

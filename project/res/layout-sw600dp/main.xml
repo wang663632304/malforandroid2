@@ -22,7 +22,7 @@
 
     <android.support.v4.view.ViewPager
         android:id="@+id/list_pager"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/left_hand_list_width"
         android:layout_height="match_parent"
         android:background="@color/light_blue" >
 
@@ -33,5 +33,23 @@
             />
         
     </android.support.v4.view.ViewPager>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <FrameLayout
+            android:id="@+id/detail_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+        
+        <View 
+            android:layout_width="@dimen/drop_shadow_width"
+            android:layout_height="match_parent"
+            android:background="@drawable/drop_shadow_divider"/>
+        
+    </RelativeLayout>
 
 </LinearLayout>
