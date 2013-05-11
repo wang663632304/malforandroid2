@@ -26,7 +26,7 @@ public class DetailActivity extends BaseDetailActivity {
 		if ( savedInstanceState == null ){
 			Intent intent = getIntent();
 			currentDetail = (ChangeDetailViewRequest) intent.getExtras().getSerializable("ITEM");
-			transitionDetail(currentDetail);
+			transitionDetail();
 		} 
 
 	}
@@ -45,14 +45,15 @@ public class DetailActivity extends BaseDetailActivity {
 	    return super.onOptionsItemSelected(item);
 	}
 
-	protected void transitionDetail(ChangeDetailViewRequest cdvr) {
+	@Override
+	protected void transitionDetail() {
 		FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
 		Fragment fragment;
-		if (cdvr != null) {
+		if (currentDetail != null) {
 			fragment = new AnimeDetailFragment();
 			Bundle args = new Bundle();
-			args.putInt("id", cdvr.id);
+			args.putInt("id", currentDetail.id);
 			fragment.setArguments(args);
 			transaction.replace(R.id.detail_frame, fragment);
 			transaction.commit();

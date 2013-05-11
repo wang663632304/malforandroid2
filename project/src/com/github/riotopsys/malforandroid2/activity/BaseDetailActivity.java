@@ -65,7 +65,8 @@ public abstract class BaseDetailActivity extends BaseActivity {
 		if (manualBackStack.isEmpty()) {
 			super.onBackPressed();
 		} else {
-			transitionDetail(manualBackStack.pop());
+			currentDetail = manualBackStack.pop();
+			transitionDetail();
 		}
 	}
 
@@ -75,7 +76,7 @@ public abstract class BaseDetailActivity extends BaseActivity {
 		}
 		manualBackStack.push(currentDetail);
 		currentDetail = cdvr;
-		transitionDetail(cdvr);
+		transitionDetail();
 	}
 
 	protected void purgeFakeBackStack() {
@@ -83,6 +84,6 @@ public abstract class BaseDetailActivity extends BaseActivity {
 		currentDetail = null;
 	}
 	
-	protected abstract void transitionDetail(ChangeDetailViewRequest cdvr);
+	protected abstract void transitionDetail();
 
 }

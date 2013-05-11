@@ -35,7 +35,6 @@ import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.adapter.ListPagerAdapter;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs.Callback;
-import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.fragment.AnimeDetailFragment;
 import com.github.riotopsys.malforandroid2.fragment.LoginFragment;
 import com.github.riotopsys.malforandroid2.fragment.PlacardFragment;
@@ -80,7 +79,7 @@ public class HubActivity extends BaseDetailActivity implements Callback<String>,
 		}
 		
 		if ( detailFrame != null ){
-			transitionDetail(currentDetail);
+			transitionDetail();
 		}
 	}
 	
@@ -137,7 +136,7 @@ public class HubActivity extends BaseDetailActivity implements Callback<String>,
 		return true;
 	}
 	
-	protected void transitionDetail(ChangeDetailViewRequest cdvr) {
+	protected void transitionDetail() {
 		if ( detailFrame != null ){
 			transitionDetailTofragment();
 		} else {
