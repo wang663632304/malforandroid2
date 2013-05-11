@@ -45,15 +45,15 @@
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/standard_padding"
             android:paddingLeft="@dimen/standard_padding"
-            app:columns="6"
+            android:paddingRight="@dimen/standard_padding"
+            app:columns="2"
             app:divider_size="@dimen/standard_padding" >
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/rounded_item"
-                app:layout_columnSpan="1"
-                app:layout_rowSpan="4" >
+                app:layout_rowSpan="2"
+                android:background="@drawable/rounded_item" >
 
                 <ImageView
                     android:id="@+id/cover_image"
@@ -70,76 +70,9 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/watched_panel"
-                style="@style/detail_item"
-                app:layout_columnSpan="1"
-                android:gravity="center"
-                android:visibility="gone" >
-
-                <TextView
-                    android:id="@+id/watched_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|left"
-                    android:text="@string/watched"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/plus_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:text="@string/plus_one" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/status_panel"
-                style="@style/detail_item"
-                app:layout_columnSpan="1"
-                android:visibility="gone" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|left"
-                    android:text="@string/status"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/anime_watched_status"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:spinnerMode="dialog"
-                    tools:listitem="@android:layout/simple_spinner_dropdown_item" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/score_panel"
-                style="@style/detail_item"
-                app:layout_columnSpan="1"
-                android:visibility="gone" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|left"
-                    android:text="@string/your_score"
-                    android:textStyle="bold" />
-
-                <Spinner
-                    android:id="@+id/anime_score_status"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:spinnerMode="dialog"
-                    tools:listitem="@android:layout/simple_spinner_dropdown_item" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/add_panel"
                 style="@style/detail_item"
-                app:layout_columnSpan="3"
+                app:layout_columnSpan="1"
                 android:gravity="center"
                 android:visibility="gone"
                 android:weightSum="5" >
@@ -168,49 +101,98 @@
                     android:text="@string/add" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/information_container"
+            <RelativeLayout
                 style="@style/detail_item"
                 app:layout_columnSpan="1"
-                app:layout_rowSpan="2"
-                android:orientation="vertical"
+                app:layout_rowSpan="3" >
+
+                <ScrollView
+                    android:id="@+id/synopsis_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/synopsis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </ScrollView>
+
+                <ProgressBar
+                    android:id="@+id/synopsis_progress_bar"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/watched_panel"
+                style="@style/detail_item"
+                android:gravity="center"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/watched_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="@string/watched"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/plus_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/plus_one" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/status_panel"
+                style="@style/detail_item"
                 android:visibility="gone" >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="@dimen/standard_padding"
-                    android:text="@string/information"
+                    android:text="@string/status"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/type"
-                    android:layout_width="wrap_content"
+                <Spinner
+                    android:id="@+id/anime_watched_status"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="@dimen/standard_padding" />
+                    android:layout_gravity="center"
+                    android:spinnerMode="dialog"
+                    tools:listitem="@android:layout/simple_spinner_dropdown_item" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/score_panel"
+                style="@style/detail_item"
+                android:visibility="gone" >
 
                 <TextView
-                    android:id="@+id/status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="@dimen/standard_padding" />
+                    android:text="@string/your_score"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/classification"
-                    android:layout_width="wrap_content"
+                <Spinner
+                    android:id="@+id/anime_score_status"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|left"
-                    android:layout_marginBottom="@dimen/standard_padding" />
+                    android:layout_gravity="center"
+                    android:spinnerMode="dialog"
+                    tools:listitem="@android:layout/simple_spinner_dropdown_item" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/statistics_container"
                 style="@style/detail_item"
-                app:layout_columnSpan="1"
-                app:layout_rowSpan="2"
+                app:layout_rowSpan="1"
                 android:orientation="vertical"
                 android:visibility="gone" >
 
@@ -258,10 +240,46 @@
                     android:layout_marginBottom="@dimen/standard_padding" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/information_container"
+                style="@style/detail_item"
+                app:layout_rowSpan="1"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginBottom="@dimen/standard_padding"
+                    android:text="@string/information"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginBottom="@dimen/standard_padding" />
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginBottom="@dimen/standard_padding" />
+
+                <TextView
+                    android:id="@+id/classification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_marginBottom="@dimen/standard_padding" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/prequel"
                 style="@style/detail_item"
-                app:layout_columnSpan="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -269,7 +287,6 @@
             <TextView
                 android:id="@+id/sequel"
                 style="@style/detail_item"
-                app:layout_columnSpan="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -277,7 +294,6 @@
             <TextView
                 android:id="@+id/side_story"
                 style="@style/detail_item"
-                app:layout_columnSpan="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -285,7 +301,6 @@
             <TextView
                 android:id="@+id/spin_offs"
                 style="@style/detail_item"
-                app:layout_columnSpan="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -293,7 +308,6 @@
             <TextView
                 android:id="@+id/summaries"
                 style="@style/detail_item"
-                app:layout_columnSpan="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:visibility="gone" />
@@ -301,35 +315,9 @@
             <TextView
                 android:id="@+id/alternative_versions"
                 style="@style/detail_item"
-                app:layout_columnSpan="1"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:visibility="gone" />
-            
-            <RelativeLayout
-                style="@style/detail_item"
-                app:layout_columnSpan="5"
-                app:layout_rowSpan="2" >
-
-                <ScrollView
-                    android:id="@+id/synopsis_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <TextView
-                        android:id="@+id/synopsis"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </ScrollView>
-
-                <ProgressBar
-                    android:id="@+id/synopsis_progress_bar"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
-            
         </com.github.riotopsys.pannellayout.PannelLayout>
     </ScrollView>
 

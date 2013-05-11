@@ -69,6 +69,30 @@
                     android:layout_centerInParent="true" />
             </RelativeLayout>
 
+            <RelativeLayout
+                style="@style/detail_item"
+                app:layout_columnSpan="3"
+                app:layout_rowSpan="4" >
+
+                <ScrollView
+                    android:id="@+id/synopsis_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:id="@+id/synopsis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </ScrollView>
+
+                <ProgressBar
+                    android:id="@+id/synopsis_progress_bar"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+
             <LinearLayout
                 android:id="@+id/watched_panel"
                 style="@style/detail_item"
@@ -139,7 +163,7 @@
             <LinearLayout
                 android:id="@+id/add_panel"
                 style="@style/detail_item"
-                app:layout_columnSpan="3"
+                app:layout_columnSpan="5"
                 android:gravity="center"
                 android:visibility="gone"
                 android:weightSum="5" >
@@ -305,31 +329,6 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:visibility="gone" />
-            
-            <RelativeLayout
-                style="@style/detail_item"
-                app:layout_columnSpan="5"
-                app:layout_rowSpan="2" >
-
-                <ScrollView
-                    android:id="@+id/synopsis_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <TextView
-                        android:id="@+id/synopsis"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </ScrollView>
-
-                <ProgressBar
-                    android:id="@+id/synopsis_progress_bar"
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-            </RelativeLayout>
-            
         </com.github.riotopsys.pannellayout.PannelLayout>
     </ScrollView>
 
