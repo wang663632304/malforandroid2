@@ -16,7 +16,6 @@
 
 package com.github.riotopsys.malforandroid2.database;
 
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,30 +26,30 @@ import android.util.Log;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.j256.ormlite.dao.Dao;
 
-public class ReadNameValuePairs<T extends Serializable> extends AsyncTask<String, Void, List<NameValuePair<T>>> {
+public class ReadNameValuePairs extends AsyncTask<String, Void, List<NameValuePair>> {
 	
 	private static final String TAG = ReadNameValuePairs.class.getSimpleName();
 	
-	public interface Callback<T extends Serializable>{
-		public void onNameValuePairsReady( List<NameValuePair<T>> data );
+	public interface Callback{
+		public void onNameValuePairsReady(List<NameValuePair> data );
 	}
 	
-	private Callback<T> callback = null;
+	private Callback callback = null;
 	private DatabaseHelper dbHelper = null;
 	
-	public ReadNameValuePairs(DatabaseHelper dbHelper,  Callback<T> callback ) {
+	public ReadNameValuePairs(DatabaseHelper dbHelper,  Callback callback ) {
 		this.callback = callback;
 		this.dbHelper = dbHelper;
 	}
 
 	@Override
-	protected List<NameValuePair<T>> doInBackground(String... params) {
-		List<NameValuePair<T>> result = new LinkedList<NameValuePair<T>>();
+	protected List<NameValuePair> doInBackground(String... params) {
+		List<NameValuePair> result = new LinkedList<NameValuePair>();
 		try {
-			Dao<NameValuePair<T>, String> dao = dbHelper.getDao(NameValuePair.class);
+			Dao<NameValuePair, String> dao = dbHelper.getDao(NameValuePair.class);
 			for (String name : params) {
 				try {
-					NameValuePair<T> nvp = dao.queryForId(name);
+					NameValuePair nvp = dao.queryForId(name);
 					if ( nvp != null ){
 						result.add(nvp);
 					}
@@ -66,7 +65,7 @@ public class ReadNameValuePairs<T extends Serializable> extends AsyncTask<String
 	}
 	
 	@Override
-	protected void onPostExecute(List<NameValuePair<T>> result) {
+	protected void onPostExecute(List<NameValuePair> result) {
 		super.onPostExecute(result);
 		if ( callback != null ){
 			callback.onNameValuePairsReady(result);

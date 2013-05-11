@@ -374,9 +374,9 @@ public class ServerInterface extends RoboIntentService {
 		RestResult<String> result = restHelper.get(urlBuilder.getVerifyCredentialsUrl());
 		bus.post(new CredentialVerificationEvent(result.code));
 		if ( result.code == 200 ){
-			Dao<NameValuePair<String>, String> dao = getHelper().getDao(NameValuePair.class);
-			dao.createOrUpdate(new NameValuePair<String>("USER", state.getUser()));
-			dao.createOrUpdate(new NameValuePair<String>("PASS", state.getPass()));
+			Dao<NameValuePair, String> dao = getHelper().getDao(NameValuePair.class);
+			dao.createOrUpdate(new NameValuePair("USER", state.getUser()));
+			dao.createOrUpdate(new NameValuePair("PASS", state.getPass()));
 		}
 	}
 	

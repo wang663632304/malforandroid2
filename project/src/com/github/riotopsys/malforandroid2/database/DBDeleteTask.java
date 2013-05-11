@@ -48,7 +48,7 @@ public class DBDeleteTask extends AsyncTask<AnimeRecord, Void, Void> {
 	@Override
 	protected Void doInBackground(AnimeRecord... params) {
 		try {
-			Dao<AnimeRecord, ?> dao = dbHelper.getDao(params[0].getClass());
+			Dao<AnimeRecord, ?> dao = dbHelper.getDao(AnimeRecord.class);
 			for (AnimeRecord p : params) {
 				try {
 					p.watched_status = null;

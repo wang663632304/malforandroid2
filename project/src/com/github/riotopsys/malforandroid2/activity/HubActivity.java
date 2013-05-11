@@ -43,7 +43,7 @@ import com.github.riotopsys.malforandroid2.server.BootReciever;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.google.inject.Inject;
 
-public class HubActivity extends BaseDetailActivity implements Callback<String>, OnQueryTextListener {
+public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener {
 
 	private static String TAG = HubActivity.class.getSimpleName();
 
@@ -71,7 +71,7 @@ public class HubActivity extends BaseDetailActivity implements Callback<String>,
 		listPager.setAdapter(adapter);
 		listPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
 		
-		new ReadNameValuePairs<String>(getHelper(), this).execute("USER","PASS");
+		new ReadNameValuePairs(getHelper(), this).execute("USER","PASS");
 		
 		if ( !state.isSyncScheduled()){
 			//somehow we hit this point with out starting the sync, so we'll do it now
@@ -108,13 +108,13 @@ public class HubActivity extends BaseDetailActivity implements Callback<String>,
 	}
 	
 	@Override
-	public void onNameValuePairsReady(List<NameValuePair<String>> data) {
-		for (NameValuePair<String> pair : data) {
+	public void onNameValuePairsReady(List<NameValuePair> data) {
+		for (NameValuePair pair : data) {
 			if ("USER".equals(pair.name)) {
-				state.setUser(pair.value);
+				state.setUser((String) pair.value);
 			}
 			if ("PASS".equals(pair.name)) {
-				state.setPass(pair.value);
+				state.setPass((String) pair.value);
 			}
 		}
 		if ( !state.loginSet() ){

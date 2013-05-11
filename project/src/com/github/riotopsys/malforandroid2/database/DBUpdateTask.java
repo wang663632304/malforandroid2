@@ -57,7 +57,7 @@ public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 	@Override
 	protected Void doInBackground(AnimeRecord... params) {
 		try {
-			Dao<AnimeRecord, ?> dao = dbHelper.getDao(params[0].getClass());
+			Dao<AnimeRecord, Integer> dao = dbHelper.getDao(AnimeRecord.class);
 			for (AnimeRecord p : params) {
 				try {
 					dao.createOrUpdate(p);
