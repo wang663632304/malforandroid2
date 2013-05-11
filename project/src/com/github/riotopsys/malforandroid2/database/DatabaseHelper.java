@@ -16,7 +16,6 @@
 
 package com.github.riotopsys.malforandroid2.database;
 
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
