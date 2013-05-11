@@ -19,6 +19,8 @@ package com.github.riotopsys.malforandroid2;
 import java.io.File;
 
 import roboguice.RoboGuice;
+import android.os.Environment;
+import android.util.Log;
 
 import com.nostra13.universalimageloader.cache.disc.impl.TotalSizeLimitedDiscCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -27,10 +29,26 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class MalApplication extends android.app.Application {
 
+	private static final String TAG = MalApplication.class.getSimpleName();
+
 	@Override
 	public void onCreate() {
 		
-		File cacheDir = new File(getCacheDir(),"imageCache");
+		String storage = Environment.getExternalStorageState();
+		
+		int limit;
+		File cacheBase;
+		if ( Environment.MEDIA_MOUNTED.equals(storage) ){
+			cacheBase = getExternalCacheDir();
+			limit = 30*1024*1024;
+		} else {
+			cacheBase = getCacheDir();
+			limit = 10*1024*1024;
+		}
+		
+		File cacheDir = new File(cacheBase,"imageCache");
+		
+		Log.i(TAG, String.format("Cache: %s", cacheDir.getAbsolutePath()));
 		if ( !cacheDir.exists() ){
 			cacheDir.mkdirs();
 		}
@@ -42,7 +60,7 @@ public class MalApplication extends android.app.Application {
 		
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
 		.defaultDisplayImageOptions(defaultDisplayImageOptions )  
-		.discCache(new TotalSizeLimitedDiscCache(cacheDir, 10*1024*1024))
+		.discCache(new TotalSizeLimitedDiscCache(cacheDir, limit))
 		.build();
 		
 		ImageLoader.getInstance().init(config);
