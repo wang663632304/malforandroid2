@@ -18,10 +18,11 @@ package com.github.riotopsys.malforandroid2.model;
 
 import java.io.Serializable;
 
-public class CrossReferance implements Serializable{
-	private static final long serialVersionUID = 3149665958016305430L;
+public class MangaCrossReferance implements Serializable{
 
-	public int anime_id;
+	private static final long serialVersionUID = 5200089513626492414L;
+
+	public int manga_id;
 	
 	public String url;
 	

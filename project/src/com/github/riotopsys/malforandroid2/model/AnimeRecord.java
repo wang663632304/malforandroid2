@@ -30,7 +30,7 @@ public class AnimeRecord {
 	public int id;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
-	public LinkedList<CrossReferance> sequels;
+	public LinkedList<AnimeCrossReferance> sequels;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
 	public LinkedList<String> tags;
@@ -51,7 +51,7 @@ public class AnimeRecord {
 	public int listed_anime_id;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
-	public LinkedList<CrossReferance> side_stories;
+	public LinkedList<AnimeCrossReferance> side_stories;
 	
 	@DatabaseField( )
 	public String classification;
@@ -75,7 +75,7 @@ public class AnimeRecord {
 	public int members_count;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
-	public LinkedList<CrossReferance> manga_adaptations;
+	public LinkedList<MangaCrossReferance> manga_adaptations;
 	
 	@DatabaseField( )
 	public int rank;
@@ -87,7 +87,7 @@ public class AnimeRecord {
 	public String title;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
-	public LinkedList<CrossReferance> prequels;
+	public LinkedList<AnimeCrossReferance> prequels;
 	
 	@DatabaseField( )
 	public int popularity_rank;
@@ -99,12 +99,12 @@ public class AnimeRecord {
 	public String synopsis;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
-	public LinkedList<CrossReferance> spin_offs;
+	public LinkedList<AnimeCrossReferance> spin_offs;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
-	public LinkedList<CrossReferance> summaries;
+	public LinkedList<AnimeCrossReferance> summaries;
     
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
-	public LinkedList<CrossReferance> alternative_versions;
+	public LinkedList<AnimeCrossReferance> alternative_versions;
 
 }

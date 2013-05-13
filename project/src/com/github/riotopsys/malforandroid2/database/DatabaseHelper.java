@@ -26,6 +26,8 @@ import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.JournalEntry;
+import com.github.riotopsys.malforandroid2.model.MangaJournalEntry;
+import com.github.riotopsys.malforandroid2.model.MangaRecord;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -36,10 +38,15 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	private static final String TAG = DatabaseHelper.class.getSimpleName();
 	private static final String DB_NAME = "mal2.db";
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 2;
 	
 	@SuppressWarnings("rawtypes")
-	private static final List<Class> STORED_MODLES = Arrays.asList( (Class)AnimeRecord.class, (Class)NameValuePair.class, (Class)JournalEntry.class );
+	private static final List<Class> STORED_MODLES = Arrays.asList( 
+			(Class)NameValuePair.class, 
+			(Class)AnimeRecord.class, 
+			(Class)MangaRecord.class, 
+			(Class)JournalEntry.class, 
+			(Class)MangaJournalEntry.class );
 
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
@@ -64,10 +71,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			int to) {
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onUpgrade");
-			for ( Class<?> clazz : STORED_MODLES){
-				TableUtils.dropTable(connectionSource, clazz, true);
+			if (from == 1 && to == 2){
+				TableUtils.dropTable(connectionSource, AnimeRecord.class, true);
+				TableUtils.createTable(connectionSource, AnimeRecord.class);
+				TableUtils.createTable(connectionSource, MangaRecord.class);
+				TableUtils.createTable(connectionSource, MangaJournalEntry.class);
 			}
-			onCreate(db, connectionSource);
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't drop databases", e);
 			throw new RuntimeException(e);

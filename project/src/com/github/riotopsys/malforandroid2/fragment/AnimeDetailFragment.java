@@ -59,7 +59,7 @@ import com.github.riotopsys.malforandroid2.fragment.NumberPickerFragment.OnDismi
 import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
-import com.github.riotopsys.malforandroid2.model.CrossReferance;
+import com.github.riotopsys.malforandroid2.model.AnimeCrossReferance;
 import com.github.riotopsys.malforandroid2.server.ServerInterface;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -489,10 +489,10 @@ public class AnimeDetailFragment extends RoboFragment implements
 		}
 	}
 
-	private Dialog createPickerDialog(final LinkedList<CrossReferance> crefs) {
+	private Dialog createPickerDialog(final LinkedList<AnimeCrossReferance> crefs) {
 		List<CharSequence> titles = new LinkedList<CharSequence>();
 		
-		for ( CrossReferance cr : crefs ){
+		for ( AnimeCrossReferance cr : crefs ){
 			titles.add(Html.fromHtml(cr.title));
 		}
 		
