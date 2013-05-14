@@ -41,7 +41,7 @@ public class BootReciever extends RoboBroadcastReceiver {
 	public static void scheduleSync(GlobalState state, Context ctx) {
 		PendingIntent pi = PendingIntent.getService(
 				ctx.getApplicationContext(), 0,
-				ServerInterface.getSyncIntent(ctx),
+				AnimeServerInterface.getSyncIntent(ctx),
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		AlarmManager am = (AlarmManager) ctx

@@ -36,7 +36,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
-import com.github.riotopsys.malforandroid2.server.ServerInterface;
+import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.google.inject.Inject;
 
 import de.greenrobot.event.EventBus;
@@ -103,7 +103,7 @@ public class LoginFragment extends RoboDialogFragment implements OnClickListener
 	public void onEventMainThread(CredentialVerificationEvent cve) {
 		progressDialog.cancel();
 		if (cve.code == 200) {
-			ServerInterface.getAnimeList(getActivity());
+			AnimeServerInterface.getAnimeList(getActivity());
 			dismiss();
 		} else if (cve.code == 401) {
 			new AlertDialog.Builder(getActivity()).setTitle(R.string.login_error_title)
@@ -142,7 +142,7 @@ public class LoginFragment extends RoboDialogFragment implements OnClickListener
 		state.setPass(pass);
 		
 		progressDialog.show();
-		ServerInterface.verifyCredentials( getActivity() );
+		AnimeServerInterface.verifyCredentials( getActivity() );
 	}
 
 }

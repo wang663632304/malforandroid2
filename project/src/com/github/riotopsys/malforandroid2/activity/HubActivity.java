@@ -40,7 +40,7 @@ import com.github.riotopsys.malforandroid2.fragment.LoginFragment;
 import com.github.riotopsys.malforandroid2.fragment.PlacardFragment;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.github.riotopsys.malforandroid2.server.BootReciever;
-import com.github.riotopsys.malforandroid2.server.ServerInterface;
+import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.google.inject.Inject;
 
 public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener {
@@ -86,7 +86,7 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (item.getItemId() == R.id.refresh_menu_item) {
-			ServerInterface.getAnimeList(this);
+			AnimeServerInterface.getAnimeList(this);
 			if ( !state.loginSet() ){
 				login.show(getSupportFragmentManager(), null);
 			}
@@ -131,7 +131,7 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	@Override
 	public boolean onQueryTextSubmit(String query) {
 		searchItem.collapseActionView();
-		ServerInterface.searchAnime(this, query);
+		AnimeServerInterface.searchAnime(this, query);
 		listPager.setCurrentItem(adapter.getCount()-1,true);
 		return true;
 	}

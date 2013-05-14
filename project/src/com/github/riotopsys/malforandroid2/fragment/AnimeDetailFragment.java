@@ -60,7 +60,7 @@ import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.AnimeCrossReferance;
-import com.github.riotopsys.malforandroid2.server.ServerInterface;
+import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -293,7 +293,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		}
 
 		if (activeRecord.synopsis == null) {
-			ServerInterface.getAnimeRecord(getActivity(), activeRecord.id);
+			AnimeServerInterface.getAnimeRecord(getActivity(), activeRecord.id);
 			informationContainer.setVisibility(View.GONE);
 			statisticsContainer.setVisibility(View.GONE);
 		} else {
@@ -389,7 +389,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 	public void onLoadFinished(Loader<AnimeRecord> loader, AnimeRecord data) {
 		activeRecord = data;
 		if ( activeRecord == null ){
-			ServerInterface.getAnimeRecord(getActivity(), idToDisplay);
+			AnimeServerInterface.getAnimeRecord(getActivity(), idToDisplay);
 		} else {
 			updateUI();
 		}

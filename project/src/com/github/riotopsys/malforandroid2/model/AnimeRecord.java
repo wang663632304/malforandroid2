@@ -24,11 +24,8 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "anime")
-public class AnimeRecord {
+public class AnimeRecord extends BaseRecord{
 
-	@DatabaseField(id = true)
-	public int id;
-	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
 	public LinkedList<AnimeCrossReferance> sequels;
 	
@@ -94,9 +91,6 @@ public class AnimeRecord {
 	
 	@DatabaseField( )
 	public int episodes;
-	
-	@DatabaseField( )
-	public String synopsis;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
 	public LinkedList<AnimeCrossReferance> spin_offs;

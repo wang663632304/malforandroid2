@@ -24,7 +24,7 @@ import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
-import com.github.riotopsys.malforandroid2.server.ServerInterface;
+import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.j256.ormlite.dao.Dao;
 
 import de.greenrobot.event.EventBus;
@@ -62,9 +62,9 @@ public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 				try {
 					dao.createOrUpdate(p);
 					if ( isAdd  ){
-						ServerInterface.addAnimeRecord(ctx, p.id);
+						AnimeServerInterface.addAnimeRecord(ctx, p.id);
 					} else {
-						ServerInterface.updateAnimeRecord(ctx, p.id);
+						AnimeServerInterface.updateAnimeRecord(ctx, p.id);
 					}
 					bus.post(new AnimeUpdateEvent(p.id));
 				} catch (SQLException e) {

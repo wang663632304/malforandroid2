@@ -7,10 +7,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "manga")
-public class MangaRecord {
-	
-	@DatabaseField(id = true)
-	public int id;
+public class MangaRecord extends BaseRecord{
 	
 	@DatabaseField
 	public String title;
@@ -50,9 +47,6 @@ public class MangaRecord {
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
 	public LinkedList<String> tags;
-	
-	@DatabaseField
-	public String synopsis;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
 	public LinkedList<AnimeCrossReferance> anime_adaptations;

@@ -14,19 +14,14 @@
  *   limitations under the License.
  */
 
-package com.github.riotopsys.malforandroid2.model;
+package com.github.riotopsys.malforandroid2.event;
 
-import com.j256.ormlite.table.DatabaseTable;
+public class MangaUpdateEvent {
 
-@DatabaseTable(tableName = "manga_journal")
-public class MangaJournalEntry extends BaseJournalEntry {
-	
-	public MangaJournalEntry() {
+	public int id;
+
+	public MangaUpdateEvent(int id) {
+		this.id = id;
 	}
-	
-	public MangaJournalEntry(int recordId, UpdateType updateType) {
-		this.recordId = recordId;
-		this.updateType = updateType;
-	}
-	
+
 }

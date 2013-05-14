@@ -46,7 +46,7 @@
         <activity android:name=".activity.DetailActivity" >
         </activity>
 
-        <service android:name=".server.ServerInterface" />
+        <service android:name=".server.AnimeServerInterface" />
 
         <receiver android:name=".server.BootReciever" >
             <intent-filter>
