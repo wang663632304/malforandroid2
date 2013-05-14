@@ -19,7 +19,6 @@
     <dimen name="item_width">250dp</dimen>
     <dimen name="corner_rounding">6dp</dimen>
     <dimen name="standard_padding">4dp</dimen>
-    <dimen name="item_width">248dp</dimen>
     
     <dimen name="item_bounds">150dp</dimen>
     <dimen name="drop_shadow_width">4dp</dimen>
