@@ -40,7 +40,7 @@ import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
 import com.github.riotopsys.malforandroid2.model.AnimeListResponse;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
-import com.github.riotopsys.malforandroid2.model.JournalEntry;
+import com.github.riotopsys.malforandroid2.model.AnimeJournalEntry;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.github.riotopsys.malforandroid2.model.UpdateType;
 import com.google.gson.Gson;
@@ -174,8 +174,8 @@ public class ServerInterface extends RoboIntentService {
 	private void addAnimeRecord(int id) throws SQLException, MalformedURLException {
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 		
-		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
-		journalUpdate(journalDao, new JournalEntry(id, UpdateType.ADD_TO_LIST) );
+		Dao<AnimeJournalEntry, Integer> journalDao = getHelper().getDao(AnimeJournalEntry.class);
+		journalUpdate(journalDao, new AnimeJournalEntry(id, UpdateType.ADD_TO_LIST) );
 		
 		AnimeRecord anime = dao.queryForId(id);
 		String value = String.format("anime_id=%d&status=%s&episodes=%d&score=%d", anime.id, anime.watched_status.getServerKey(), anime.watched_episodes, anime.score);
@@ -192,8 +192,8 @@ public class ServerInterface extends RoboIntentService {
 	private void updateAnimeRecord(int id) throws SQLException, MalformedURLException {
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 		
-		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
-		journalUpdate(journalDao, new JournalEntry(id, UpdateType.UPDATED) );
+		Dao<AnimeJournalEntry, Integer> journalDao = getHelper().getDao(AnimeJournalEntry.class);
+		journalUpdate(journalDao, new AnimeJournalEntry(id, UpdateType.UPDATED) );
 		
 		AnimeRecord anime = dao.queryForId(id);
 		String value = String.format("status=%s&episodes=%d&score=%d",
@@ -208,8 +208,8 @@ public class ServerInterface extends RoboIntentService {
 	}
 	
 	private void removeAnimeRecord(int id) throws SQLException, MalformedURLException {
-		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
-		journalUpdate(journalDao, new JournalEntry(id, UpdateType.DELETE_FROM_LIST) );
+		Dao<AnimeJournalEntry, Integer> journalDao = getHelper().getDao(AnimeJournalEntry.class);
+		journalUpdate(journalDao, new AnimeJournalEntry(id, UpdateType.DELETE_FROM_LIST) );
 		
 		Log.v(TAG, String.format("url %s",  urlBuilder.getAnimeUpdateUrl(id)));
 		RestResult<String> result = restHelper.delete(urlBuilder.getAnimeUpdateUrl(id));
@@ -219,8 +219,8 @@ public class ServerInterface extends RoboIntentService {
 		Log.v(TAG, String.format("removeAnimeRecord: journal size, %d ",  journalDao.countOf()));
 	}
 
-	private void journalUpdate(Dao<JournalEntry, Integer> journalDao, JournalEntry journalEntry) throws SQLException {
-		JournalEntry original = journalDao.queryForId(journalEntry.recordId);
+	private void journalUpdate(Dao<AnimeJournalEntry, Integer> journalDao, AnimeJournalEntry journalEntry) throws SQLException {
+		AnimeJournalEntry original = journalDao.queryForId(journalEntry.recordId);
 		if ( original == null ){
 			// id has no out standing operations so add it
 			journalDao.create(journalEntry);
@@ -255,7 +255,7 @@ public class ServerInterface extends RoboIntentService {
 			AnimeRecord ar = gson.fromJson(result.result, AnimeRecord.class);
 			getHelper().getDao(AnimeRecord.class).createOrUpdate(ar);
 			
-			Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
+			Dao<AnimeJournalEntry, Integer> journalDao = getHelper().getDao(AnimeJournalEntry.class);
 			journalDao.deleteById(ar.id);
 			bus.post(new AnimeUpdateEvent(id));
 		}
@@ -267,12 +267,12 @@ public class ServerInterface extends RoboIntentService {
 			return;
 		}
 		Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
-		Dao<JournalEntry, Integer> journalDao = getHelper().getDao(JournalEntry.class);
+		Dao<AnimeJournalEntry, Integer> journalDao = getHelper().getDao(AnimeJournalEntry.class);
 		
 		Log.v(TAG, String.format("getAnimeList: journal size before, %d ",  journalDao.countOf()));
 		//push outstanding journal entries to server
-		List<JournalEntry> journal = journalDao.queryForAll();
-		for( JournalEntry je : journal ){
+		List<AnimeJournalEntry> journal = journalDao.queryForAll();
+		for( AnimeJournalEntry je : journal ){
 			switch (je.updateType) {
 			case ADD_TO_LIST:
 				addAnimeRecord(je.recordId);

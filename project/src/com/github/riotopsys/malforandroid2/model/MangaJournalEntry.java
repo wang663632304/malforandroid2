@@ -19,7 +19,7 @@ package com.github.riotopsys.malforandroid2.model;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "journal")
+@DatabaseTable(tableName = "manga_journal")
 public class MangaJournalEntry {
 	
 	public MangaJournalEntry() {

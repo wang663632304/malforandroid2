@@ -24,8 +24,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.github.riotopsys.malforandroid2.model.AnimeJournalEntry;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
-import com.github.riotopsys.malforandroid2.model.JournalEntry;
 import com.github.riotopsys.malforandroid2.model.MangaJournalEntry;
 import com.github.riotopsys.malforandroid2.model.MangaRecord;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
@@ -45,7 +45,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			(Class)NameValuePair.class, 
 			(Class)AnimeRecord.class, 
 			(Class)MangaRecord.class, 
-			(Class)JournalEntry.class, 
+			(Class)AnimeJournalEntry.class, 
 			(Class)MangaJournalEntry.class );
 
 	public DatabaseHelper(Context context) {
@@ -71,11 +71,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			int to) {
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onUpgrade");
-			if (from == 1 && to == 2){
-				TableUtils.dropTable(connectionSource, AnimeRecord.class, true);
-				TableUtils.createTable(connectionSource, AnimeRecord.class);
-				TableUtils.createTable(connectionSource, MangaRecord.class);
-				TableUtils.createTable(connectionSource, MangaJournalEntry.class);
+			if (from != to ){
+				for ( Class<?> clazz: STORED_MODLES ){
+					TableUtils.dropTable(connectionSource, clazz, true);
+				}
 			}
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't drop databases", e);

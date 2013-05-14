@@ -20,12 +20,12 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "journal")
-public class JournalEntry {
+public class AnimeJournalEntry {
 	
-	public JournalEntry() {
+	public AnimeJournalEntry() {
 	}
 
-	public JournalEntry(int recordId, UpdateType updateType) {
+	public AnimeJournalEntry(int recordId, UpdateType updateType) {
 		this.recordId = recordId;
 		this.updateType = updateType;
 	}
