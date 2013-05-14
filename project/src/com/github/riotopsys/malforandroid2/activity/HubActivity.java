@@ -102,6 +102,7 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		
 		searchView = (SearchView) searchItem.getActionView();
 		searchView.setOnQueryTextListener(this);
+		searchView.setQueryHint(getString(R.string.search));
 		
 		
 		return super.onCreateOptionsMenu(menu);
