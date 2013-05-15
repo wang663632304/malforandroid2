@@ -36,7 +36,7 @@
         android:theme="@style/Theme.MAL" >
 
         <!-- android:theme="@android:style/Theme.Holo.Light" -->
-        <activity android:name=".activity.HubActivity" >
+        <activity android:name=".activity.HubActivity"> 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

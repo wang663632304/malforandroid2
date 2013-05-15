@@ -86,4 +86,9 @@
 	<string name="not_in_list">Not in your list</string>
 	<string name="remove_anime">Remove Anime</string>
 	
+	<string-array name="drop_down_nav_options">
+        <item>Anime</item>
+        <item>Manga</item>
+    </string-array>
+	
 </resources>

@@ -65,7 +65,6 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	private SearchView searchView;
 	private MenuItem searchItem;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,11 +77,11 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 
 	    actionBar.setListNavigationCallbacks(
 	            // Specify a SpinnerAdapter to populate the dropdown list.
-	            new ArrayAdapter(
+	            new ArrayAdapter<String>(
 	                    actionBar.getThemedContext(),
 	                    android.R.layout.simple_list_item_1,
 	                    android.R.id.text1,
-	                    new String[]{ "Anime", "Manga" }),
+	                    getResources().getStringArray(R.array.drop_down_nav_options)),
 	            this
 	            );
 
