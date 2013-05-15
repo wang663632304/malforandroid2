@@ -47,6 +47,7 @@
         </activity>
 
         <service android:name=".server.AnimeServerInterface" />
+        <service android:name=".server.MangaServerInterface" />
 
         <receiver android:name=".server.BootReciever" >
             <intent-filter>

@@ -376,9 +376,6 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 				deletedIds.remove(ar.id);
 				BaseRecord arOriginal = dao.queryForId(ar.id);
 				if ( arOriginal != null ){
-//					arOriginal.watched_status = ar.watched_status;
-//					arOriginal.score = ar.score;
-//					arOriginal.watched_episodes = ar.watched_episodes;
 					partialUpdate(arOriginal, ar);
 					
 					dao.createOrUpdate(arOriginal);
@@ -392,9 +389,6 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 			//any items still in deletedIds need to be cleared
 			for ( int id : deletedIds){
 				BaseRecord arOriginal = dao.queryForId(id);
-//				arOriginal.watched_status = null;
-//				arOriginal.score = 0;
-//				arOriginal.watched_episodes = 0;
 				removeFromList(arOriginal);
 				
 				dao.createOrUpdate(arOriginal);

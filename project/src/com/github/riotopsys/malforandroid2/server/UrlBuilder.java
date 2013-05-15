@@ -61,19 +61,16 @@ public class UrlBuilder {
 		return new URL( String.format("%s/mangalist/manga/%d", baseUrl, id));
 	}
 
-	public URL getMangaRecordUrl(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public URL getMangaRecordUrl(int id) throws MalformedURLException {
+		return new URL( String.format("%s/manga/%d?mine=1", baseUrl, id));
 	}
 
-	public URL getMangaListUrl(String user) {
-		// TODO Auto-generated method stub
-		return null;
+	public URL getMangaListUrl(String user) throws MalformedURLException {
+		return new URL( String.format("%s/mangalist/%s", baseUrl, user));
 	}
 
-	public URL getMangaSearchUrl(String criteria) {
-		// TODO Auto-generated method stub
-		return null;
+	public URL getMangaSearchUrl(String criteria) throws MalformedURLException, UnsupportedEncodingException {
+		return new URL( String.format("%s/manga/search?q=%s", baseUrl, URLEncoder.encode(criteria, "utf-8")));
 	}
 
 }
