@@ -19,6 +19,8 @@ package com.github.riotopsys.malforandroid2.activity;
 import java.util.List;
 
 import roboguice.inject.InjectView;
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +29,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 
@@ -43,7 +46,7 @@ import com.github.riotopsys.malforandroid2.server.BootReciever;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.google.inject.Inject;
 
-public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener {
+public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener, OnNavigationListener {
 
 	private static String TAG = HubActivity.class.getSimpleName();
 
@@ -62,11 +65,26 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	private SearchView searchView;
 	private MenuItem searchItem;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.i(TAG, "onCreate");
 		setContentView(R.layout.main);
+		
+		ActionBar actionBar = getActionBar();
+		
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+	    actionBar.setListNavigationCallbacks(
+	            // Specify a SpinnerAdapter to populate the dropdown list.
+	            new ArrayAdapter(
+	                    actionBar.getThemedContext(),
+	                    android.R.layout.simple_list_item_1,
+	                    android.R.id.text1,
+	                    new String[]{ "Anime", "Manga" }),
+	            this
+	            );
 
 		listPager.setAdapter(adapter);
 		listPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
@@ -166,6 +184,11 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		}
 		transaction.replace(R.id.detail_frame, fragment);
 		transaction.commit();
+	}
+
+	@Override
+	public boolean onNavigationItemSelected(int arg0, long arg1) {
+		return true;
 	}
 
 }
