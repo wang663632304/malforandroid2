@@ -219,17 +219,17 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 		if ( record instanceof AnimeRecord ){
 			journalUpdate(journalDao, new AnimeJournalEntry(id, UpdateType.UPDATED) );
 			AnimeRecord anime = (AnimeRecord)record;
-			value = String.format("status=%s&episodes=%d&score=%d", anime.id, anime.watched_status.getServerKey(), anime.watched_episodes, anime.score);
+			value = String.format("status=%s&episodes=%d&score=%d", anime.watched_status.getServerKey(), anime.watched_episodes, anime.score);
 			url = urlBuilder.getAnimeUpdateUrl(id);
 		} else {
 			journalUpdate(journalDao, new MangaJournalEntry(id, UpdateType.UPDATED) );
 			MangaRecord manga = (MangaRecord)record;
-			value = String.format("status=%s&chapters=%d&volumes=%d&score%d", manga.id, manga.read_status.getServerKey(), manga.chapters_read, manga.volumes_read, manga.score);
+			value = String.format("status=%s&chapters=%d&volumes=%d&score%d", manga.read_status.getServerKey(), manga.chapters_read, manga.volumes_read, manga.score);
 			url = urlBuilder.getMangaUpdateUrl(id);
 		}
 		
 		Log.v(TAG, String.format("url %s data %s", url, value));
-		RestResult<String> result = restHelper.post(url, value);
+		RestResult<String> result = restHelper.put(url, value);
 		if ( result.code == 200 ){
 			journalDao.deleteById(id);
 		}
