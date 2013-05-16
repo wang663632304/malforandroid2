@@ -8,15 +8,6 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "manga")
 public class MangaRecord extends BaseRecord{
-	
-	@DatabaseField
-	public String title;
-	
-	@DatabaseField
-	public int rank;
-	
-	@DatabaseField
-	public String image_url;
 
 	@DatabaseField
 	public String type;
@@ -68,8 +59,5 @@ public class MangaRecord extends BaseRecord{
 	
 	@DatabaseField()
 	public int volumes_read;
-	
-	@DatabaseField()
-	public int score;
 	
 }

@@ -16,15 +16,30 @@
 
 package com.github.riotopsys.malforandroid2.util;
 
-import java.util.Comparator;
+import java.io.IOException;
 
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 
-public class AnimeTitleComparator implements Comparator<AnimeRecord> {
+public class MangaReadStatusTypeAdapter extends TypeAdapter<MangaReadStatus> {
 
 	@Override
-	public int compare(AnimeRecord lhs, AnimeRecord rhs) {
-		return lhs.title.toUpperCase().compareTo(rhs.title.toUpperCase());
+	public MangaReadStatus read(JsonReader in) throws IOException {
+		if ( in.peek() != JsonToken.NULL ){
+			return MangaReadStatus.getByServerKey( in.nextString());
+		}
+		in.nextNull();
+		return null;
+	}
+
+
+	@Override
+	public void write(JsonWriter out, MangaReadStatus value)
+			throws IOException {
+		out.value(value.getServerKey());
 	}
 
 }

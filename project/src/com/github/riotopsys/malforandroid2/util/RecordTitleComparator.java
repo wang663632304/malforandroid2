@@ -14,18 +14,17 @@
  *   limitations under the License.
  */
 
-package com.github.riotopsys.malforandroid2.adapter.SupplementaryText;
+package com.github.riotopsys.malforandroid2.util;
 
-import android.content.Context;
+import java.util.Comparator;
 
-import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
 
-public class RankText implements SupplementaryTextFactory {
+public class RecordTitleComparator implements Comparator<BaseRecord> {
 
 	@Override
-	public String getSupplementaryText(Context ctx, BaseRecord ar) {
-		return ctx.getString(R.string.rank_format, ar.rank );
+	public int compare(BaseRecord lhs, BaseRecord rhs) {
+		return lhs.title.toUpperCase().compareTo(rhs.title.toUpperCase());
 	}
 
 }

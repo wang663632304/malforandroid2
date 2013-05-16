@@ -33,31 +33,31 @@ import android.widget.TextView;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class AnimeAdapter extends BaseAdapter implements SectionIndexer{
+public class BaseRecordAdapter extends BaseAdapter implements SectionIndexer{
 	
 	@Inject
 	private ImageLoader lazyLoader;
 	
 	@Inject
-	private Comparator<AnimeRecord> comparator;
+	private Comparator<BaseRecord> comparator;
 	
-	private List<AnimeRecord> animeList = new LinkedList<AnimeRecord>();
+	private List<BaseRecord> recordList = new LinkedList<BaseRecord>();
 	private Section[] sections = new Section[0];
 
 	private SupplementaryTextFactory textFactory;
 	
 	@Override
 	public int getCount() {
-		return animeList.size();
+		return recordList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return animeList.get(position);
+		return recordList.get(position);
 	}
 
 	@Override
@@ -71,24 +71,24 @@ public class AnimeAdapter extends BaseAdapter implements SectionIndexer{
 		if ( convertView == null ){
 			convertView = ((LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.anime_item, null);
 		}
-		AnimeRecord anime = animeList.get(position);
+		BaseRecord record = recordList.get(position);
 		
-		((TextView)convertView.findViewById(R.id.title)).setText(Html.fromHtml(anime.title));
+		((TextView)convertView.findViewById(R.id.title)).setText(Html.fromHtml(record.title));
 		
-		((TextView)convertView.findViewById(R.id.suplimentary_text)).setText( textFactory.getSupplementaryText(ctx, anime) );
+		((TextView)convertView.findViewById(R.id.suplimentary_text)).setText( textFactory.getSupplementaryText(ctx, record) );
 		
 		ImageView imageView = (ImageView)convertView.findViewById(R.id.thumb_image);
 		imageView.setImageBitmap(null);
-		lazyLoader.displayImage(anime.image_url,imageView ); 
+		lazyLoader.displayImage(record.image_url,imageView ); 
 		
 		return convertView;
 	}
 	
-	public void addAll( List<AnimeRecord> anime ) {
-		animeList.clear();
+	public void addAll( List<BaseRecord> anime ) {
+		recordList.clear();
 		if ( anime != null ){
-			animeList.addAll(anime);
-			Collections.sort( animeList, comparator );
+			recordList.addAll(anime);
+			Collections.sort( recordList, comparator );
 			buildSections();
 		}
 		notifyDataSetChanged();
@@ -115,17 +115,17 @@ public class AnimeAdapter extends BaseAdapter implements SectionIndexer{
 
 	private void buildSections() {
 		LinkedList<Section> scratch = new LinkedList<Section>();
-		if ( animeList.size() == 0 ){
+		if ( recordList.size() == 0 ){
 			return;
 		}
 		
 		Section s = new Section();
-		s.tag=makeTag(animeList.get(0));
+		s.tag=makeTag(recordList.get(0));
 		s.start = 0;
 		s.end = 0;
 		scratch.add(s);
-		for ( int c = 1; c < animeList.size(); c++){
-			String tag = makeTag(animeList.get(c));
+		for ( int c = 1; c < recordList.size(); c++){
+			String tag = makeTag(recordList.get(c));
 			if ( !tag.equals(s.tag)){
 				s.end = c;
 				s = new Section();
@@ -137,7 +137,7 @@ public class AnimeAdapter extends BaseAdapter implements SectionIndexer{
 		sections = scratch.toArray(sections);
 	}
 
-	private String makeTag(AnimeRecord animeRecord) {
+	private String makeTag(BaseRecord animeRecord) {
 		char result = animeRecord.title.toUpperCase().charAt(0);
 		if ( Character.isDigit(result) ){
 			result = '#';

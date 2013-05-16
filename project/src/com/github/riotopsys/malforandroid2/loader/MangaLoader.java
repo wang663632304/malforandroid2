@@ -23,26 +23,32 @@ import java.util.List;
 import android.content.Context;
 import android.util.Log;
 
-import com.github.riotopsys.malforandroid2.GlobalState;
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
+import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
+import com.github.riotopsys.malforandroid2.model.MangaRecord;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.Where;
 
-public class SearchLoader extends DBLoader<List<BaseRecord>> {
+public class MangaLoader extends DBLoader<List<BaseRecord>> {
 
-	private static final String TAG = SearchLoader.class.getSimpleName();
-	private GlobalState state;
+	private static final String TAG = MangaLoader.class.getSimpleName();
+	private MangaReadStatus filter;
 
-	public SearchLoader(Context context, GlobalState state) {
+	public MangaLoader(Context context, MangaReadStatus filter) {
 		super(context);
-		this.state = state;
+		this.filter = filter;
 	}
 
 	@Override
 	public List<BaseRecord> loadInBackground() {
 		try {
-			Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
-			return new LinkedList<BaseRecord>( dao.queryBuilder().where().in("id", state.getSearchResults()).query());
+			Dao<MangaRecord, Integer> dao = getHelper().getDao(MangaRecord.class);
+			Log.i(TAG, String.format("count of manga %d", dao.countOf()));
+			Where<MangaRecord, Integer> where = dao.queryBuilder().where().isNotNull("read_status");
+			if ( filter != null ){
+				where.and().eq("read_status", filter);
+			} 
+			return new LinkedList<BaseRecord>(where.query());
 		} catch (SQLException e) {
 			Log.e(TAG, "", e);
 		}

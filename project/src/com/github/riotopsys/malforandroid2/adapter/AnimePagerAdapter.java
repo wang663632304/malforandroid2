@@ -23,17 +23,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.github.riotopsys.malforandroid2.R;
-import com.github.riotopsys.malforandroid2.fragment.ItemListFragment;
+import com.github.riotopsys.malforandroid2.fragment.AnimeListFragment;
 import com.github.riotopsys.malforandroid2.fragment.SearchListFragment;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.google.inject.Inject;
 
-public class ListPagerAdapter extends FragmentPagerAdapter {
+public class AnimePagerAdapter extends FragmentPagerAdapter {
 
 	private Context ctx;
 
 	@Inject
-	public ListPagerAdapter(FragmentManager fm, Context ctx) {
+	public AnimePagerAdapter(FragmentManager fm, Context ctx) {
 		super(fm);
 		this.ctx = ctx;
 	}
@@ -45,11 +45,11 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 		Bundle args = new Bundle();
 		if ( AnimeWatchedStatus.values().length > position ){
 			args.putSerializable("filter", AnimeWatchedStatus.values()[position]);
-			f = new ItemListFragment();
+			f = new AnimeListFragment();
 		} else if ( AnimeWatchedStatus.values().length == position )  {
 			//handle "all" condition
 			args.putSerializable("filter", null);
-			f = new ItemListFragment();
+			f = new AnimeListFragment();
 		} else {
 			//handle "search" condition
 			f = new SearchListFragment();

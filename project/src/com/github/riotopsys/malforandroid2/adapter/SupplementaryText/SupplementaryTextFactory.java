@@ -18,10 +18,10 @@ package com.github.riotopsys.malforandroid2.adapter.SupplementaryText;
 
 import android.content.Context;
 
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.BaseRecord;
 
 public interface SupplementaryTextFactory {
 
-	public String getSupplementaryText(Context ctx, AnimeRecord ar);
+	public String getSupplementaryText(Context ctx, BaseRecord br);
 	
 }

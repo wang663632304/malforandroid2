@@ -21,11 +21,14 @@ import android.content.Context;
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
+import com.github.riotopsys.malforandroid2.model.BaseRecord;
 
 public class WatchedStatusText implements SupplementaryTextFactory {
 
 	@Override
-	public String getSupplementaryText(Context ctx, AnimeRecord ar) {
+	public String getSupplementaryText(Context ctx, BaseRecord br) {
+		if ( br instanceof AnimeRecord){
+			AnimeRecord ar = (AnimeRecord) br;
 		if ( ar.watched_status == null ){
 			return ctx.getString(R.string.not_in_list);
 		}
@@ -33,6 +36,10 @@ public class WatchedStatusText implements SupplementaryTextFactory {
 			return ctx.getString(R.string.watched_format, ar.watched_episodes, ar.episodes);			
 		}
 		return ctx.getString( ar.watched_status.getResource() );
+		} else {
+			//TODO: add manga version
+			return "";
+		}
 	}
-
+	
 }

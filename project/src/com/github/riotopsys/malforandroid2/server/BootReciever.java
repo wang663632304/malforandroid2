@@ -39,7 +39,12 @@ public class BootReciever extends RoboBroadcastReceiver {
 
 	//initializes the sync system so the user does not need to enter app on reboot
 	public static void scheduleSync(GlobalState state, Context ctx) {
-		PendingIntent pi = PendingIntent.getService(
+		PendingIntent piAnime = PendingIntent.getService(
+				ctx.getApplicationContext(), 0,
+				AnimeServerInterface.getSyncIntent(ctx),
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		PendingIntent piManga = PendingIntent.getService(
 				ctx.getApplicationContext(), 0,
 				AnimeServerInterface.getSyncIntent(ctx),
 				PendingIntent.FLAG_UPDATE_CURRENT);
@@ -47,11 +52,17 @@ public class BootReciever extends RoboBroadcastReceiver {
 		AlarmManager am = (AlarmManager) ctx
 				.getSystemService(Context.ALARM_SERVICE);
 
-		am.cancel(pi);
+		am.cancel(piAnime);
+		am.cancel(piManga);
+		
 		am.setInexactRepeating(AlarmManager.RTC, 
 				System.currentTimeMillis(), 
 				AlarmManager.INTERVAL_HOUR, 
-				pi);
+				piAnime);
+		am.setInexactRepeating(AlarmManager.RTC, 
+				System.currentTimeMillis(), 
+				AlarmManager.INTERVAL_HOUR, 
+				piManga);
 		
 		state.setSyncScheduled(true);
 	}

@@ -35,26 +35,35 @@ import android.widget.SearchView.OnQueryTextListener;
 
 import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.R;
-import com.github.riotopsys.malforandroid2.adapter.ListPagerAdapter;
+import com.github.riotopsys.malforandroid2.adapter.AnimePagerAdapter;
+import com.github.riotopsys.malforandroid2.adapter.MangaPagerAdapter;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs.Callback;
 import com.github.riotopsys.malforandroid2.fragment.AnimeDetailFragment;
 import com.github.riotopsys.malforandroid2.fragment.LoginFragment;
 import com.github.riotopsys.malforandroid2.fragment.PlacardFragment;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
-import com.github.riotopsys.malforandroid2.server.BootReciever;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
+import com.github.riotopsys.malforandroid2.server.BootReciever;
+import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
 import com.google.inject.Inject;
 
 public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener, OnNavigationListener {
 
 	private static String TAG = HubActivity.class.getSimpleName();
 
-	@InjectView(R.id.list_pager)
-	private ViewPager listPager;
+	@InjectView(R.id.list_pager_anime)
+	private ViewPager animeListPager;
+	
+	@InjectView(R.id.list_pager_manga)
+	private ViewPager mangaListPager;
 
 	@Inject
-	private ListPagerAdapter adapter;
+	private AnimePagerAdapter animeAdapter;
+	
+	@Inject
+	private MangaPagerAdapter mangaAdapter;
+	
 	
 	@Inject 
 	private GlobalState state;
@@ -76,7 +85,6 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 	    actionBar.setListNavigationCallbacks(
-	            // Specify a SpinnerAdapter to populate the dropdown list.
 	            new ArrayAdapter<String>(
 	                    actionBar.getThemedContext(),
 	                    android.R.layout.simple_list_item_1,
@@ -85,8 +93,12 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	            this
 	            );
 
-		listPager.setAdapter(adapter);
-		listPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
+		animeListPager.setAdapter(animeAdapter);
+		animeListPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
+		
+		mangaListPager.setAdapter(mangaAdapter);
+		mangaListPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
+		
 		
 		new ReadNameValuePairs(getHelper(), this).execute("USER","PASS");
 		
@@ -104,6 +116,7 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if (item.getItemId() == R.id.refresh_menu_item) {
 			AnimeServerInterface.getAnimeList(this);
+			MangaServerInterface.getMangaList(this);
 			if ( !state.loginSet() ){
 				login.show(getSupportFragmentManager(), null);
 			}
@@ -150,7 +163,7 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	public boolean onQueryTextSubmit(String query) {
 		searchItem.collapseActionView();
 		AnimeServerInterface.searchAnime(this, query);
-		listPager.setCurrentItem(adapter.getCount()-1,true);
+		animeListPager.setCurrentItem(animeAdapter.getCount()-1,true);
 		return true;
 	}
 	
@@ -186,7 +199,14 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	}
 
 	@Override
-	public boolean onNavigationItemSelected(int arg0, long arg1) {
+	public boolean onNavigationItemSelected(int position, long arg1) {
+		if (position == 0){
+			animeListPager.setVisibility(ViewPager.VISIBLE);
+			mangaListPager.setVisibility(ViewPager.GONE);
+		} else {
+			animeListPager.setVisibility(ViewPager.GONE);
+			mangaListPager.setVisibility(ViewPager.VISIBLE);
+		}
 		return true;
 	}
 

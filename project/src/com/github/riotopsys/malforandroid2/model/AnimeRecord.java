@@ -36,13 +36,7 @@ public class AnimeRecord extends BaseRecord{
 	public String status;
 	
 	@DatabaseField( )
-	public String image_url;
-	
-	@DatabaseField( )
 	public String type;
-	
-	@DatabaseField( )
-	public int score;
 	
 	@DatabaseField( )
 	public int listed_anime_id;
@@ -75,13 +69,7 @@ public class AnimeRecord extends BaseRecord{
 	public LinkedList<MangaCrossReferance> manga_adaptations;
 	
 	@DatabaseField( )
-	public int rank;
-	
-	@DatabaseField( )
 	public int favorited_count;
-	
-	@DatabaseField( )
-	public String title;
 	
 	@DatabaseField(dataType=DataType.SERIALIZABLE)
 	public LinkedList<AnimeCrossReferance> prequels;

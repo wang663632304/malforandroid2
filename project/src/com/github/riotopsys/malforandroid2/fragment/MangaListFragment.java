@@ -26,22 +26,23 @@ import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.RankText;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ScoreText;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.WatchedStatusText;
-import com.github.riotopsys.malforandroid2.loader.AnimeLoader;
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.loader.MangaLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
+import com.github.riotopsys.malforandroid2.model.BaseRecord;
+import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
 
-public class ItemListFragment extends AbstractListFragment  {
+public class MangaListFragment extends AbstractListFragment  {
 	
 	@Override
-	public Loader<List<AnimeRecord>> onCreateLoader(int id, Bundle args) {
-		AnimeLoader loader = new AnimeLoader(getActivity(), (AnimeWatchedStatus)getArguments().getSerializable("filter"));
+	public Loader<List<BaseRecord>> onCreateLoader(int id, Bundle args) {
+		MangaLoader loader = new MangaLoader(getActivity(), (MangaReadStatus)getArguments().getSerializable("filter"));
 //		loader.setUpdateThrottle(1000/24);
 		return loader;
 	}
 
 	@Override
 	protected SupplementaryTextFactory getSupplementaryTextFactory() {
-		AnimeWatchedStatus filter = (AnimeWatchedStatus)getArguments().getSerializable("filter");
+		MangaReadStatus filter = (MangaReadStatus)getArguments().getSerializable("filter");
 		if ( filter == null ){
 			return new WatchedStatusText();
 		}
@@ -55,7 +56,7 @@ public class ItemListFragment extends AbstractListFragment  {
 			return new ProgressText();
 		case PLAN:
 			return new RankText();
-		case WATCHING:
+		case READING:
 			return new WatchedStatusText();
 		default:
 			return new WatchedStatusText();

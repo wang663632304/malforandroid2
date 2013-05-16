@@ -20,12 +20,20 @@ import android.content.Context;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.BaseRecord;
 
 public class ProgressText implements SupplementaryTextFactory {
 
 	@Override
-	public String getSupplementaryText(Context ctx, AnimeRecord ar) {
-		return ctx.getString(R.string.watched_format, ar.watched_episodes, ar.episodes);
+	public String getSupplementaryText(Context ctx, BaseRecord br) {
+		if ( br instanceof AnimeRecord){
+			AnimeRecord ar = (AnimeRecord) br;
+			return ctx.getString(R.string.watched_format, ar .watched_episodes, ar.episodes);
+		} else {
+			//TODO: add manga version
+			return "";
+		}
+		
 	}
 
 }

@@ -31,11 +31,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.github.riotopsys.malforandroid2.R;
-import com.github.riotopsys.malforandroid2.adapter.AnimeAdapter;
+import com.github.riotopsys.malforandroid2.adapter.BaseRecordAdapter;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
@@ -43,7 +44,7 @@ import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import de.greenrobot.event.EventBus;
 
 public abstract class AbstractListFragment extends RoboFragment implements
-		LoaderManager.LoaderCallbacks<List<AnimeRecord>>, OnItemClickListener {
+		LoaderManager.LoaderCallbacks<List<BaseRecord>>, OnItemClickListener {
 	
 	@SuppressWarnings("unused")
 	private static final String TAG = AbstractListFragment.class.getSimpleName();
@@ -52,7 +53,7 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	protected AbsListView itemListView;
 	
 	@Inject
-	private AnimeAdapter animeAdapter;
+	private BaseRecordAdapter animeAdapter;
 	
 	@Inject 
 	private EventBus bus;
@@ -60,7 +61,7 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	@Inject
 	private ImageLoader lazyLoader;
 	
-	protected Loader<List<AnimeRecord>> animeLoader;
+	protected Loader<List<BaseRecord>> animeLoader;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,8 +73,6 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		// AnimeWatchedStatus filter =
-		// (AnimeWatchedStatus)getArguments().getSerializable("filter");
 		
 		animeAdapter.setSupplementaryTextFactory(getSupplementaryTextFactory());
 
@@ -108,24 +107,27 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	}
 	
 	protected abstract SupplementaryTextFactory getSupplementaryTextFactory(); 
-		
-	public abstract Loader<List<AnimeRecord>> onCreateLoader(int id, Bundle args); 
+	public abstract Loader<List<BaseRecord>> onCreateLoader(int id, Bundle args); 
 	
 	@Override
-	public void onLoadFinished(Loader<List<AnimeRecord>> loader,
-			List<AnimeRecord> data) {
+	public void onLoadFinished(Loader<List<BaseRecord>> loader,
+			List<BaseRecord> data) {
 		animeAdapter.addAll(data);
 	}
 
 	@Override
-	public void onLoaderReset(Loader<List<AnimeRecord>> loader) {
+	public void onLoaderReset(Loader<List<BaseRecord>> loader) {
 		animeAdapter.addAll(null);
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> view, View arg1, int position, long arg3) {
-		AnimeRecord ar = (AnimeRecord) view.getItemAtPosition(position);
-		bus.post(new ChangeDetailViewRequest(ar.id));
+		BaseRecord item = (BaseRecord) view.getItemAtPosition(position);
+		if ( item instanceof AnimeRecord ){
+			bus.post(new ChangeDetailViewRequest(item.id));
+		} else {
+			//TODO: handle manga
+		}
 	}
 	
 }

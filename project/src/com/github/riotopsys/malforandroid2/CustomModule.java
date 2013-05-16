@@ -18,10 +18,12 @@ package com.github.riotopsys.malforandroid2;
 
 import java.util.Comparator;
 
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
-import com.github.riotopsys.malforandroid2.util.AnimeTitleComparator;
+import com.github.riotopsys.malforandroid2.model.BaseRecord;
+import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
 import com.github.riotopsys.malforandroid2.util.AnimeWatchedStatusTypeAdapter;
+import com.github.riotopsys.malforandroid2.util.MangaReadStatusTypeAdapter;
+import com.github.riotopsys.malforandroid2.util.RecordTitleComparator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.AbstractModule;
@@ -36,7 +38,7 @@ public class CustomModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(new TypeLiteral<Comparator<AnimeRecord>>(){}).to(AnimeTitleComparator.class);
+		bind(new TypeLiteral<Comparator<BaseRecord>>(){}).to(RecordTitleComparator.class);
 	}
 
 	@Provides
@@ -58,7 +60,9 @@ public class CustomModule extends AbstractModule {
 
 	@Provides
 	public Gson provideGson() {
-		return new GsonBuilder().registerTypeAdapter(AnimeWatchedStatus.class,
-				new AnimeWatchedStatusTypeAdapter()).create();
+		return new GsonBuilder()
+			.registerTypeAdapter(AnimeWatchedStatus.class,new AnimeWatchedStatusTypeAdapter())
+			.registerTypeAdapter(MangaReadStatus.class,new MangaReadStatusTypeAdapter())
+			.create();
 	}
 }

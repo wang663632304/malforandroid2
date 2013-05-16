@@ -62,7 +62,7 @@ public class MangaServerInterface extends AbstractServerInterface {
 		return getSyncIntent(ctx, getBaseIntent(ctx));
 	}
 
-	public static void getAnimeList(Context ctx) {
+	public static void getMangaList(Context ctx) {
 		getList(ctx, getBaseIntent(ctx));
 	}
 

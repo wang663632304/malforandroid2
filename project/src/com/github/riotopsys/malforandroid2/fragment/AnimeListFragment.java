@@ -21,35 +21,46 @@ import java.util.List;
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 
-import com.github.riotopsys.malforandroid2.GlobalState;
+import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ProgressText;
+import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.RankText;
+import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ScoreText;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.WatchedStatusText;
-import com.github.riotopsys.malforandroid2.event.AnimeSearchUpdated;
-import com.github.riotopsys.malforandroid2.loader.SearchLoader;
+import com.github.riotopsys.malforandroid2.loader.AnimeLoader;
+import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
-import com.google.inject.Inject;
 
-public class SearchListFragment extends AbstractListFragment  {
-	
-	@Inject GlobalState state;
+public class AnimeListFragment extends AbstractListFragment  {
 	
 	@Override
 	public Loader<List<BaseRecord>> onCreateLoader(int id, Bundle args) {
-		SearchLoader loader = new SearchLoader(getActivity(), state );
+		Loader<List<BaseRecord>> loader = new AnimeLoader(getActivity(), (AnimeWatchedStatus)getArguments().getSerializable("filter"));
 //		loader.setUpdateThrottle(1000/24);
 		return loader;
-	}
-	
-	public void onEventMainThread( AnimeSearchUpdated asu ){
-		if ( animeLoader != null ){
-			itemListView.setSelection(0);
-			animeLoader.onContentChanged();
-		}
 	}
 
 	@Override
 	protected SupplementaryTextFactory getSupplementaryTextFactory() {
-		return new WatchedStatusText();
+		AnimeWatchedStatus filter = (AnimeWatchedStatus)getArguments().getSerializable("filter");
+		if ( filter == null ){
+			return new WatchedStatusText();
+		}
+		
+		switch( filter ){
+		case COMPLETED:
+			return new ScoreText();
+		case DROPPED:
+			return new ProgressText();
+		case ONHOLD:
+			return new ProgressText();
+		case PLAN:
+			return new RankText();
+		case WATCHING:
+			return new WatchedStatusText();
+		default:
+			return new WatchedStatusText();
+		}
+		
 	}
-	
+
 }

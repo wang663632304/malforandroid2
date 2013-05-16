@@ -37,6 +37,7 @@ import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
+import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
 import com.google.inject.Inject;
 
 import de.greenrobot.event.EventBus;
@@ -104,6 +105,7 @@ public class LoginFragment extends RoboDialogFragment implements OnClickListener
 		progressDialog.cancel();
 		if (cve.code == 200) {
 			AnimeServerInterface.getAnimeList(getActivity());
+			MangaServerInterface.getMangaList(getActivity());
 			dismiss();
 		} else if (cve.code == 401) {
 			new AlertDialog.Builder(getActivity()).setTitle(R.string.login_error_title)

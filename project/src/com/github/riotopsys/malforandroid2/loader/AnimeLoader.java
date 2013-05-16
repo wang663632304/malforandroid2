@@ -17,6 +17,7 @@
 package com.github.riotopsys.malforandroid2.loader;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
@@ -24,10 +25,11 @@ import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
+import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.Where;
 
-public class AnimeLoader extends DBLoader<List<AnimeRecord>> {
+public class AnimeLoader extends DBLoader<List<BaseRecord>> {
 
 	private static final String TAG = AnimeLoader.class.getSimpleName();
 	private AnimeWatchedStatus filter;
@@ -38,14 +40,14 @@ public class AnimeLoader extends DBLoader<List<AnimeRecord>> {
 	}
 
 	@Override
-	public List<AnimeRecord> loadInBackground() {
+	public List<BaseRecord> loadInBackground() {
 		try {
 			Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
 			Where<AnimeRecord, Integer> where = dao.queryBuilder().where().isNotNull("watched_status");
 			if ( filter != null ){
 				where.and().eq("watched_status", filter);
 			} 
-			return where.query();
+			return new LinkedList<BaseRecord>(where.query());
 		} catch (SQLException e) {
 			Log.e(TAG, "", e);
 		}
