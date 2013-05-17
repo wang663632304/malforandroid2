@@ -21,6 +21,7 @@ import android.content.Context;
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
+import com.github.riotopsys.malforandroid2.model.MangaRecord;
 
 public class ProgressText implements SupplementaryTextFactory {
 
@@ -30,8 +31,8 @@ public class ProgressText implements SupplementaryTextFactory {
 			AnimeRecord ar = (AnimeRecord) br;
 			return ctx.getString(R.string.watched_format, ar .watched_episodes, ar.episodes);
 		} else {
-			//TODO: add manga version
-			return "";
+			MangaRecord mr = (MangaRecord) br;
+			return ctx.getString(R.string.read_format, mr.chapters_read, mr.chapters, mr.volumes_read, mr.volumes);
 		}
 		
 	}

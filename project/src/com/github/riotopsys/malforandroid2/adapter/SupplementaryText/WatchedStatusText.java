@@ -22,24 +22,33 @@ import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
+import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
+import com.github.riotopsys.malforandroid2.model.MangaRecord;
 
 public class WatchedStatusText implements SupplementaryTextFactory {
 
 	@Override
 	public String getSupplementaryText(Context ctx, BaseRecord br) {
-		if ( br instanceof AnimeRecord){
+		if (br instanceof AnimeRecord) {
 			AnimeRecord ar = (AnimeRecord) br;
-		if ( ar.watched_status == null ){
-			return ctx.getString(R.string.not_in_list);
-		}
-		if ( ar.watched_status == AnimeWatchedStatus.WATCHING ){
-			return ctx.getString(R.string.watched_format, ar.watched_episodes, ar.episodes);			
-		}
-		return ctx.getString( ar.watched_status.getResource() );
+			if (ar.watched_status == null) {
+				return ctx.getString(R.string.not_in_list);
+			}
+			if (ar.watched_status == AnimeWatchedStatus.WATCHING) {
+				return ctx.getString(R.string.watched_format,
+						ar.watched_episodes, ar.episodes);
+			}
+			return ctx.getString(ar.watched_status.getResource());
 		} else {
-			//TODO: add manga version
-			return "";
+			MangaRecord mr = (MangaRecord) br;
+			if (mr.read_status == null) {
+				return ctx.getString(R.string.not_in_list);
+			}
+			if (mr.read_status == MangaReadStatus.READING) {
+				return ctx.getString(R.string.read_format, mr.chapters_read,
+						mr.chapters, mr.volumes_read, mr.volumes);
+			}
+			return ctx.getString(mr.read_status.getResource());
 		}
 	}
-	
 }

@@ -57,6 +57,7 @@
     </string-array>
 
     <string name="watched_format">Watching %1$d/%2$d</string>
+    <string name="read_format">chap: %1$d/%2$d vol: %3$d/%4$d</string>
     <string name="prequel_format">Prequels: %1$d</string>
     <string name="sequel_format">Sequels: %1$d</string>
     <string name="side_story_format">Side Stories: %1$d</string>

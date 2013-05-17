@@ -27,7 +27,6 @@ import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ScoreText;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.WatchedStatusText;
 import com.github.riotopsys.malforandroid2.loader.MangaLoader;
-import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
 
