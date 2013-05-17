@@ -100,20 +100,8 @@ public class MangaDetailFragment extends RoboFragment implements
 	@InjectView(R.id.plus_one)
 	private Button plusOne;
 	
-	@InjectView(R.id.prequel)
-	private TextView prequel;
-	
-	@InjectView(R.id.sequel)
-	private TextView sequel;
-	
-	@InjectView(R.id.side_story)
-	private TextView sideStory;
-	
 	@InjectView(R.id.spin_offs)
 	private TextView spinOffs;
-	
-	@InjectView(R.id.summaries)
-	private TextView summaries;
 	
 	@InjectView(R.id.alternative_versions)
 	private TextView alternativeVersions;
@@ -123,9 +111,6 @@ public class MangaDetailFragment extends RoboFragment implements
 	
 	@InjectView(R.id.status)
 	private TextView status;
-	
-	@InjectView(R.id.classification)
-	private TextView classification;
 	
 	@InjectView(R.id.rank)
 	private TextView rank;
@@ -193,7 +178,7 @@ public class MangaDetailFragment extends RoboFragment implements
 		
 		setHasOptionsMenu(true);
 		
-		return inflater.inflate(R.layout.anime_detail_fragment, null);
+		return inflater.inflate(R.layout.manga_detail_fragment, null);
 	}
 
 	@Override
@@ -221,11 +206,7 @@ public class MangaDetailFragment extends RoboFragment implements
 		
 		plusOne.setOnClickListener(this);
 		watchedPannel.setOnClickListener(this);
-		prequel.setOnClickListener(this);
-		sequel.setOnClickListener(this);
-		sideStory.setOnClickListener(this);
 		spinOffs.setOnClickListener(this);
-		summaries.setOnClickListener(this);
 		alternativeVersions.setOnClickListener(this);
 		addButton.setOnClickListener(this);
 		
@@ -305,7 +286,6 @@ public class MangaDetailFragment extends RoboFragment implements
 		
 		type.setText(getString(R.string.type_format, activeRecord.type ));
 		status.setText(getString(R.string.status_format, activeRecord.status ));
-//		classification.setText(getString(R.string.classification_format, activeRecord.classification ));
 		rank.setText(getString(R.string.rank_format, activeRecord.rank ));
 		popularity.setText(getString(R.string.popularity_format, activeRecord.popularity_rank ));
 		memberScore.setText(getString(R.string.members_score_format, activeRecord.members_score ));
@@ -335,27 +315,6 @@ public class MangaDetailFragment extends RoboFragment implements
 			addPanel.setVisibility(View.VISIBLE);
 		}
 		
-//		if ( activeRecord.prequels.size() >0 ){
-//			prequel.setText(getString(R.string.prequel_format, activeRecord.prequels.size()));
-//			prequel.setVisibility(View.VISIBLE);
-//		} else {
-//			prequel.setVisibility(View.GONE);
-//		}
-		
-//		if ( activeRecord.sequels.size() >0 ){
-//			sequel.setText(getString(R.string.sequel_format, activeRecord.sequels.size()));
-//			sequel.setVisibility(View.VISIBLE);
-//		} else {
-//			sequel.setVisibility(View.GONE);
-//		}
-		
-//		if ( activeRecord.side_stories.size() >0 ){
-//			sideStory.setText(getString(R.string.side_story_format, activeRecord.side_stories.size()));
-//			sideStory.setVisibility(View.VISIBLE);
-//		} else {
-//			sideStory.setVisibility(View.GONE);
-//		}
-		
 		if ( activeRecord.related_manga.size() >0 ){
 			spinOffs.setText(getString(R.string.spin_off_format, activeRecord.related_manga.size()));
 			spinOffs.setVisibility(View.VISIBLE);
@@ -363,13 +322,6 @@ public class MangaDetailFragment extends RoboFragment implements
 			spinOffs.setVisibility(View.GONE);
 		}
 
-//		if ( activeRecord.summaries.size() >0 ){
-//			summaries.setText(getString(R.string.summaries_format, activeRecord.summaries.size()));
-//			summaries.setVisibility(View.VISIBLE);
-//		} else {
-//			summaries.setVisibility(View.GONE);
-//		}
-		
 		if ( activeRecord.alternative_versions.size() >0 ){
 			alternativeVersions.setText(getString(R.string.alternative_versions_format, activeRecord.alternative_versions.size()));
 			alternativeVersions.setVisibility(View.VISIBLE);

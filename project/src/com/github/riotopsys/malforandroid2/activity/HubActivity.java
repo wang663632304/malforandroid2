@@ -192,12 +192,13 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 				.beginTransaction();
 		Fragment fragment;
 		if (currentDetail != null) {
+			ActionBar actionBar = getActionBar();
 			if ( currentDetail instanceof AnimeChangeDetailViewRequest){
 				fragment = new AnimeDetailFragment();
-				onNavigationItemSelected(ANIME_POSITION,0);
+				actionBar.setSelectedNavigationItem(ANIME_POSITION);
 			} else {
 				fragment = new MangaDetailFragment();
-				onNavigationItemSelected(MANGA_POSITION,0);
+				actionBar.setSelectedNavigationItem(MANGA_POSITION);
 			}
 			Bundle args = new Bundle();
 			args.putInt("id", currentDetail.id);
