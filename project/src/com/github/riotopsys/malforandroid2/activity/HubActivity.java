@@ -39,8 +39,10 @@ import com.github.riotopsys.malforandroid2.adapter.AnimePagerAdapter;
 import com.github.riotopsys.malforandroid2.adapter.MangaPagerAdapter;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs.Callback;
+import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.fragment.AnimeDetailFragment;
 import com.github.riotopsys.malforandroid2.fragment.LoginFragment;
+import com.github.riotopsys.malforandroid2.fragment.MangaDetailFragment;
 import com.github.riotopsys.malforandroid2.fragment.PlacardFragment;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
@@ -49,6 +51,9 @@ import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
 import com.google.inject.Inject;
 
 public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener, OnNavigationListener {
+
+	private static final int MANGA_POSITION = 1;
+	private static final int ANIME_POSITION = 0;
 
 	private static String TAG = HubActivity.class.getSimpleName();
 
@@ -187,7 +192,13 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 				.beginTransaction();
 		Fragment fragment;
 		if (currentDetail != null) {
-			fragment = new AnimeDetailFragment();
+			if ( currentDetail instanceof AnimeChangeDetailViewRequest){
+				fragment = new AnimeDetailFragment();
+				onNavigationItemSelected(ANIME_POSITION,0);
+			} else {
+				fragment = new MangaDetailFragment();
+				onNavigationItemSelected(MANGA_POSITION,0);
+			}
 			Bundle args = new Bundle();
 			args.putInt("id", currentDetail.id);
 			fragment.setArguments(args);
@@ -200,7 +211,7 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 
 	@Override
 	public boolean onNavigationItemSelected(int position, long arg1) {
-		if (position == 0){
+		if (position == ANIME_POSITION){
 			animeListPager.setVisibility(ViewPager.VISIBLE);
 			mangaListPager.setVisibility(ViewPager.GONE);
 		} else {

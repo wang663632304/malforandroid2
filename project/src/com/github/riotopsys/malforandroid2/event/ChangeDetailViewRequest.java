@@ -19,7 +19,7 @@ package com.github.riotopsys.malforandroid2.event;
 import java.io.Serializable;
 
 
-public class ChangeDetailViewRequest implements Serializable {
+public abstract class ChangeDetailViewRequest implements Serializable {
 
 	private static final long serialVersionUID = 3599241799270950826L;
 	

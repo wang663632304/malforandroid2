@@ -24,8 +24,10 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.github.riotopsys.malforandroid2.R;
+import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.fragment.AnimeDetailFragment;
+import com.github.riotopsys.malforandroid2.fragment.MangaDetailFragment;
 
 public class DetailActivity extends BaseDetailActivity {
 	
@@ -67,7 +69,11 @@ public class DetailActivity extends BaseDetailActivity {
 				.beginTransaction();
 		Fragment fragment;
 		if (currentDetail != null) {
-			fragment = new AnimeDetailFragment();
+			if ( currentDetail instanceof AnimeChangeDetailViewRequest){
+				fragment = new AnimeDetailFragment();
+			} else {
+				fragment = new MangaDetailFragment();
+			}
 			Bundle args = new Bundle();
 			args.putInt("id", currentDetail.id);
 			fragment.setArguments(args);

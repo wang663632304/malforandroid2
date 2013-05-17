@@ -23,15 +23,15 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
-import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
+import com.github.riotopsys.malforandroid2.model.MangaRecord;
+import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
 import com.j256.ormlite.dao.Dao;
 
 import de.greenrobot.event.EventBus;
 
-public class DBDeleteTask extends AsyncTask<AnimeRecord, Void, Void> {
+public class MangaDBDeleteTask extends AsyncTask<MangaRecord, Void, Void> {
 
-	private static final String TAG = DBDeleteTask.class.getSimpleName();
+	private static final String TAG = MangaDBDeleteTask.class.getSimpleName();
 
 	private DatabaseHelper dbHelper;
 
@@ -39,23 +39,24 @@ public class DBDeleteTask extends AsyncTask<AnimeRecord, Void, Void> {
 
 	private EventBus bus;
 
-	public DBDeleteTask(DatabaseHelper dbHelper, Context ctx, EventBus bus) {
+	public MangaDBDeleteTask(DatabaseHelper dbHelper, Context ctx, EventBus bus) {
 		this.dbHelper = dbHelper;
 		this.ctx = ctx;
 		this.bus = bus;
 	}
 	
 	@Override
-	protected Void doInBackground(AnimeRecord... params) {
+	protected Void doInBackground(MangaRecord... params) {
 		try {
-			Dao<AnimeRecord, ?> dao = dbHelper.getDao(AnimeRecord.class);
-			for (AnimeRecord p : params) {
+			Dao<MangaRecord, ?> dao = dbHelper.getDao(MangaRecord.class);
+			for (MangaRecord p : params) {
 				try {
-					p.watched_status = null;
-					p.watched_episodes = 0;
+					p.read_status = null;
+					p.chapters_read = 0;
+					p.volumes_read = 0;
 					p.score = 0;
 					dao.createOrUpdate(p);
-					AnimeServerInterface.removeAnimeRecord(ctx, p.id);
+					MangaServerInterface.removeMangaRecord(ctx, p.id);
 					bus.post(new AnimeUpdateEvent(p.id));
 				} catch (SQLException e) {
 					Log.e(TAG, "cannot save item", e);

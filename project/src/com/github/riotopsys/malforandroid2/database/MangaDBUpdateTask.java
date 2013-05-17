@@ -23,15 +23,15 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
-import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
+import com.github.riotopsys.malforandroid2.model.MangaRecord;
+import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
 import com.j256.ormlite.dao.Dao;
 
 import de.greenrobot.event.EventBus;
 
-public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
+public class MangaDBUpdateTask extends AsyncTask<MangaRecord, Void, Void> {
 
-	private static final String TAG = DBUpdateTask.class.getSimpleName();
+	private static final String TAG = MangaDBUpdateTask.class.getSimpleName();
 
 	private DatabaseHelper dbHelper;
 
@@ -41,13 +41,13 @@ public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 
 	private boolean isAdd = false;
 
-	public DBUpdateTask(DatabaseHelper dbHelper, Context ctx, EventBus bus) {
+	public MangaDBUpdateTask(DatabaseHelper dbHelper, Context ctx, EventBus bus) {
 		this.dbHelper = dbHelper;
 		this.ctx = ctx;
 		this.bus = bus;
 	}
 	
-	public DBUpdateTask(DatabaseHelper dbHelper, Context ctx, EventBus bus, boolean isAdd) {
+	public MangaDBUpdateTask(DatabaseHelper dbHelper, Context ctx, EventBus bus, boolean isAdd) {
 		this.dbHelper = dbHelper;
 		this.ctx = ctx;
 		this.bus = bus;
@@ -55,16 +55,16 @@ public class DBUpdateTask extends AsyncTask<AnimeRecord, Void, Void> {
 	}
 
 	@Override
-	protected Void doInBackground(AnimeRecord... params) {
+	protected Void doInBackground(MangaRecord... params) {
 		try {
-			Dao<AnimeRecord, Integer> dao = dbHelper.getDao(AnimeRecord.class);
-			for (AnimeRecord p : params) {
+			Dao<MangaRecord, Integer> dao = dbHelper.getDao(MangaRecord.class);
+			for (MangaRecord p : params) {
 				try {
 					dao.createOrUpdate(p);
 					if ( isAdd  ){
-						AnimeServerInterface.addAnimeRecord(ctx, p.id);
+						MangaServerInterface.addMangaRecord(ctx, p.id);
 					} else {
-						AnimeServerInterface.updateAnimeRecord(ctx, p.id);
+						MangaServerInterface.updateMangaRecord(ctx, p.id);
 					}
 					bus.post(new AnimeUpdateEvent(p.id));
 				} catch (SQLException e) {

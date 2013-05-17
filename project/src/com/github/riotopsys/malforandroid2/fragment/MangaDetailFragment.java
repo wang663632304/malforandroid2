@@ -51,16 +51,16 @@ import android.widget.TextView;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.activity.BaseActivity;
-import com.github.riotopsys.malforandroid2.database.AnimeDBDeleteTask;
-import com.github.riotopsys.malforandroid2.database.AnimeDBUpdateTask;
-import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
-import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
+import com.github.riotopsys.malforandroid2.database.MangaDBDeleteTask;
+import com.github.riotopsys.malforandroid2.database.MangaDBUpdateTask;
+import com.github.riotopsys.malforandroid2.event.MangaChangeDetailViewRequest;
+import com.github.riotopsys.malforandroid2.event.MangaUpdateEvent;
 import com.github.riotopsys.malforandroid2.fragment.NumberPickerFragment.OnDismissListener;
-import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
-import com.github.riotopsys.malforandroid2.model.AnimeCrossReferance;
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
-import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
-import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
+import com.github.riotopsys.malforandroid2.loader.SingleMangaLoader;
+import com.github.riotopsys.malforandroid2.model.MangaCrossReferance;
+import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
+import com.github.riotopsys.malforandroid2.model.MangaRecord;
+import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -68,10 +68,10 @@ import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
 import de.greenrobot.event.EventBus;
 
-public class AnimeDetailFragment extends RoboFragment implements
-		LoaderManager.LoaderCallbacks<AnimeRecord>, OnItemSelectedListener, OnClickListener, OnDismissListener, OnTouchListener, ImageLoadingListener {
+public class MangaDetailFragment extends RoboFragment implements
+		LoaderManager.LoaderCallbacks<MangaRecord>, OnItemSelectedListener, OnClickListener, OnDismissListener, OnTouchListener, ImageLoadingListener {
 
-	private static final String TAG = AnimeDetailFragment.class.getSimpleName();
+	private static final String TAG = MangaDetailFragment.class.getSimpleName();
 
 	@InjectView(R.id.title)
 	private TextView title;
@@ -180,9 +180,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	private int idToDisplay;
 
-	private Loader<AnimeRecord> singleAnimeLoader;
+	private Loader<MangaRecord> singleMangaLoader;
 
-	private AnimeRecord activeRecord;
+	private MangaRecord activeRecord;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -216,8 +216,8 @@ public class AnimeDetailFragment extends RoboFragment implements
 		
 		scoreStatus.setOnItemSelectedListener(this);
 
-		singleAnimeLoader = getLoaderManager().initLoader(0, null, this);
-		singleAnimeLoader.forceLoad();
+		singleMangaLoader = getLoaderManager().initLoader(0, null, this);
+		singleMangaLoader.forceLoad();
 		
 		plusOne.setOnClickListener(this);
 		watchedPannel.setOnClickListener(this);
@@ -243,7 +243,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.remove_anime){
 			BaseActivity ba = (BaseActivity)getActivity();
-			new AnimeDBDeleteTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			new MangaDBDeleteTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
 			return true;
 		}
 		return false;
@@ -253,7 +253,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 		if ( activeRecord != null ){
-			menu.findItem(R.id.remove_anime).setEnabled(activeRecord.watched_status != null);
+			menu.findItem(R.id.remove_anime).setEnabled(activeRecord.read_status != null);
 		}
 	}
 	
@@ -269,10 +269,10 @@ public class AnimeDetailFragment extends RoboFragment implements
 		super.onResume();
 	}
 
-	public void onEvent(AnimeUpdateEvent aue) {
-		if (singleAnimeLoader != null) {
+	public void onEvent(MangaUpdateEvent aue) {
+		if (singleMangaLoader != null) {
 			if (aue.id == idToDisplay) {
-				singleAnimeLoader.onContentChanged();
+				singleMangaLoader.onContentChanged();
 			}
 		}
 	}
@@ -293,7 +293,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		}
 
 		if (activeRecord.synopsis == null) {
-			AnimeServerInterface.getAnimeRecord(getActivity(), activeRecord.id);
+			MangaServerInterface.getAnimeRecord(getActivity(), activeRecord.id);
 			informationContainer.setVisibility(View.GONE);
 			statisticsContainer.setVisibility(View.GONE);
 		} else {
@@ -301,11 +301,11 @@ public class AnimeDetailFragment extends RoboFragment implements
 			statisticsContainer.setVisibility(View.VISIBLE);
 		}
 
-		watchedCount.setText(getString(R.string.watched_format, activeRecord.watched_episodes, activeRecord.episodes ));
+//		watchedCount.setText(getString(R.string.watched_format, activeRecord.watched_episodes, activeRecord.episodes ));
 		
 		type.setText(getString(R.string.type_format, activeRecord.type ));
 		status.setText(getString(R.string.status_format, activeRecord.status ));
-		classification.setText(getString(R.string.classification_format, activeRecord.classification ));
+//		classification.setText(getString(R.string.classification_format, activeRecord.classification ));
 		rank.setText(getString(R.string.rank_format, activeRecord.rank ));
 		popularity.setText(getString(R.string.popularity_format, activeRecord.popularity_rank ));
 		memberScore.setText(getString(R.string.members_score_format, activeRecord.members_score ));
@@ -320,8 +320,8 @@ public class AnimeDetailFragment extends RoboFragment implements
 			scoreStatus.setSelection(11 - activeRecord.score  );
 		}
 		
-		if (activeRecord.watched_status != null ){
-			watchedStatus.setSelection(activeRecord.watched_status.ordinal());
+		if (activeRecord.read_status != null ){
+			watchedStatus.setSelection(activeRecord.read_status.ordinal());
 			watchedPanel.setVisibility(View.VISIBLE);
 			statusPanel.setVisibility(View.VISIBLE);
 			scorePanel.setVisibility(View.VISIBLE); 
@@ -335,40 +335,40 @@ public class AnimeDetailFragment extends RoboFragment implements
 			addPanel.setVisibility(View.VISIBLE);
 		}
 		
-		if ( activeRecord.prequels.size() >0 ){
-			prequel.setText(getString(R.string.prequel_format, activeRecord.prequels.size()));
-			prequel.setVisibility(View.VISIBLE);
-		} else {
-			prequel.setVisibility(View.GONE);
-		}
+//		if ( activeRecord.prequels.size() >0 ){
+//			prequel.setText(getString(R.string.prequel_format, activeRecord.prequels.size()));
+//			prequel.setVisibility(View.VISIBLE);
+//		} else {
+//			prequel.setVisibility(View.GONE);
+//		}
 		
-		if ( activeRecord.sequels.size() >0 ){
-			sequel.setText(getString(R.string.sequel_format, activeRecord.sequels.size()));
-			sequel.setVisibility(View.VISIBLE);
-		} else {
-			sequel.setVisibility(View.GONE);
-		}
+//		if ( activeRecord.sequels.size() >0 ){
+//			sequel.setText(getString(R.string.sequel_format, activeRecord.sequels.size()));
+//			sequel.setVisibility(View.VISIBLE);
+//		} else {
+//			sequel.setVisibility(View.GONE);
+//		}
 		
-		if ( activeRecord.side_stories.size() >0 ){
-			sideStory.setText(getString(R.string.side_story_format, activeRecord.side_stories.size()));
-			sideStory.setVisibility(View.VISIBLE);
-		} else {
-			sideStory.setVisibility(View.GONE);
-		}
+//		if ( activeRecord.side_stories.size() >0 ){
+//			sideStory.setText(getString(R.string.side_story_format, activeRecord.side_stories.size()));
+//			sideStory.setVisibility(View.VISIBLE);
+//		} else {
+//			sideStory.setVisibility(View.GONE);
+//		}
 		
-		if ( activeRecord.spin_offs.size() >0 ){
-			spinOffs.setText(getString(R.string.spin_off_format, activeRecord.spin_offs.size()));
+		if ( activeRecord.related_manga.size() >0 ){
+			spinOffs.setText(getString(R.string.spin_off_format, activeRecord.related_manga.size()));
 			spinOffs.setVisibility(View.VISIBLE);
 		} else {
 			spinOffs.setVisibility(View.GONE);
 		}
 
-		if ( activeRecord.summaries.size() >0 ){
-			summaries.setText(getString(R.string.summaries_format, activeRecord.summaries.size()));
-			summaries.setVisibility(View.VISIBLE);
-		} else {
-			summaries.setVisibility(View.GONE);
-		}
+//		if ( activeRecord.summaries.size() >0 ){
+//			summaries.setText(getString(R.string.summaries_format, activeRecord.summaries.size()));
+//			summaries.setVisibility(View.VISIBLE);
+//		} else {
+//			summaries.setVisibility(View.GONE);
+//		}
 		
 		if ( activeRecord.alternative_versions.size() >0 ){
 			alternativeVersions.setText(getString(R.string.alternative_versions_format, activeRecord.alternative_versions.size()));
@@ -381,22 +381,22 @@ public class AnimeDetailFragment extends RoboFragment implements
 	}
 
 	@Override
-	public Loader<AnimeRecord> onCreateLoader(int id, Bundle args) {
-		return new SingleAnimeLoader(getActivity(), idToDisplay);
+	public Loader<MangaRecord> onCreateLoader(int id, Bundle args) {
+		return new SingleMangaLoader(getActivity(), idToDisplay);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<AnimeRecord> loader, AnimeRecord data) {
+	public void onLoadFinished(Loader<MangaRecord> loader, MangaRecord data) {
 		activeRecord = data;
 		if ( activeRecord == null ){
-			AnimeServerInterface.getAnimeRecord(getActivity(), idToDisplay);
+			MangaServerInterface.getAnimeRecord(getActivity(), idToDisplay);
 		} else {
 			updateUI();
 		}
 	}
 
 	@Override
-	public void onLoaderReset(Loader<AnimeRecord> loader) {}
+	public void onLoaderReset(Loader<MangaRecord> loader) {}
 
 	@Override
 	public void onItemSelected(AdapterView<?> adapter, View view, int position, long id) {
@@ -408,10 +408,10 @@ public class AnimeDetailFragment extends RoboFragment implements
 		
 		switch ( adapter.getId() ){
 		case R.id.anime_watched_status:
-			AnimeWatchedStatus newStatus = AnimeWatchedStatus.values()[position];
-			if ( activeRecord.watched_status != null && activeRecord.watched_status != newStatus ){
-				activeRecord.watched_status = AnimeWatchedStatus.values()[position];
-				new AnimeDBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
+			MangaReadStatus newStatus = MangaReadStatus.values()[position];
+			if ( activeRecord.read_status != null && activeRecord.read_status != newStatus ){
+				activeRecord.read_status = MangaReadStatus.values()[position];
+				new MangaDBDeleteTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
 			}
 			break;
 		case R.id.anime_score_status:
@@ -425,7 +425,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			}
 			if ( activeRecord.score != newScore ){
 				activeRecord.score = newScore;
-				new AnimeDBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
+				new MangaDBDeleteTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
 			}
 			break;
 		}
@@ -440,48 +440,48 @@ public class AnimeDetailFragment extends RoboFragment implements
 		
 		switch (v.getId()) {
 		case R.id.plus_one:
-			activeRecord.watched_episodes++;
-			if (activeRecord.watched_episodes > activeRecord.episodes) {
-				activeRecord.watched_episodes = activeRecord.episodes;
+			activeRecord.chapters_read++;
+			if (activeRecord.chapters_read > activeRecord.chapters) {
+				activeRecord.chapters_read = activeRecord.chapters;
 				// save
 			}
-			new AnimeDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
+			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
 				.execute(activeRecord);
 			break;
 		case R.id.watched_panel:
 			FragmentManager fm = getActivity().getSupportFragmentManager();
 			NumberPickerFragment numberPickerFragment = new NumberPickerFragment();
-			if ( activeRecord.episodes != 0 ){
-				numberPickerFragment.setMaximum(activeRecord.episodes);
+			if ( activeRecord.chapters != 0 ){
+				numberPickerFragment.setMaximum(activeRecord.chapters);
 			} else {
 				numberPickerFragment.setMaximum(Integer.MAX_VALUE);
 			}
-			numberPickerFragment.setValue( activeRecord.watched_episodes);		
+			numberPickerFragment.setValue( activeRecord.chapters_read);		
 			
 			numberPickerFragment.show(fm,"numberpicker");
 			
 			numberPickerFragment.setOnDismissListener(this);
 			break;
 		case R.id.add_button:
-			activeRecord.watched_status = AnimeWatchedStatus.values()[addSpinner.getSelectedItemPosition()];
+			activeRecord.read_status = MangaReadStatus.values()[addSpinner.getSelectedItemPosition()];
 
-			new AnimeDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus, true)
+			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus, true)
 					.execute(activeRecord);
 			break;
-		case R.id.prequel:
-			createPickerDialog( activeRecord.prequels ).show();
-			break;
-		case R.id.sequel:
-			createPickerDialog( activeRecord.sequels ).show();
-			break;
-		case R.id.side_story:
-			createPickerDialog( activeRecord.side_stories ).show();
-			break;
-		case R.id.spin_offs:
-			createPickerDialog( activeRecord.spin_offs ).show();
-			break;
+//		case R.id.prequel:
+//			createPickerDialog( activeRecord.prequels ).show();
+//			break;
+//		case R.id.sequel:
+//			createPickerDialog( activeRecord.sequels ).show();
+//			break;
+//		case R.id.side_story:
+//			createPickerDialog( activeRecord.side_stories ).show();
+//			break;
+//		case R.id.spin_offs:
+//			createPickerDialog( activeRecord.spin_offs ).show();
+//			break;
 		case R.id.summaries:
-			createPickerDialog( activeRecord.summaries ).show();
+			createPickerDialog( activeRecord.related_manga ).show();
 			break;
 		case R.id.alternative_versions:
 			createPickerDialog( activeRecord.alternative_versions ).show();
@@ -489,10 +489,10 @@ public class AnimeDetailFragment extends RoboFragment implements
 		}
 	}
 
-	private Dialog createPickerDialog(final LinkedList<AnimeCrossReferance> crefs) {
+	private Dialog createPickerDialog(final LinkedList<MangaCrossReferance> crefs) {
 		List<CharSequence> titles = new LinkedList<CharSequence>();
 		
-		for ( AnimeCrossReferance cr : crefs ){
+		for ( MangaCrossReferance cr : crefs ){
 			titles.add(Html.fromHtml(cr.title));
 		}
 		
@@ -500,7 +500,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				bus.post(new AnimeChangeDetailViewRequest(crefs.get(which).anime_id));
+				bus.post(new MangaChangeDetailViewRequest(crefs.get(which).manga_id));
 			}
 		}).create();
 		
@@ -509,11 +509,11 @@ public class AnimeDetailFragment extends RoboFragment implements
 	@Override
 	public void onDismiss(NumberPickerFragment numberPickerFragment) {
 		int value = numberPickerFragment.getValue();
-		if ( activeRecord.watched_episodes != value ){
-			activeRecord.watched_episodes = value;
+		if ( activeRecord.chapters_read != value ){
+			activeRecord.chapters_read = value;
 			//save
 			BaseActivity ba = (BaseActivity)getActivity();
-			new AnimeDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
 		}
 	}
 

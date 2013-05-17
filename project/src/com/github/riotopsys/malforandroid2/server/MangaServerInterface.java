@@ -74,15 +74,15 @@ public class MangaServerInterface extends AbstractServerInterface {
 		getRecord(ctx, id, getBaseIntent(ctx) );
 	}
 
-	public static void addAnimeRecord(Context ctx, int id) {
+	public static void addMangaRecord(Context ctx, int id) {
 		addRecord(ctx, id, getBaseIntent(ctx));
 	}
 
-	public static void updateAnimeRecord(Context ctx, int id) {
+	public static void updateMangaRecord(Context ctx, int id) {
 		updateRecord(ctx, id, getBaseIntent(ctx));
 	}
 
-	public static void removeAnimeRecord(Context ctx, int id) {
+	public static void removeMangaRecord(Context ctx, int id) {
 		removeRecord(ctx, id, getBaseIntent(ctx));
 	}
 

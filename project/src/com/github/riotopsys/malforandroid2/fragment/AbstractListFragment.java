@@ -33,8 +33,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.adapter.BaseRecordAdapter;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
+import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
-import com.github.riotopsys.malforandroid2.event.ChangeDetailViewRequest;
+import com.github.riotopsys.malforandroid2.event.MangaChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.google.inject.Inject;
@@ -124,9 +125,9 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	public void onItemClick(AdapterView<?> view, View arg1, int position, long arg3) {
 		BaseRecord item = (BaseRecord) view.getItemAtPosition(position);
 		if ( item instanceof AnimeRecord ){
-			bus.post(new ChangeDetailViewRequest(item.id));
+			bus.post(new AnimeChangeDetailViewRequest(item.id));
 		} else {
-			//TODO: handle manga
+			bus.post(new MangaChangeDetailViewRequest(item.id));
 		}
 	}
 	
