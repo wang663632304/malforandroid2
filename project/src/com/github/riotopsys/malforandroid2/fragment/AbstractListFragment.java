@@ -34,7 +34,6 @@ import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.adapter.BaseRecordAdapter;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
-import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.MangaChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
@@ -99,12 +98,6 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	public void onResume() {
 		bus.register(this);
 		super.onResume();
-	}
-	
-	public void onEvent( AnimeUpdateEvent aue ){
-		if ( animeLoader != null ){
-			animeLoader.onContentChanged();
-		}
 	}
 	
 	protected abstract SupplementaryTextFactory getSupplementaryTextFactory(); 

@@ -69,7 +69,7 @@ import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import de.greenrobot.event.EventBus;
 
 public class MangaDetailFragment extends RoboFragment implements
-		LoaderManager.LoaderCallbacks<MangaRecord>, OnItemSelectedListener, OnClickListener, OnDismissListener, OnTouchListener, ImageLoadingListener {
+		LoaderManager.LoaderCallbacks<MangaRecord>, OnItemSelectedListener, OnClickListener, OnTouchListener, ImageLoadingListener {
 
 	private static final String TAG = MangaDetailFragment.class.getSimpleName();
 
@@ -85,20 +85,29 @@ public class MangaDetailFragment extends RoboFragment implements
 	@InjectView(R.id.synopsis_container)
 	private View synopsysContainer;
 	
-	@InjectView(R.id.anime_watched_status)
-	private Spinner watchedStatus;
+	@InjectView(R.id.manga_read_status)
+	private Spinner readStatus;
 
-	@InjectView(R.id.anime_score_status)
+	@InjectView(R.id.manga_score_status)
 	private Spinner scoreStatus;
 
-	@InjectView(R.id.watched_count)
-	private TextView watchedCount;
+	@InjectView(R.id.chapter_count)
+	private TextView chapterCount;
 	
-	@InjectView(R.id.watched_panel)
-	private View watchedPannel;
+	@InjectView(R.id.volume_count)
+	private TextView volumeCount;
 	
-	@InjectView(R.id.plus_one)
-	private Button plusOne;
+	@InjectView(R.id.chapter_panel)
+	private View chapterPannel;
+	
+	@InjectView(R.id.volume_panel)
+	private View volumePannel;
+	
+	@InjectView(R.id.plus_one_chapter)
+	private Button plusOneChapter;
+	
+	@InjectView(R.id.plus_one_volume)
+	private Button plusOneVolume;
 	
 	@InjectView(R.id.spin_offs)
 	private TextView spinOffs;
@@ -133,9 +142,6 @@ public class MangaDetailFragment extends RoboFragment implements
 	@InjectView(R.id.statistics_container)
 	private View statisticsContainer;
 	
-	@InjectView(R.id.watched_panel)
-	private View watchedPanel;
-	
 	@InjectView(R.id.status_panel)
 	private View statusPanel;
 	
@@ -145,7 +151,7 @@ public class MangaDetailFragment extends RoboFragment implements
 	@InjectView(R.id.add_panel)
 	private View addPanel;
 	
-	@InjectView(R.id.anime_watched_status_add)
+	@InjectView(R.id.manga_watched_status_add)
 	private Spinner addSpinner;
 	
 	@InjectView(R.id.add_button)
@@ -169,6 +175,33 @@ public class MangaDetailFragment extends RoboFragment implements
 
 	private MangaRecord activeRecord;
 
+	private OnDismissListener chapterDismissListener = new OnDismissListener() {
+		@Override
+		public void onDismiss(NumberPickerFragment numberPickerFragment) {
+			int value = numberPickerFragment.getValue();
+			if ( activeRecord.chapters_read != value ){
+				activeRecord.chapters_read = value;
+				//save
+				BaseActivity ba = (BaseActivity)getActivity();
+				new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			}
+		}
+	};
+
+	private OnDismissListener volumeDismissListener = new OnDismissListener() {
+		
+		@Override
+		public void onDismiss(NumberPickerFragment numberPickerFragment) {
+			int value = numberPickerFragment.getValue();
+			if ( activeRecord.volumes_read != value ){
+				activeRecord.volumes_read = value;
+				//save
+				BaseActivity ba = (BaseActivity)getActivity();
+				new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			}
+		}
+	};
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -185,18 +218,18 @@ public class MangaDetailFragment extends RoboFragment implements
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 
-		watchedStatus.setAdapter(ArrayAdapter.createFromResource(getActivity(),
-				R.array.anime_status_options,
+		readStatus.setAdapter(ArrayAdapter.createFromResource(getActivity(),
+				R.array.manga_status_options,
 				android.R.layout.simple_spinner_dropdown_item));
 		
-		watchedStatus.setOnItemSelectedListener(this);
+		readStatus.setOnItemSelectedListener(this);
 		
 		scoreStatus.setAdapter(ArrayAdapter.createFromResource(getActivity(),
 				R.array.anime_score_options,
 				android.R.layout.simple_spinner_dropdown_item));
 		
 		addSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(),
-				R.array.anime_status_options,
+				R.array.manga_status_options,
 				android.R.layout.simple_spinner_dropdown_item));
 		
 		scoreStatus.setOnItemSelectedListener(this);
@@ -204,8 +237,10 @@ public class MangaDetailFragment extends RoboFragment implements
 		singleMangaLoader = getLoaderManager().initLoader(0, null, this);
 		singleMangaLoader.forceLoad();
 		
-		plusOne.setOnClickListener(this);
-		watchedPannel.setOnClickListener(this);
+		plusOneChapter.setOnClickListener(this);
+		plusOneVolume.setOnClickListener(this);
+		chapterPannel.setOnClickListener(this);
+		volumePannel.setOnClickListener(this);
 		spinOffs.setOnClickListener(this);
 		alternativeVersions.setOnClickListener(this);
 		addButton.setOnClickListener(this);
@@ -282,7 +317,8 @@ public class MangaDetailFragment extends RoboFragment implements
 			statisticsContainer.setVisibility(View.VISIBLE);
 		}
 
-//		watchedCount.setText(getString(R.string.watched_format, activeRecord.watched_episodes, activeRecord.episodes ));
+		chapterCount.setText(getString(R.string.chapter_format, activeRecord.chapters_read, activeRecord.chapters ));
+		volumeCount.setText(getString(R.string.volume_format, activeRecord.volumes_read, activeRecord.volumes ));
 		
 		type.setText(getString(R.string.type_format, activeRecord.type ));
 		status.setText(getString(R.string.status_format, activeRecord.status ));
@@ -301,14 +337,16 @@ public class MangaDetailFragment extends RoboFragment implements
 		}
 		
 		if (activeRecord.read_status != null ){
-			watchedStatus.setSelection(activeRecord.read_status.ordinal());
-			watchedPanel.setVisibility(View.VISIBLE);
+			readStatus.setSelection(activeRecord.read_status.ordinal());
+			chapterPannel.setVisibility(View.VISIBLE);
+			volumePannel.setVisibility(View.VISIBLE);
 			statusPanel.setVisibility(View.VISIBLE);
 			scorePanel.setVisibility(View.VISIBLE); 
 			
 			addPanel.setVisibility(View.GONE);
 		} else {
-			watchedPanel.setVisibility(View.GONE);
+			chapterPannel.setVisibility(View.GONE);
+			volumePannel.setVisibility(View.GONE);
 			statusPanel.setVisibility(View.GONE);
 			scorePanel.setVisibility(View.GONE);
 			
@@ -316,7 +354,7 @@ public class MangaDetailFragment extends RoboFragment implements
 		}
 		
 		if ( activeRecord.related_manga.size() >0 ){
-			spinOffs.setText(getString(R.string.spin_off_format, activeRecord.related_manga.size()));
+			spinOffs.setText(getString(R.string.related_format, activeRecord.related_manga.size()));
 			spinOffs.setVisibility(View.VISIBLE);
 		} else {
 			spinOffs.setVisibility(View.GONE);
@@ -390,8 +428,10 @@ public class MangaDetailFragment extends RoboFragment implements
 	public void onClick(View v) {
 		BaseActivity ba = (BaseActivity) getActivity();
 		
+		FragmentManager fm = getActivity().getSupportFragmentManager();
+		
 		switch (v.getId()) {
-		case R.id.plus_one:
+		case R.id.plus_one_chapter:
 			activeRecord.chapters_read++;
 			if (activeRecord.chapters_read > activeRecord.chapters) {
 				activeRecord.chapters_read = activeRecord.chapters;
@@ -400,39 +440,48 @@ public class MangaDetailFragment extends RoboFragment implements
 			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
 				.execute(activeRecord);
 			break;
-		case R.id.watched_panel:
-			FragmentManager fm = getActivity().getSupportFragmentManager();
-			NumberPickerFragment numberPickerFragment = new NumberPickerFragment();
-			if ( activeRecord.chapters != 0 ){
-				numberPickerFragment.setMaximum(activeRecord.chapters);
-			} else {
-				numberPickerFragment.setMaximum(Integer.MAX_VALUE);
+		case R.id.plus_one_volume:
+			activeRecord.volumes_read++;
+			if (activeRecord.volumes_read > activeRecord.volumes) {
+				activeRecord.volumes_read = activeRecord.volumes;
+				// save
 			}
-			numberPickerFragment.setValue( activeRecord.chapters_read);		
-			
-			numberPickerFragment.show(fm,"numberpicker");
-			
-			numberPickerFragment.setOnDismissListener(this);
+			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
+				.execute(activeRecord);
 			break;
+		case R.id.chapter_panel:
+			NumberPickerFragment numberPickerFragmentChapter = new NumberPickerFragment();
+			if ( activeRecord.chapters != 0 ){
+				numberPickerFragmentChapter.setMaximum(activeRecord.chapters);
+			} else {
+				numberPickerFragmentChapter.setMaximum(Integer.MAX_VALUE);
+			}
+			numberPickerFragmentChapter.setValue( activeRecord.chapters_read);		
+			
+			numberPickerFragmentChapter.show(fm,"numberpicker");
+			
+			numberPickerFragmentChapter.setOnDismissListener(chapterDismissListener);
+			break;
+		case R.id.volume_panel:
+			NumberPickerFragment numberPickerFragmentVolume = new NumberPickerFragment();
+			if ( activeRecord.chapters != 0 ){
+				numberPickerFragmentVolume.setMaximum(activeRecord.volumes);
+			} else {
+				numberPickerFragmentVolume.setMaximum(Integer.MAX_VALUE);
+			}
+			numberPickerFragmentVolume.setValue( activeRecord.volumes_read);		
+			
+			numberPickerFragmentVolume.show(fm,"numberpicker");
+			
+			numberPickerFragmentVolume.setOnDismissListener(volumeDismissListener);
+			
 		case R.id.add_button:
 			activeRecord.read_status = MangaReadStatus.values()[addSpinner.getSelectedItemPosition()];
 
 			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus, true)
 					.execute(activeRecord);
 			break;
-//		case R.id.prequel:
-//			createPickerDialog( activeRecord.prequels ).show();
-//			break;
-//		case R.id.sequel:
-//			createPickerDialog( activeRecord.sequels ).show();
-//			break;
-//		case R.id.side_story:
-//			createPickerDialog( activeRecord.side_stories ).show();
-//			break;
-//		case R.id.spin_offs:
-//			createPickerDialog( activeRecord.spin_offs ).show();
-//			break;
-		case R.id.summaries:
+		case R.id.spin_offs:
 			createPickerDialog( activeRecord.related_manga ).show();
 			break;
 		case R.id.alternative_versions:
@@ -456,17 +505,6 @@ public class MangaDetailFragment extends RoboFragment implements
 			}
 		}).create();
 		
-	}
-
-	@Override
-	public void onDismiss(NumberPickerFragment numberPickerFragment) {
-		int value = numberPickerFragment.getValue();
-		if ( activeRecord.chapters_read != value ){
-			activeRecord.chapters_read = value;
-			//save
-			BaseActivity ba = (BaseActivity)getActivity();
-			new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
-		}
 	}
 
 	@Override

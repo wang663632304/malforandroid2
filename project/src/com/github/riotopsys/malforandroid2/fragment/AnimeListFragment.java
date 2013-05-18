@@ -26,6 +26,7 @@ import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.RankText;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ScoreText;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.WatchedStatusText;
+import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.loader.AnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
@@ -37,6 +38,12 @@ public class AnimeListFragment extends AbstractListFragment  {
 		Loader<List<BaseRecord>> loader = new AnimeLoader(getActivity(), (AnimeWatchedStatus)getArguments().getSerializable("filter"));
 //		loader.setUpdateThrottle(1000/24);
 		return loader;
+	}
+	
+	public void onEvent( AnimeUpdateEvent aue ){
+		if ( animeLoader != null ){
+			animeLoader.onContentChanged();
+		}
 	}
 
 	@Override

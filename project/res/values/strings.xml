@@ -42,6 +42,15 @@
         <item>Dropped</item>
         <item>Plan to Watch</item>
     </string-array>
+    
+    <string-array name="manga_status_options">
+        <item>Reading</item>
+        <item>Completed</item>
+        <item>On-Hold</item>
+        <item>Dropped</item>
+        <item>Plan to Read</item>
+    </string-array>
+    
     <string-array name="anime_score_options">
         <item>Select</item>
         <item>(10) Masterpiece</item>
@@ -56,12 +65,15 @@
         <item>(1) Appalling</item>
     </string-array>
 
-    <string name="watched_format">Watching %1$d/%2$d</string>
+    <string name="watched_format">Watching: %1$d/%2$d</string>
+    <string name="chapter_format">Chapters: %1$d/%2$d</string>
+    <string name="volume_format">Volumes: %1$d/%2$d</string>
     <string name="read_format">chap: %1$d/%2$d vol: %3$d/%4$d</string>
     <string name="prequel_format">Prequels: %1$d</string>
     <string name="sequel_format">Sequels: %1$d</string>
     <string name="side_story_format">Side Stories: %1$d</string>
     <string name="spin_off_format">Spin Offs: %1$d</string>
+    <string name="related_format">Related: %1$d</string>
     <string name="summaries_format">Summaries: %1$d</string>
     <string name="type_format">Type: %1$s</string>
     <string name="status_format">Status: %1$s</string>
@@ -81,6 +93,8 @@
 	<string name="information">Information</string>
 	<string name="status">Status:</string>
 	<string name="watched">Watched:</string>
+	<string name="chapters">Chapters:</string>
+	<string name="volumes">Volumes:</string>
 	<string name="your_score">Your Score:</string>
 	<string name="refresh_list">Refresh List</string>
 	<string name="search">Search</string>

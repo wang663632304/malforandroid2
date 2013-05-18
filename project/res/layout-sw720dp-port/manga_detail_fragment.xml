@@ -86,7 +86,7 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/anime_watched_status_add"
+                    android:id="@+id/manga_watched_status_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -161,7 +161,7 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/anime_watched_status"
+                    android:id="@+id/manga_watched_status"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -182,7 +182,7 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/anime_score_status"
+                    android:id="@+id/manga_score_status"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

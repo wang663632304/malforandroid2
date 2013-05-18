@@ -70,22 +70,45 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/watched_panel"
+                android:id="@+id/chapter_panel"
                 style="@style/detail_item"
                 app:layout_columnSpan="1"
                 android:gravity="center"
                 android:visibility="gone" >
 
                 <TextView
-                    android:id="@+id/watched_count"
+                    android:id="@+id/chapter_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|left"
-                    android:text="@string/watched"
+                    android:text="@string/chapters"
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/plus_one"
+                    android:id="@+id/plus_one_chapter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/plus_one" />
+            </LinearLayout>
+            
+            <LinearLayout
+                android:id="@+id/volume_panel"
+                style="@style/detail_item"
+                app:layout_columnSpan="1"
+                android:gravity="center"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/volume_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:text="@string/volumes"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/plus_one_volume"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
@@ -106,7 +129,7 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/anime_watched_status"
+                    android:id="@+id/manga_read_status"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -128,7 +151,7 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/anime_score_status"
+                    android:id="@+id/manga_score_status"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -152,7 +175,7 @@
                     android:textStyle="bold" />
 
                 <Spinner
-                    android:id="@+id/anime_watched_status_add"
+                    android:id="@+id/manga_watched_status_add"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -259,39 +282,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/prequel"
-                style="@style/detail_item"
-                app:layout_columnSpan="1"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/sequel"
-                style="@style/detail_item"
-                app:layout_columnSpan="1"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/side_story"
-                style="@style/detail_item"
-                app:layout_columnSpan="1"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <TextView
                 android:id="@+id/spin_offs"
-                style="@style/detail_item"
-                app:layout_columnSpan="1"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/summaries"
                 style="@style/detail_item"
                 app:layout_columnSpan="1"
                 android:gravity="center"
