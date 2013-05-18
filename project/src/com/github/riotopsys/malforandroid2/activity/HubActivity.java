@@ -115,6 +115,18 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		if ( detailFrame != null ){
 			transitionDetail();
 		}
+		
+		if ( savedInstanceState != null){
+			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("MODE"));
+		}
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		
+		outState.putInt("MODE", getActionBar().getSelectedNavigationIndex());
+		
+		super.onSaveInstanceState(outState);
 	}
 	
 	@Override
