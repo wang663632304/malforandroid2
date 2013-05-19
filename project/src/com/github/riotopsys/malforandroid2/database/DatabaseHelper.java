@@ -76,6 +76,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 					TableUtils.dropTable(connectionSource, clazz, true);
 				}
 			}
+			onCreate(db, connectionSource);
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't drop databases", e);
 			throw new RuntimeException(e);
