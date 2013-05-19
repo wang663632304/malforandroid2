@@ -24,23 +24,23 @@ import android.support.v4.content.Loader;
 import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.SupplementaryTextFactory;
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.WatchedStatusText;
-import com.github.riotopsys.malforandroid2.event.AnimeSearchUpdated;
-import com.github.riotopsys.malforandroid2.loader.SearchLoader;
+import com.github.riotopsys.malforandroid2.event.MangaSearchUpdated;
+import com.github.riotopsys.malforandroid2.loader.MangaSearchLoader;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.google.inject.Inject;
 
-public class SearchListFragment extends AbstractListFragment  {
+public class MangaSearchListFragment extends AbstractListFragment  {
 	
 	@Inject GlobalState state;
 	
 	@Override
 	public Loader<List<BaseRecord>> onCreateLoader(int id, Bundle args) {
-		SearchLoader loader = new SearchLoader(getActivity(), state );
+		MangaSearchLoader loader = new MangaSearchLoader(getActivity(), state );
 //		loader.setUpdateThrottle(1000/24);
 		return loader;
 	}
 	
-	public void onEventMainThread( AnimeSearchUpdated asu ){
+	public void onEventMainThread( MangaSearchUpdated asu ){
 		if ( animeLoader != null ){
 			itemListView.setSelection(0);
 			animeLoader.onContentChanged();

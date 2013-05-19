@@ -24,7 +24,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.fragment.MangaListFragment;
-import com.github.riotopsys.malforandroid2.fragment.SearchListFragment;
+import com.github.riotopsys.malforandroid2.fragment.MangaSearchListFragment;
 import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
 import com.google.inject.Inject;
 
@@ -52,7 +52,7 @@ public class MangaPagerAdapter extends FragmentPagerAdapter {
 			f = new MangaListFragment();
 		} else {
 			//handle "search" condition
-			f = new SearchListFragment();
+			f = new MangaSearchListFragment();
 		}
 		
 		f.setArguments(args);

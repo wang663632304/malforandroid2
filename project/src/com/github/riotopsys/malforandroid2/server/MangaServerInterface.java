@@ -86,7 +86,7 @@ public class MangaServerInterface extends AbstractServerInterface {
 		removeRecord(ctx, id, getBaseIntent(ctx));
 	}
 
-	public static void searchAnime(Context ctx, String query) {
+	public static void searchManga(Context ctx, String query) {
 		search(ctx, query, getBaseIntent(ctx));
 	}
 

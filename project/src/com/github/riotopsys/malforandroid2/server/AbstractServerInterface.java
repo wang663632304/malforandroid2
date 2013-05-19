@@ -436,11 +436,12 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 					dao.create(ar);
 				}
 			}
-			state.setSearchResults(ids);
 			
 			if ( getRecordClass().equals( AnimeRecord.class ) ){
+				state.setAnimeSearchResults(ids);
 				bus.post(new AnimeSearchUpdated());
 			} else {
+				state.setMangaSearchResults(ids);
 				bus.post(new MangaSearchUpdated());
 			}
 		}

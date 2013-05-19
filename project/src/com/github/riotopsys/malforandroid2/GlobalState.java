@@ -30,7 +30,8 @@ public class GlobalState {
 	
 	private boolean syncScheduled = false;
 	
-	private LinkedList<Integer> searchResults = new LinkedList<Integer>();
+	private LinkedList<Integer> animeSearchResults = new LinkedList<Integer>();
+	private LinkedList<Integer> mangaSearchResults = new LinkedList<Integer>();
 	
 	public String getUser() {
 		return user;
@@ -55,19 +56,36 @@ public class GlobalState {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Integer> getSearchResults() {
-		synchronized (searchResults) {
-			return (List<Integer>) searchResults.clone();			
+	public List<Integer> getAnimeSearchResults() {
+		synchronized (animeSearchResults) {
+			return (List<Integer>) animeSearchResults.clone();			
 		}
 	}
 	
-	public void setSearchResults(List<Integer> ids) {
+	public void setAnimeSearchResults(List<Integer> ids) {
 		if ( ids == null ){
 			return;
 		}
 		synchronized (ids) {
-			this.searchResults.clear();
-			this.searchResults.addAll(ids);
+			this.animeSearchResults.clear();
+			this.animeSearchResults.addAll(ids);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Integer> getMangaSearchResults() {
+		synchronized (mangaSearchResults) {
+			return (List<Integer>) mangaSearchResults.clone();			
+		}
+	}
+	
+	public void setMangaSearchResults(List<Integer> ids) {
+		if ( ids == null ){
+			return;
+		}
+		synchronized (ids) {
+			this.mangaSearchResults.clear();
+			this.mangaSearchResults.addAll(ids);
 		}
 	}
 

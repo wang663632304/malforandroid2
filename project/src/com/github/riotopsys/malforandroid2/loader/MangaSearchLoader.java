@@ -24,16 +24,16 @@ import android.content.Context;
 import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.GlobalState;
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
+import com.github.riotopsys.malforandroid2.model.MangaRecord;
 import com.j256.ormlite.dao.Dao;
 
-public class SearchLoader extends DBLoader<List<BaseRecord>> {
+public class MangaSearchLoader extends DBLoader<List<BaseRecord>> {
 
-	private static final String TAG = SearchLoader.class.getSimpleName();
+	private static final String TAG = AnimeSearchLoader.class.getSimpleName();
 	private GlobalState state;
 
-	public SearchLoader(Context context, GlobalState state) {
+	public MangaSearchLoader(Context context, GlobalState state) {
 		super(context);
 		this.state = state;
 	}
@@ -41,8 +41,8 @@ public class SearchLoader extends DBLoader<List<BaseRecord>> {
 	@Override
 	public List<BaseRecord> loadInBackground() {
 		try {
-			Dao<AnimeRecord, Integer> dao = getHelper().getDao(AnimeRecord.class);
-			return new LinkedList<BaseRecord>( dao.queryBuilder().where().in("id", state.getSearchResults()).query());
+			Dao<MangaRecord, Integer> dao = getHelper().getDao(MangaRecord.class);
+			return new LinkedList<BaseRecord>( dao.queryBuilder().where().in("id", state.getMangaSearchResults()).query());
 		} catch (SQLException e) {
 			Log.e(TAG, "", e);
 		}

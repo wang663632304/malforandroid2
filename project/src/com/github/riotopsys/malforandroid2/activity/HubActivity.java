@@ -52,6 +52,7 @@ import com.google.inject.Inject;
 
 public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener, OnNavigationListener {
 
+	@SuppressWarnings("unused")
 	private static final int MANGA_POSITION = 1;
 	private static final int ANIME_POSITION = 0;
 
@@ -179,8 +180,13 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	@Override
 	public boolean onQueryTextSubmit(String query) {
 		searchItem.collapseActionView();
-		AnimeServerInterface.searchAnime(this, query);
-		animeListPager.setCurrentItem(animeAdapter.getCount()-1,true);
+		if ( getActionBar().getSelectedNavigationIndex() == ANIME_POSITION ){
+			AnimeServerInterface.searchAnime(this, query);
+			animeListPager.setCurrentItem(animeAdapter.getCount()-1,true);
+		} else {
+			MangaServerInterface.searchManga(this, query);
+			mangaListPager.setCurrentItem(mangaAdapter.getCount()-1,true);
+		}
 		return true;
 	}
 	
@@ -204,13 +210,10 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 				.beginTransaction();
 		Fragment fragment;
 		if (currentDetail != null) {
-			ActionBar actionBar = getActionBar();
 			if ( currentDetail instanceof AnimeChangeDetailViewRequest){
 				fragment = new AnimeDetailFragment();
-				actionBar.setSelectedNavigationItem(ANIME_POSITION);
 			} else {
 				fragment = new MangaDetailFragment();
-				actionBar.setSelectedNavigationItem(MANGA_POSITION);
 			}
 			Bundle args = new Bundle();
 			args.putInt("id", currentDetail.id);
