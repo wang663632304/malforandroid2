@@ -85,6 +85,7 @@
     <string name="favorited_count_format">Favorited: %1$d</string>
     <string name="alternative_versions_format">Alternates: %1$d</string>
     <string name="manga_adaptations_format">Manga: %1$d</string>
+    <string name="anime_adaptations_format">Anime: %1$d</string>
     <string name="score_format">Score: %1$d</string>
     
     <string name="plus_one">+1</string>
