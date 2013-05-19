@@ -298,14 +298,6 @@
                 android:visibility="gone" />
             
             <TextView
-                android:id="@+id/alternative_versions"
-                style="@style/detail_item"
-                app:layout_columnSpan="1"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:visibility="gone" />
-            
-            <TextView
                 android:id="@+id/anime_adaptations"
                 style="@style/detail_item"
                 app:layout_columnSpan="1"
