@@ -441,7 +441,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		switch (v.getId()) {
 		case R.id.plus_one:
 			activeRecord.watched_episodes++;
-			if (activeRecord.watched_episodes > activeRecord.episodes) {
+			if (activeRecord.watched_episodes > activeRecord.episodes && activeRecord.episodes != 0) {
 				activeRecord.watched_episodes = activeRecord.episodes;
 				// save
 			}

@@ -196,8 +196,8 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 		} else {
 			journalUpdate(journalDao, new MangaJournalEntry(id, UpdateType.ADD_TO_LIST) );
 			MangaRecord manga = (MangaRecord)record;
-			value = String.format("manga_id=%d&status=%s&chapters=%d&volumes=%d&score%d", manga.id, manga.read_status.getServerKey(), manga.chapters_read, manga.volumes_read, manga.score);
-			url = urlBuilder.getAnimeAddUrl();
+			value = String.format("manga_id=%d&status=%s&chapters=%d&volumes=%d&score=%d", manga.id, manga.read_status.getServerKey(), manga.chapters_read, manga.volumes_read, manga.score);
+			url = urlBuilder.getMangaAddUrl();
 		}
 		
 		Log.v(TAG, String.format("url %s data %s", url, value));
@@ -224,7 +224,7 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 		} else {
 			journalUpdate(journalDao, new MangaJournalEntry(id, UpdateType.UPDATED) );
 			MangaRecord manga = (MangaRecord)record;
-			value = String.format("status=%s&chapters=%d&volumes=%d&score%d", manga.read_status.getServerKey(), manga.chapters_read, manga.volumes_read, manga.score);
+			value = String.format("status=%s&chapters=%d&volumes=%d&score=%d", manga.read_status.getServerKey(), manga.chapters_read, manga.volumes_read, manga.score);
 			url = urlBuilder.getMangaUpdateUrl(id);
 		}
 		

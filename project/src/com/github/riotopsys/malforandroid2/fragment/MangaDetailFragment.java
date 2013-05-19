@@ -397,14 +397,14 @@ public class MangaDetailFragment extends RoboFragment implements
 		BaseActivity ba = (BaseActivity)getActivity();
 		
 		switch ( adapter.getId() ){
-		case R.id.anime_watched_status:
+		case R.id.manga_read_status:
 			MangaReadStatus newStatus = MangaReadStatus.values()[position];
 			if ( activeRecord.read_status != null && activeRecord.read_status != newStatus ){
 				activeRecord.read_status = MangaReadStatus.values()[position];
-				new MangaDBDeleteTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
+				new MangaDBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
 			}
 			break;
-		case R.id.anime_score_status:
+		case R.id.manga_score_status:
 			int newScore;
 			switch (position) {
 			case 0:
@@ -415,7 +415,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			}
 			if ( activeRecord.score != newScore ){
 				activeRecord.score = newScore;
-				new MangaDBDeleteTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
+				new MangaDBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
 			}
 			break;
 		}
@@ -433,7 +433,7 @@ public class MangaDetailFragment extends RoboFragment implements
 		switch (v.getId()) {
 		case R.id.plus_one_chapter:
 			activeRecord.chapters_read++;
-			if (activeRecord.chapters_read > activeRecord.chapters) {
+			if (activeRecord.chapters_read > activeRecord.chapters && activeRecord.chapters != 0) {
 				activeRecord.chapters_read = activeRecord.chapters;
 				// save
 			}
@@ -442,7 +442,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			break;
 		case R.id.plus_one_volume:
 			activeRecord.volumes_read++;
-			if (activeRecord.volumes_read > activeRecord.volumes) {
+			if (activeRecord.volumes_read > activeRecord.volumes && activeRecord.volumes != 0) {
 				activeRecord.volumes_read = activeRecord.volumes;
 				// save
 			}

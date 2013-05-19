@@ -22,7 +22,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
+import com.github.riotopsys.malforandroid2.event.MangaUpdateEvent;
 import com.github.riotopsys.malforandroid2.model.MangaRecord;
 import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
 import com.j256.ormlite.dao.Dao;
@@ -57,7 +57,7 @@ public class MangaDBDeleteTask extends AsyncTask<MangaRecord, Void, Void> {
 					p.score = 0;
 					dao.createOrUpdate(p);
 					MangaServerInterface.removeMangaRecord(ctx, p.id);
-					bus.post(new AnimeUpdateEvent(p.id));
+					bus.post(new MangaUpdateEvent(p.id));
 				} catch (SQLException e) {
 					Log.e(TAG, "cannot save item", e);
 				}
