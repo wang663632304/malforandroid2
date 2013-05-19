@@ -20,19 +20,34 @@
     android:baselineAligned="false"
     android:orientation="horizontal" >
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/list_pager_anime"
+    <FrameLayout
         android:layout_width="@dimen/left_hand_list_width"
         android:layout_height="match_parent"
         android:background="@color/light_blue" >
 
-        <android.support.v4.view.PagerTabStrip
-            android:paddingTop="@dimen/standard_padding"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/list_pager_anime"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="match_parent" >
+
+            <android.support.v4.view.PagerTabStrip
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/standard_padding" />
+        </android.support.v4.view.ViewPager>
         
-    </android.support.v4.view.ViewPager>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/list_pager_manga"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" >
+
+            <android.support.v4.view.PagerTabStrip
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/standard_padding" />
+        </android.support.v4.view.ViewPager>
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="0dp"

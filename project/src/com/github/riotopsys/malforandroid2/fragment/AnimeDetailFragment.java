@@ -236,7 +236,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.detail_fragment_menu, menu);
+		inflater.inflate(R.menu.anime_detail_fragment_menu, menu);
 	}
 	
 	@Override
