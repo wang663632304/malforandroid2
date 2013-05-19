@@ -22,7 +22,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.MangaUpdateEvent;
 import com.github.riotopsys.malforandroid2.model.MangaRecord;
 import com.github.riotopsys.malforandroid2.server.MangaServerInterface;

@@ -55,11 +55,13 @@ import com.github.riotopsys.malforandroid2.database.AnimeDBDeleteTask;
 import com.github.riotopsys.malforandroid2.database.AnimeDBUpdateTask;
 import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
+import com.github.riotopsys.malforandroid2.event.MangaChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.fragment.NumberPickerFragment.OnDismissListener;
 import com.github.riotopsys.malforandroid2.loader.SingleAnimeLoader;
 import com.github.riotopsys.malforandroid2.model.AnimeCrossReferance;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
+import com.github.riotopsys.malforandroid2.model.MangaCrossReferance;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.google.inject.Inject;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -117,6 +119,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 	
 	@InjectView(R.id.alternative_versions)
 	private TextView alternativeVersions;
+	
+	@InjectView(R.id.manga_adaptations)
+	private TextView mangaAdaptations;
 	
 	@InjectView(R.id.type)
 	private TextView type;
@@ -227,6 +232,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		spinOffs.setOnClickListener(this);
 		summaries.setOnClickListener(this);
 		alternativeVersions.setOnClickListener(this);
+		mangaAdaptations.setOnClickListener(this);
 		addButton.setOnClickListener(this);
 		
 		synopsysContainer.setOnTouchListener(this);
@@ -377,7 +383,12 @@ public class AnimeDetailFragment extends RoboFragment implements
 			alternativeVersions.setVisibility(View.GONE);
 		}
 		
-		
+		if ( activeRecord.alternative_versions.size() >0 ){
+			mangaAdaptations.setText(getString(R.string.manga_adaptations_format, activeRecord.manga_adaptations.size()));
+			mangaAdaptations.setVisibility(View.VISIBLE);
+		} else {
+			mangaAdaptations.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -469,27 +480,30 @@ public class AnimeDetailFragment extends RoboFragment implements
 					.execute(activeRecord);
 			break;
 		case R.id.prequel:
-			createPickerDialog( activeRecord.prequels ).show();
+			createAnimePickerDialog( activeRecord.prequels ).show();
 			break;
 		case R.id.sequel:
-			createPickerDialog( activeRecord.sequels ).show();
+			createAnimePickerDialog( activeRecord.sequels ).show();
 			break;
 		case R.id.side_story:
-			createPickerDialog( activeRecord.side_stories ).show();
+			createAnimePickerDialog( activeRecord.side_stories ).show();
 			break;
 		case R.id.spin_offs:
-			createPickerDialog( activeRecord.spin_offs ).show();
+			createAnimePickerDialog( activeRecord.spin_offs ).show();
 			break;
 		case R.id.summaries:
-			createPickerDialog( activeRecord.summaries ).show();
+			createAnimePickerDialog( activeRecord.summaries ).show();
 			break;
 		case R.id.alternative_versions:
-			createPickerDialog( activeRecord.alternative_versions ).show();
+			createAnimePickerDialog( activeRecord.alternative_versions ).show();
+			break;
+		case R.id.manga_adaptations:
+			createMangaPickerDialog( activeRecord.manga_adaptations ).show();
 			break;
 		}
 	}
 
-	private Dialog createPickerDialog(final LinkedList<AnimeCrossReferance> crefs) {
+	private Dialog createAnimePickerDialog(final LinkedList<AnimeCrossReferance> crefs) {
 		List<CharSequence> titles = new LinkedList<CharSequence>();
 		
 		for ( AnimeCrossReferance cr : crefs ){
@@ -505,6 +519,24 @@ public class AnimeDetailFragment extends RoboFragment implements
 		}).create();
 		
 	}
+	
+	private Dialog createMangaPickerDialog(final LinkedList<MangaCrossReferance> crefs) {
+		List<CharSequence> titles = new LinkedList<CharSequence>();
+		
+		for ( MangaCrossReferance cr : crefs ){
+			titles.add(Html.fromHtml(cr.title));
+		}
+		
+		return new AlertDialog.Builder(getActivity()).setItems(titles.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				bus.post(new MangaChangeDetailViewRequest(crefs.get(which).manga_id));
+			}
+		}).create();
+		
+	}
+	
 
 	@Override
 	public void onDismiss(NumberPickerFragment numberPickerFragment) {
