@@ -103,6 +103,9 @@
 	<string name="not_in_list">Not in your list</string>
 	<string name="remove_anime">Remove Anime</string>
 	<string name="remove_manga">Remove Manga</string>
+	<string name="later">Remind Me Later</string>
+	<string name="app_rate_title">App Rating</string>
+	<string name="app_rate_message">Please consider rating MAL For Android.</string>
 	
 	<string-array name="drop_down_nav_options">
         <item>Anime</item>

@@ -48,6 +48,7 @@ import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.github.riotopsys.malforandroid2.server.BootReciever;
 import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
+import com.github.riotopsys.malforandroid2.util.Apprater;
 import com.google.inject.Inject;
 
 public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener, OnNavigationListener {
@@ -70,12 +71,14 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	@Inject
 	private MangaPagerAdapter mangaAdapter;
 	
-	
 	@Inject 
 	private GlobalState state;
 	
 	@Inject
 	private LoginFragment login;
+	
+	@Inject
+	private Apprater apprater;
 	
 	private SearchView searchView;
 	private MenuItem searchItem;
@@ -120,6 +123,8 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		if ( savedInstanceState != null){
 			actionBar.setSelectedNavigationItem(savedInstanceState.getInt("MODE"));
 		}
+		
+		apprater.onAppOpened(this);
 	}
 	
 	@Override
@@ -151,7 +156,6 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		searchView = (SearchView) searchItem.getActionView();
 		searchView.setOnQueryTextListener(this);
 		searchView.setQueryHint(getString(R.string.search));
-		
 		
 		return super.onCreateOptionsMenu(menu);
 	}
