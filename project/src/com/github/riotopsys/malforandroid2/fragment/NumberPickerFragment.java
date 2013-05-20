@@ -71,8 +71,6 @@ public class NumberPickerFragment extends RoboDialogFragment {
         view.setValue(value);
         view.setWrapSelectorWheel(false);
         
-        view.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
-        
         return builder.create();
     }
 
