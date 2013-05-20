@@ -97,6 +97,7 @@ public abstract class AbstractListFragment extends RoboFragment implements
 	@Override
 	public void onResume() {
 		bus.register(this);
+		animeLoader.onContentChanged();
 		super.onResume();
 	}
 	

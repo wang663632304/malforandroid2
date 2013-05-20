@@ -47,7 +47,9 @@ public class AnimeLoader extends DBLoader<List<BaseRecord>> {
 			if ( filter != null ){
 				where.and().eq("watched_status", filter);
 			} 
-			return new LinkedList<BaseRecord>(where.query());
+			List<AnimeRecord> items = where.query();
+			Log.i(TAG, String.format("item count %d: filter: %s", items.size(), (filter != null) ? filter.getServerKey() : "NULL" ));
+			return new LinkedList<BaseRecord>(items);
 		} catch (SQLException e) {
 			Log.e(TAG, "", e);
 		}

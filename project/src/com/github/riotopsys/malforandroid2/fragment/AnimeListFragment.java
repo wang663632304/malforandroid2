@@ -19,6 +19,7 @@ package com.github.riotopsys.malforandroid2.fragment;
 import java.util.List;
 
 import android.os.Bundle;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
 import com.github.riotopsys.malforandroid2.adapter.SupplementaryText.ProgressText;
@@ -35,8 +36,8 @@ public class AnimeListFragment extends AbstractListFragment  {
 	
 	@Override
 	public Loader<List<BaseRecord>> onCreateLoader(int id, Bundle args) {
-		Loader<List<BaseRecord>> loader = new AnimeLoader(getActivity(), (AnimeWatchedStatus)getArguments().getSerializable("filter"));
-//		loader.setUpdateThrottle(1000/24);
+		AsyncTaskLoader<List<BaseRecord>> loader = new AnimeLoader(getActivity(), (AnimeWatchedStatus)getArguments().getSerializable("filter"));
+		loader.setUpdateThrottle(1000/24);
 		return loader;
 	}
 	

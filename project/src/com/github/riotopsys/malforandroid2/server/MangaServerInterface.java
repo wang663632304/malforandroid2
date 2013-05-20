@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Context;
 import android.content.Intent;
 
-import com.github.riotopsys.malforandroid2.model.BaseJournalEntry;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.github.riotopsys.malforandroid2.model.MangaJournalEntry;
 import com.github.riotopsys.malforandroid2.model.MangaListResponse;
@@ -20,13 +19,16 @@ public class MangaServerInterface extends AbstractServerInterface {
 		return MangaRecord.class;
 	}
 
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected Dao<BaseRecord, Integer> getRecordDao() throws SQLException {
+	protected Dao getRecordDao() throws SQLException {
 		return getHelper().getDao(MangaRecord.class);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	protected Dao<BaseJournalEntry, Integer> getJournalDao() throws SQLException {
+	protected Dao getJournalDao() throws SQLException {
 		return getHelper().getDao(MangaJournalEntry.class);
 	}
 
