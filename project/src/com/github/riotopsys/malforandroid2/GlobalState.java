@@ -16,8 +16,10 @@
 
 package com.github.riotopsys.malforandroid2;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.util.Log;
 
@@ -32,6 +34,8 @@ public class GlobalState {
 	
 	private LinkedList<Integer> animeSearchResults = new LinkedList<Integer>();
 	private LinkedList<Integer> mangaSearchResults = new LinkedList<Integer>();
+	
+	private Map<Class<?>,Boolean> busy = new HashMap<Class<?>, Boolean>();
 	
 	public String getUser() {
 		return user;
@@ -95,6 +99,18 @@ public class GlobalState {
 
 	public void setSyncScheduled(boolean syncScheduled) {
 		this.syncScheduled = syncScheduled;
+	}
+
+	public void setBusy(Class<?> recordClass, boolean b) {
+		busy.put(recordClass, b);
+	}
+	
+	public boolean isBusy(){
+		boolean result = false;
+		for ( boolean b : busy.values()){
+			result = result || b;
+		}
+		return result;
 	}
 	
 }

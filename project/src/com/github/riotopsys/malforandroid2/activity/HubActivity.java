@@ -29,6 +29,8 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
@@ -40,6 +42,7 @@ import com.github.riotopsys.malforandroid2.adapter.MangaPagerAdapter;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs.Callback;
 import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
+import com.github.riotopsys.malforandroid2.event.ListRetreivalStatusEvent;
 import com.github.riotopsys.malforandroid2.fragment.AnimeDetailFragment;
 import com.github.riotopsys.malforandroid2.fragment.LoginFragment;
 import com.github.riotopsys.malforandroid2.fragment.MangaDetailFragment;
@@ -49,9 +52,10 @@ import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.github.riotopsys.malforandroid2.server.BootReciever;
 import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
 import com.github.riotopsys.malforandroid2.util.Apprater;
+import com.github.riotopsys.malforandroid2.view.RefreshProgressActionView;
 import com.google.inject.Inject;
 
-public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener, OnNavigationListener {
+public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener, OnNavigationListener, OnClickListener {
 
 	@SuppressWarnings("unused")
 	private static final int MANGA_POSITION = 1;
@@ -82,6 +86,7 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	
 	private SearchView searchView;
 	private MenuItem searchItem;
+	private RefreshProgressActionView refreshView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -137,13 +142,6 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		if (item.getItemId() == R.id.refresh_menu_item) {
-			AnimeServerInterface.getAnimeList(this);
-			MangaServerInterface.getMangaList(this);
-			if ( !state.loginSet() ){
-				login.show(getSupportFragmentManager(), null);
-			}
-		}
 		return super.onMenuItemSelected(featureId, item);
 	}
 
@@ -157,7 +155,18 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		searchView.setOnQueryTextListener(this);
 		searchView.setQueryHint(getString(R.string.search));
 		
+		MenuItem refreshItem = menu.findItem(R.id.refresh_menu_item);
+		refreshView = (RefreshProgressActionView)refreshItem.getActionView();
+		refreshView.setOnClickListener(this);
+		refreshView.setBusy(state.isBusy());
+		
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	public void onEventMainThread( ListRetreivalStatusEvent lsre ){
+		if ( refreshView != null ){
+			refreshView.setBusy(state.isBusy());
+		}
 	}
 	
 	@Override
@@ -239,6 +248,21 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 			mangaListPager.setVisibility(ViewPager.VISIBLE);
 		}
 		return true;
+	}
+
+	@Override
+	public void onClick(View view) {
+		
+		
+		if ( !state.loginSet() ){
+			login.show(getSupportFragmentManager(), null);
+		} else {
+			AnimeServerInterface.getAnimeList(this);
+			MangaServerInterface.getMangaList(this);
+			
+			refreshView.setBusy(true);
+		}
+		
 	}
 
 }

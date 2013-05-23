@@ -17,10 +17,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:icon="@drawable/ic_menu_refresh"
         android:id="@+id/refresh_menu_item"
         android:showAsAction="ifRoom"
-        android:title="@string/refresh_list"/>
+        android:title="@string/refresh_list"
+        android:actionViewClass="com.github.riotopsys.malforandroid2.view.RefreshProgressActionView"/>
     
     <item android:id="@+id/menu_search"
           android:title="@string/search"

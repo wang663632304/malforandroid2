@@ -38,6 +38,7 @@ import com.github.riotopsys.malforandroid2.database.DatabaseHelper;
 import com.github.riotopsys.malforandroid2.event.AnimeSearchUpdated;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
+import com.github.riotopsys.malforandroid2.event.ListRetreivalStatusEvent;
 import com.github.riotopsys.malforandroid2.event.MangaSearchUpdated;
 import com.github.riotopsys.malforandroid2.event.MangaUpdateEvent;
 import com.github.riotopsys.malforandroid2.model.AnimeJournalEntry;
@@ -321,6 +322,10 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 		if ( user == null ){
 			return;
 		}
+		
+		state.setBusy(getRecordClass(), true);
+		bus.post(new ListRetreivalStatusEvent());
+		
 		Dao<BaseRecord, Integer> dao = getRecordDao();
 		Dao<BaseJournalEntry, Integer> journalDao = getJournalDao();
 		
@@ -396,6 +401,9 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 				sendUpdateEvent(id);
 			}
 		}
+		
+		state.setBusy(getRecordClass(), false);
+		bus.post(new ListRetreivalStatusEvent());
 	}
 	
 	private void search( String criteria ) throws MalformedURLException, SQLException, UnsupportedEncodingException {
