@@ -3,6 +3,7 @@
 
     <style name="Theme.MAL" parent="@android:style/Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/Theme.MAL.ActionBar</item>
+        <item name="android:windowBackground">@color/light_blue</item>
     </style>
 
     <style name="Theme.MAL.ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">

@@ -122,7 +122,7 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		}
 		
 		if ( detailFrame != null ){
-			transitionDetail();
+			transitionDetail( false );
 		}
 		
 		if ( savedInstanceState != null){
@@ -203,9 +203,9 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		return true;
 	}
 	
-	protected void transitionDetail() {
+	protected void transitionDetail( boolean wasBack) {
 		if ( detailFrame != null ){
-			transitionDetailTofragment();
+			transitionDetailTofragment( wasBack );
 		} else {
 			transitionDetailToActivity();
 		}
@@ -218,9 +218,12 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		purgeFakeBackStack();
 	}
 
-	private void transitionDetailTofragment() {
+	private void transitionDetailTofragment(boolean wasBack) {
 		FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
+		
+		setAnimations(wasBack, transaction);
+		
 		Fragment fragment;
 		if (currentDetail != null) {
 			if ( currentDetail instanceof AnimeChangeDetailViewRequest){
@@ -252,8 +255,6 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 
 	@Override
 	public void onClick(View view) {
-		
-		
 		if ( !state.loginSet() ){
 			login.show(getSupportFragmentManager(), null);
 		} else {

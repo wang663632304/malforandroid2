@@ -44,7 +44,7 @@ public class DetailActivity extends BaseDetailActivity {
 		if ( savedInstanceState == null ){
 			Intent intent = getIntent();
 			currentDetail = (ChangeDetailViewRequest) intent.getExtras().getSerializable("ITEM");
-			transitionDetail();
+			transitionDetail(false);
 		} 
 
 	}
@@ -64,11 +64,14 @@ public class DetailActivity extends BaseDetailActivity {
 	}
 
 	@Override
-	protected void transitionDetail() {
+	protected void transitionDetail( boolean wasBack ) {
 		FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
 		Fragment fragment;
 		if (currentDetail != null) {
+			
+			setAnimations(wasBack, transaction);
+			
 			if ( currentDetail instanceof AnimeChangeDetailViewRequest){
 				fragment = new AnimeDetailFragment();
 			} else {
