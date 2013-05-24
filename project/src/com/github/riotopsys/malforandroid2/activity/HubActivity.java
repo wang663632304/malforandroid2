@@ -18,6 +18,8 @@ package com.github.riotopsys.malforandroid2.activity;
 
 import java.util.List;
 
+import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 import roboguice.inject.InjectView;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
@@ -47,12 +49,20 @@ import com.github.riotopsys.malforandroid2.fragment.AnimeDetailFragment;
 import com.github.riotopsys.malforandroid2.fragment.LoginFragment;
 import com.github.riotopsys.malforandroid2.fragment.MangaDetailFragment;
 import com.github.riotopsys.malforandroid2.fragment.PlacardFragment;
+import com.github.riotopsys.malforandroid2.model.AnimeRecord;
+import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
+import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.github.riotopsys.malforandroid2.server.BootReciever;
 import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
+import com.github.riotopsys.malforandroid2.server.retrofit.AnimeInterconnect;
+import com.github.riotopsys.malforandroid2.util.AnimeWatchedStatusTypeAdapter;
 import com.github.riotopsys.malforandroid2.util.Apprater;
+import com.github.riotopsys.malforandroid2.util.MangaReadStatusTypeAdapter;
 import com.github.riotopsys.malforandroid2.view.RefreshProgressActionView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
 
 public class HubActivity extends BaseDetailActivity implements Callback, OnQueryTextListener, OnNavigationListener, OnClickListener {
@@ -130,6 +140,33 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		}
 		
 		apprater.onAppOpened(this);
+		
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				Gson gson = new GsonBuilder()
+						.registerTypeAdapter(AnimeWatchedStatus.class,
+								new AnimeWatchedStatusTypeAdapter())
+						.registerTypeAdapter(MangaReadStatus.class,
+								new MangaReadStatusTypeAdapter()).create();
+
+				RestAdapter restAdapter = new RestAdapter.Builder()
+						.setServer("http://mal-api.com")
+						.setConverter(new GsonConverter(gson)).build();
+
+				// Create an instance of our GitHub API interface.
+				AnimeInterconnect ai = restAdapter
+						.create(AnimeInterconnect.class);
+				
+				List<AnimeRecord> out = ai.search("ah my goddess");
+				for ( AnimeRecord ar : out ){
+					Log.i("nadeshiko", ar.title);
+				}
+
+			}
+		}).start();
+		
 	}
 	
 	@Override
