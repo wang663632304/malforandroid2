@@ -54,6 +54,7 @@
 	<string name="app_rate_message">Please consider rating MAL For Android.</string>
 	<string name="complete_question_title">Complete?</string>
 	<string name="complete_question_msg">It looks as if you\'ve completed this item.\nShould this be moved to completed now?</string>
+	<string name="open_in_browser">Open in browser</string>
 	
 	<string name="watched_format">Watching: %1$d/%2$d</string>
     <string name="chapter_format">Chapters: %1$d/%2$d</string>

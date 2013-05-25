@@ -15,9 +15,18 @@
  limitations under the License. 
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    
-    <item android:id="@+id/remove_anime"
-          android:title="@string/remove_manga"
-          android:showAsAction="never" />
+
+    <item
+        android:id="@+id/remove_anime"
+        android:icon="@drawable/ic_trash"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="30"
+        android:title="@string/remove_anime"/>
+    <item
+        android:id="@+id/open_web"
+        android:icon="@drawable/ic_website"
+        android:showAsAction="ifRoom"
+        android:orderInCategory="40"
+        android:title="@string/open_in_browser"/>
 
 </menu>

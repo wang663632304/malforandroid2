@@ -24,7 +24,9 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -242,14 +244,19 @@ public class AnimeDetailFragment extends RoboFragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.anime_detail_fragment_menu, menu);
+		inflater.inflate(R.menu.detail_fragment_menu, menu);
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.remove_anime){
+		switch (item.getItemId()){
+		case R.id.remove_anime:
 			BaseActivity ba = (BaseActivity)getActivity();
 			new AnimeDBDeleteTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			return true;
+		case R.id.open_web:
+			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("http://myanimelist.net/anime/%d", activeRecord.id)));
+			startActivity(myIntent);
 			return true;
 		}
 		return false;

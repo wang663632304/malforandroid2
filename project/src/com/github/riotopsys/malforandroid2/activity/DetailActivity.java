@@ -16,6 +16,7 @@
 
 package com.github.riotopsys.malforandroid2.activity;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,7 +40,9 @@ public class DetailActivity extends BaseDetailActivity {
 		Log.i(TAG, "onCreate");
 		setContentView(R.layout.detail_activity);
 		
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setDisplayShowTitleEnabled(true);
 		
 		if ( savedInstanceState == null ){
 			Intent intent = getIntent();
