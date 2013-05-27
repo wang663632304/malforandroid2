@@ -25,7 +25,7 @@
         android:layout_height="@dimen/item_bounds"
         android:layout_alignParentLeft="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/icon" />
+         />
 
     <LinearLayout
         android:layout_width="fill_parent"

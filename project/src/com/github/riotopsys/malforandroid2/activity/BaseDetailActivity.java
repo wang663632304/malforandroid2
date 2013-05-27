@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 
 import roboguice.inject.InjectView;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
 import com.github.riotopsys.malforandroid2.R;
@@ -82,7 +83,7 @@ public abstract class BaseDetailActivity extends BaseActivity {
 			super.onBackPressed();
 		} else {
 			currentDetail = manualBackStack.pop();
-			transitionDetail();
+			transitionDetail( true );
 		}
 	}
 
@@ -92,7 +93,7 @@ public abstract class BaseDetailActivity extends BaseActivity {
 		}
 		manualBackStack.push(currentDetail);
 		currentDetail = cdvr;
-		transitionDetail();
+		transitionDetail( false );
 	}
 
 	protected void purgeFakeBackStack() {
@@ -100,6 +101,14 @@ public abstract class BaseDetailActivity extends BaseActivity {
 		currentDetail = null;
 	}
 	
-	protected abstract void transitionDetail();
+	protected abstract void transitionDetail( boolean wasBack );
+
+	protected void setAnimations(boolean wasBack, FragmentTransaction transaction) {
+		if ( wasBack ){
+			transaction.setCustomAnimations(R.anim.scale_in, R.anim.slide_down);
+		} else {
+			transaction.setCustomAnimations(R.anim.slide_up, R.anim.scale_out);
+		}
+	}
 
 }

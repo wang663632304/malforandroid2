@@ -24,7 +24,9 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -242,14 +244,19 @@ public class AnimeDetailFragment extends RoboFragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.anime_detail_fragment_menu, menu);
+		inflater.inflate(R.menu.detail_fragment_menu, menu);
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.remove_anime){
+		switch (item.getItemId()){
+		case R.id.remove_anime:
 			BaseActivity ba = (BaseActivity)getActivity();
 			new AnimeDBDeleteTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			return true;
+		case R.id.open_web:
+			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("http://myanimelist.net/anime/%d", activeRecord.id)));
+			startActivity(myIntent);
 			return true;
 		}
 		return false;
@@ -308,6 +315,12 @@ public class AnimeDetailFragment extends RoboFragment implements
 		}
 
 		watchedCount.setText(getString(R.string.watched_format, activeRecord.watched_episodes, activeRecord.episodes ));
+		
+		if ( activeRecord.episodes != 0 && activeRecord.episodes == activeRecord.watched_episodes ){
+			plusOne.setVisibility(View.GONE);
+		} else {
+			plusOne.setVisibility(View.VISIBLE);
+		}
 		
 		type.setText(getString(R.string.type_format, activeRecord.type ));
 		status.setText(getString(R.string.status_format, activeRecord.status ));
@@ -458,6 +471,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			}
 			new AnimeDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
 				.execute(activeRecord);
+			checkComplete();
 			break;
 		case R.id.watched_panel:
 			FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -546,6 +560,31 @@ public class AnimeDetailFragment extends RoboFragment implements
 			//save
 			BaseActivity ba = (BaseActivity)getActivity();
 			new AnimeDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			checkComplete();
+		}
+	}
+
+	private void checkComplete() {
+		if ( activeRecord.watched_status != AnimeWatchedStatus.COMPLETED && activeRecord.episodes == activeRecord.watched_episodes ){
+			new AlertDialog.Builder(getActivity())
+			.setTitle(R.string.complete_question_title)
+			.setMessage(R.string.complete_question_msg)
+			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					activeRecord.watched_status = AnimeWatchedStatus.COMPLETED;
+					BaseActivity ba = (BaseActivity)getActivity();
+					new AnimeDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+				}
+			})
+			.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			}).create().show();
 		}
 	}
 

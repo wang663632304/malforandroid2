@@ -15,10 +15,7 @@ Apache License Version 2.0, January 2004
 Made possible by the fine work of Cheah Chu Yeow
 and his [unofficial MAL API][api].
 
-If you like throw him a bone @  
-[http://github.com/chuyeow/myanimelist-api](http://github.com/chuyeow/myanimelist-api "github")  
-or   
-[http://blog.codefront.net/](http://blog.codefront.net/ "blog")
+If you like throw him a bone @ [github][cho_github] or [his blog][cho_blog]
 
 ## Contributing
 
@@ -28,6 +25,14 @@ Current contributors can be found under the [Github contributors page][contrib]
 
 ## Changelog
 
+v1.2.0
+
+*	reordered items on action bar
+*	Added action bar item that open MAL site for current anime or manga
+*	Animated transitions between item detail fragments
+*	When watched or read count indicates completion, app asks if it's ok to move item into completed list
+*	adding an indeterminate progress bar to action bar when app is syncing with server
+
 v1.1.0
 
 *	Adds Manga support
@@ -35,3 +40,5 @@ v1.1.0
 
 [api]: http://mal-api.com/  
 [contrib]: https://github.com/riotopsys/malforandroid2/contributors
+[cho_github]: http://github.com/chuyeow/myanimelist-api
+[cho_blog]: http://blog.codefront.net/

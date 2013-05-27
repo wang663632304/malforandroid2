@@ -18,14 +18,16 @@
 
     <item
         android:id="@+id/refresh_menu_item"
+        android:actionViewClass="com.github.riotopsys.malforandroid2.view.RefreshProgressActionView"
         android:showAsAction="ifRoom"
-        android:title="@string/refresh_list"
-        android:actionViewClass="com.github.riotopsys.malforandroid2.view.RefreshProgressActionView"/>
-    
-    <item android:id="@+id/menu_search"
-          android:title="@string/search"
-          android:icon="@drawable/ic_menu_search"
-          android:showAsAction="ifRoom|collapseActionView"
-          android:actionViewClass="android.widget.SearchView"/>
+        android:orderInCategory="20"
+        android:title="@string/refresh_list"/>
+    <item
+        android:id="@+id/menu_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/ic_menu_search"
+        android:orderInCategory="10"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/search"/>
 
 </menu>

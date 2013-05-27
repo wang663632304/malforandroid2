@@ -24,7 +24,9 @@ import roboguice.inject.InjectView;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -189,6 +191,7 @@ public class MangaDetailFragment extends RoboFragment implements
 				//save
 				BaseActivity ba = (BaseActivity)getActivity();
 				new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+				checkComplete();
 			}
 		}
 	};
@@ -203,6 +206,7 @@ public class MangaDetailFragment extends RoboFragment implements
 				//save
 				BaseActivity ba = (BaseActivity)getActivity();
 				new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+				checkComplete();
 			}
 		}
 	};
@@ -258,14 +262,19 @@ public class MangaDetailFragment extends RoboFragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.manga_detail_fragment_menu, menu);
+		inflater.inflate(R.menu.detail_fragment_menu, menu);
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.remove_anime){
+		switch (item.getItemId()){
+		case R.id.remove_anime:
 			BaseActivity ba = (BaseActivity)getActivity();
 			new MangaDBDeleteTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			return true;
+		case R.id.open_web:
+			Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("http://myanimelist.net/manga/%d", activeRecord.id)));
+			startActivity(myIntent);
 			return true;
 		}
 		return false;
@@ -325,6 +334,18 @@ public class MangaDetailFragment extends RoboFragment implements
 
 		chapterCount.setText(getString(R.string.chapter_format, activeRecord.chapters_read, activeRecord.chapters ));
 		volumeCount.setText(getString(R.string.volume_format, activeRecord.volumes_read, activeRecord.volumes ));
+		
+		if ( activeRecord.chapters != 0 && activeRecord.chapters == activeRecord.chapters_read ){
+			plusOneChapter.setVisibility(View.GONE);
+		} else {
+			plusOneChapter.setVisibility(View.VISIBLE);
+		}
+		
+		if ( activeRecord.volumes != 0 && activeRecord.volumes == activeRecord.volumes_read ){
+			plusOneVolume.setVisibility(View.GONE);
+		} else {
+			plusOneVolume.setVisibility(View.VISIBLE);
+		}
 		
 		type.setText(getString(R.string.type_format, activeRecord.type ));
 		status.setText(getString(R.string.status_format, activeRecord.status ));
@@ -450,6 +471,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			}
 			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
 				.execute(activeRecord);
+			checkComplete();
 			break;
 		case R.id.plus_one_volume:
 			activeRecord.volumes_read++;
@@ -459,6 +481,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			}
 			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
 				.execute(activeRecord);
+			checkComplete();
 			break;
 		case R.id.chapter_panel:
 			NumberPickerFragment numberPickerFragmentChapter = new NumberPickerFragment();
@@ -536,6 +559,33 @@ public class MangaDetailFragment extends RoboFragment implements
 			}
 		}).create();
 		
+	}
+	
+	private void checkComplete() {
+		if ( activeRecord.read_status != MangaReadStatus.COMPLETED && ( activeRecord.chapters == activeRecord.chapters_read || activeRecord.volumes == activeRecord.volumes_read ) ){
+			new AlertDialog.Builder(getActivity())
+			.setTitle(R.string.complete_question_title)
+			.setMessage(R.string.complete_question_msg)
+			.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					activeRecord.read_status = MangaReadStatus.COMPLETED;
+					//we can have a mismatch between volumes and chapters so well bash it here
+					activeRecord.chapters_read = activeRecord.chapters;
+					activeRecord.volumes_read = activeRecord.volumes;
+					BaseActivity ba = (BaseActivity)getActivity();
+					new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+				}
+			})
+			.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			}).create().show();
+		}
 	}
 	
 	@Override
