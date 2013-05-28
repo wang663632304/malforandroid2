@@ -38,7 +38,9 @@ import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
+import com.github.riotopsys.malforandroid2.server.background_tasks.VerifyCredentialsTask;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import de.greenrobot.event.EventBus;
 
@@ -58,6 +60,9 @@ public class LoginFragment extends RoboDialogFragment implements OnClickListener
 
 	@Inject
 	private EventBus bus;
+	
+	@Inject
+	private Provider<VerifyCredentialsTask> verifyCredentialsTaskProvider;
 
 	private ProgressDialog progressDialog;
 	
@@ -144,7 +149,8 @@ public class LoginFragment extends RoboDialogFragment implements OnClickListener
 		state.setPass(pass);
 		
 		progressDialog.show();
-		AnimeServerInterface.verifyCredentials( getActivity() );
+		verifyCredentialsTaskProvider.get().start();
+		
 	}
 
 }

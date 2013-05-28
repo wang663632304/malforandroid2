@@ -16,44 +16,46 @@ import retrofit.http.Query;
 import com.github.riotopsys.malforandroid2.model.AnimeListResponse;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 
-public interface AnimeInterconnect {
+public interface MangaInterconnect {
 
-	@GET("/animelist/{user}")
+	@GET("/mangalist/{user}")
 	public AnimeListResponse getUsersList(@Path("user") String user);
 
 	@FormUrlEncoded
-	@PUT("/animelist/anime/{id}")
+	@PUT("/mangalist/manga/{id}")
 	public Response update(
 			@Header("Authorization") String auth,
 			@Path("id") int id, 
 			@Field("status") String status,
-			@Field("episodes") int episodes, 
+			@Field("chapters") int chapters, 
+			@Field("volumes") int volumes, 
 			@Field("score") int score);
 
 	@FormUrlEncoded
-	@DELETE("/animelist/anime/{id}")
+	@DELETE("/mangalist/manga/{id}")
 	public Response delete(
 			@Header("Authorization") String auth,
 			@Path("id") int id);
 
-	@GET("/anime/{id}?mine=1")
-	public AnimeRecord get(
+	@GET("/manga/{id}?mine=1")
+	public AnimeRecord getAnime(
 			@Header("Authorization") String auth,
 			@Path("id") int id);
 
-	@GET("/anime/search")
+	@GET("/manga/search")
 	public List<AnimeRecord> search(@Query("q") String query);
 
 	@FormUrlEncoded
-	@POST("/animelist/anime/{id}")
+	@POST("/mangalist/manga/{id}")
 	public Response add(
 			@Header("Authorization") String auth,
-			@Field("anime_id") int id, 
+			@Field("manga_id") int id, 
 			@Field("status") String status,
-			@Field("episodes") int episodes, 
+			@Field("chapters") int chapters, 
+			@Field("volumes") int volumes, 
 			@Field("score") int score);
 
-	@GET("/account/verify_credentials")
+	@POST("/account/verify_credentials")
 	public Response verifyCredentials(@Header("Authorization") String auth);
 
 }

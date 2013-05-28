@@ -17,10 +17,18 @@
 package com.github.riotopsys.malforandroid2;
 
 import java.util.Comparator;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import retrofit.RestAdapter;
+import retrofit.converter.GsonConverter;
 
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
+import com.github.riotopsys.malforandroid2.server.background_tasks.VerifyCredentialsTask;
+import com.github.riotopsys.malforandroid2.server.background_tasks.provider.VerifyCredentialsTaskProvider;
+import com.github.riotopsys.malforandroid2.server.retrofit.AnimeInterconnect;
 import com.github.riotopsys.malforandroid2.util.AnimeWatchedStatusTypeAdapter;
 import com.github.riotopsys.malforandroid2.util.MangaReadStatusTypeAdapter;
 import com.github.riotopsys.malforandroid2.util.RecordTitleComparator;
@@ -39,6 +47,7 @@ public class CustomModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(new TypeLiteral<Comparator<BaseRecord>>(){}).to(RecordTitleComparator.class);
+		bind(VerifyCredentialsTask.class).toProvider(VerifyCredentialsTaskProvider.class);
 	}
 
 	@Provides
@@ -64,5 +73,19 @@ public class CustomModule extends AbstractModule {
 			.registerTypeAdapter(AnimeWatchedStatus.class,new AnimeWatchedStatusTypeAdapter())
 			.registerTypeAdapter(MangaReadStatus.class,new MangaReadStatusTypeAdapter())
 			.create();
+	}
+	
+	@Provides
+	public AnimeInterconnect provideAnimeInterconnect(){
+		RestAdapter restAdapter = new RestAdapter.Builder()
+			.setServer("http://mal-api.com")
+			.setConverter(new GsonConverter(provideGson())).build();
+		return restAdapter.create(AnimeInterconnect.class);
+	}
+	
+	@Provides
+	@Singleton
+	public Executor provideExecutor(){
+		return Executors.newCachedThreadPool();
 	}
 }
