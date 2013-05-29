@@ -565,7 +565,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 	}
 
 	private void checkComplete() {
-		if ( activeRecord.watched_status != AnimeWatchedStatus.COMPLETED && activeRecord.episodes == activeRecord.watched_episodes ){
+		if ( activeRecord.watched_status != AnimeWatchedStatus.COMPLETED && 
+				activeRecord.episodes == activeRecord.watched_episodes &&
+				activeRecord.episodes != 0 ){
 			new AlertDialog.Builder(getActivity())
 			.setTitle(R.string.complete_question_title)
 			.setMessage(R.string.complete_question_msg)

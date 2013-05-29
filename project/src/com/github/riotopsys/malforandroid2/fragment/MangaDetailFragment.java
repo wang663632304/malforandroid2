@@ -562,7 +562,9 @@ public class MangaDetailFragment extends RoboFragment implements
 	}
 	
 	private void checkComplete() {
-		if ( activeRecord.read_status != MangaReadStatus.COMPLETED && ( activeRecord.chapters == activeRecord.chapters_read || activeRecord.volumes == activeRecord.volumes_read ) ){
+		if ( activeRecord.read_status != MangaReadStatus.COMPLETED && 
+			( activeRecord.chapters == activeRecord.chapters_read || activeRecord.volumes == activeRecord.volumes_read ) &&
+			( activeRecord.chapters != 0 && activeRecord.volumes != 0 ) ){
 			new AlertDialog.Builder(getActivity())
 			.setTitle(R.string.complete_question_title)
 			.setMessage(R.string.complete_question_msg)
