@@ -508,7 +508,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			numberPickerFragmentVolume.show(fm,"numberpicker");
 			
 			numberPickerFragmentVolume.setOnDismissListener(volumeDismissListener);
-			
+			break;
 		case R.id.add_button:
 			activeRecord.read_status = MangaReadStatus.values()[addSpinner.getSelectedItemPosition()];
 

@@ -28,6 +28,7 @@ Current contributors can be found under the [Github contributors page][contrib]
 v1.2.1
 
 *	fix overly zealous completion dialog from popping up when total items is zero.
+*	fix update to manga volume count moving manga to reading state.
 
 v1.2.0
 
