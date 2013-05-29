@@ -25,6 +25,10 @@ Current contributors can be found under the [Github contributors page][contrib]
 
 ## Changelog
 
+v1.2.1
+
+*	fix overly zealous completion dialog from popping up when total items is zero.
+
 v1.2.0
 
 *	reordered items on action bar
