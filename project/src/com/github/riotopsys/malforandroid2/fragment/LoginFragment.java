@@ -38,7 +38,7 @@ import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.event.CredentialVerificationEvent;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
-import com.github.riotopsys.malforandroid2.server.background_tasks.VerifyCredentialsTask;
+import com.github.riotopsys.malforandroid2.server.tasks.VerifyCredentialsTask;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 

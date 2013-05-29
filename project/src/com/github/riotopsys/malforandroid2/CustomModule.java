@@ -26,9 +26,14 @@ import retrofit.converter.GsonConverter;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
-import com.github.riotopsys.malforandroid2.server.background_tasks.VerifyCredentialsTask;
-import com.github.riotopsys.malforandroid2.server.background_tasks.provider.VerifyCredentialsTaskProvider;
+import com.github.riotopsys.malforandroid2.server.provider.AnimeUpdateTaskProvider;
+import com.github.riotopsys.malforandroid2.server.provider.MangaUpdateTaskProvider;
+import com.github.riotopsys.malforandroid2.server.provider.VerifyCredentialsTaskProvider;
 import com.github.riotopsys.malforandroid2.server.retrofit.AnimeInterconnect;
+import com.github.riotopsys.malforandroid2.server.retrofit.MangaInterconnect;
+import com.github.riotopsys.malforandroid2.server.tasks.AnimeUpdateTask;
+import com.github.riotopsys.malforandroid2.server.tasks.MangaUpdateTask;
+import com.github.riotopsys.malforandroid2.server.tasks.VerifyCredentialsTask;
 import com.github.riotopsys.malforandroid2.util.AnimeWatchedStatusTypeAdapter;
 import com.github.riotopsys.malforandroid2.util.MangaReadStatusTypeAdapter;
 import com.github.riotopsys.malforandroid2.util.RecordTitleComparator;
@@ -48,6 +53,8 @@ public class CustomModule extends AbstractModule {
 	protected void configure() {
 		bind(new TypeLiteral<Comparator<BaseRecord>>(){}).to(RecordTitleComparator.class);
 		bind(VerifyCredentialsTask.class).toProvider(VerifyCredentialsTaskProvider.class);
+		bind(AnimeUpdateTask.class).toProvider(AnimeUpdateTaskProvider.class);
+		bind(MangaUpdateTask.class).toProvider(MangaUpdateTaskProvider.class);
 	}
 
 	@Provides
@@ -77,12 +84,23 @@ public class CustomModule extends AbstractModule {
 	
 	@Provides
 	public AnimeInterconnect provideAnimeInterconnect(){
-		RestAdapter restAdapter = new RestAdapter.Builder()
-			.setServer("http://mal-api.com")
-			.setConverter(new GsonConverter(provideGson())).build();
+		RestAdapter restAdapter = provideRestAdapter();
 		return restAdapter.create(AnimeInterconnect.class);
 	}
 	
+	@Provides
+	public MangaInterconnect provideMangaInterconnect(){
+		RestAdapter restAdapter = provideRestAdapter();
+		return restAdapter.create(MangaInterconnect.class);
+	}
+	
+	private RestAdapter provideRestAdapter() {
+		return new RestAdapter.Builder()
+			.setServer("http://mal-api.com")
+			.setConverter(new GsonConverter(provideGson()))
+			.build();
+	}
+
 	@Provides
 	@Singleton
 	public Executor provideExecutor(){

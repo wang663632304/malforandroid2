@@ -54,7 +54,6 @@ import android.widget.TextView;
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.activity.BaseActivity;
 import com.github.riotopsys.malforandroid2.database.AnimeDBDeleteTask;
-import com.github.riotopsys.malforandroid2.database.AnimeDBUpdateTask;
 import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
 import com.github.riotopsys.malforandroid2.event.MangaChangeDetailViewRequest;
@@ -65,7 +64,9 @@ import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.MangaCrossReferance;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
+import com.github.riotopsys.malforandroid2.server.tasks.AnimeUpdateTask;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
@@ -184,6 +185,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@Inject
 	private EventBus bus;
+	
+	@Inject
+	private Provider<AnimeUpdateTask> animeUpdateTaskProvider;
 
 	private int idToDisplay;
 
@@ -428,14 +432,12 @@ public class AnimeDetailFragment extends RoboFragment implements
 			return;
 		}
 		
-		BaseActivity ba = (BaseActivity)getActivity();
-		
 		switch ( adapter.getId() ){
 		case R.id.anime_watched_status:
 			AnimeWatchedStatus newStatus = AnimeWatchedStatus.values()[position];
 			if ( activeRecord.watched_status != null && activeRecord.watched_status != newStatus ){
 				activeRecord.watched_status = AnimeWatchedStatus.values()[position];
-				new AnimeDBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
+				animeUpdateTaskProvider.get().setRecord(activeRecord).start();
 			}
 			break;
 		case R.id.anime_score_status:
@@ -449,7 +451,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			}
 			if ( activeRecord.score != newScore ){
 				activeRecord.score = newScore;
-				new AnimeDBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
+				animeUpdateTaskProvider.get().setRecord(activeRecord).start();
 			}
 			break;
 		}
@@ -460,8 +462,6 @@ public class AnimeDetailFragment extends RoboFragment implements
 
 	@Override
 	public void onClick(View v) {
-		BaseActivity ba = (BaseActivity) getActivity();
-		
 		switch (v.getId()) {
 		case R.id.plus_one:
 			activeRecord.watched_episodes++;
@@ -469,8 +469,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 				activeRecord.watched_episodes = activeRecord.episodes;
 				// save
 			}
-			new AnimeDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
-				.execute(activeRecord);
+			animeUpdateTaskProvider.get().setRecord(activeRecord).start();
 			checkComplete();
 			break;
 		case R.id.watched_panel:
@@ -489,9 +488,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			break;
 		case R.id.add_button:
 			activeRecord.watched_status = AnimeWatchedStatus.values()[addSpinner.getSelectedItemPosition()];
-
-			new AnimeDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus, true)
-					.execute(activeRecord);
+			//TODO: add task needed
 			break;
 		case R.id.prequel:
 			createAnimePickerDialog( activeRecord.prequels ).show();
@@ -558,8 +555,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 		if ( activeRecord.watched_episodes != value ){
 			activeRecord.watched_episodes = value;
 			//save
-			BaseActivity ba = (BaseActivity)getActivity();
-			new AnimeDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+			animeUpdateTaskProvider.get().setRecord(activeRecord).start();
 			checkComplete();
 		}
 	}
@@ -574,8 +570,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					activeRecord.watched_status = AnimeWatchedStatus.COMPLETED;
-					BaseActivity ba = (BaseActivity)getActivity();
-					new AnimeDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+					animeUpdateTaskProvider.get().setRecord(activeRecord).start();
 				}
 			})
 			.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

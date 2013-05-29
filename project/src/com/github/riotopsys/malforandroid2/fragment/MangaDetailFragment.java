@@ -54,7 +54,6 @@ import android.widget.TextView;
 import com.github.riotopsys.malforandroid2.R;
 import com.github.riotopsys.malforandroid2.activity.BaseActivity;
 import com.github.riotopsys.malforandroid2.database.MangaDBDeleteTask;
-import com.github.riotopsys.malforandroid2.database.MangaDBUpdateTask;
 import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.event.MangaChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.event.MangaUpdateEvent;
@@ -65,7 +64,9 @@ import com.github.riotopsys.malforandroid2.model.MangaCrossReferance;
 import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
 import com.github.riotopsys.malforandroid2.model.MangaRecord;
 import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
+import com.github.riotopsys.malforandroid2.server.tasks.MangaUpdateTask;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
@@ -175,6 +176,9 @@ public class MangaDetailFragment extends RoboFragment implements
 
 	@Inject
 	private EventBus bus;
+	
+	@Inject
+	private Provider<MangaUpdateTask> mangaUpdateTaskProvider;
 
 	private int idToDisplay;
 
@@ -189,8 +193,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			if ( activeRecord.chapters_read != value ){
 				activeRecord.chapters_read = value;
 				//save
-				BaseActivity ba = (BaseActivity)getActivity();
-				new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+				mangaUpdateTaskProvider.get().setRecord(activeRecord).start();
 				checkComplete();
 			}
 		}
@@ -204,8 +207,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			if ( activeRecord.volumes_read != value ){
 				activeRecord.volumes_read = value;
 				//save
-				BaseActivity ba = (BaseActivity)getActivity();
-				new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+				mangaUpdateTaskProvider.get().setRecord(activeRecord).start();
 				checkComplete();
 			}
 		}
@@ -426,14 +428,12 @@ public class MangaDetailFragment extends RoboFragment implements
 			return;
 		}
 		
-		BaseActivity ba = (BaseActivity)getActivity();
-		
 		switch ( adapter.getId() ){
 		case R.id.manga_read_status:
 			MangaReadStatus newStatus = MangaReadStatus.values()[position];
 			if ( activeRecord.read_status != null && activeRecord.read_status != newStatus ){
 				activeRecord.read_status = MangaReadStatus.values()[position];
-				new MangaDBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
+				mangaUpdateTaskProvider.get().setRecord(activeRecord).start();
 			}
 			break;
 		case R.id.manga_score_status:
@@ -447,7 +447,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			}
 			if ( activeRecord.score != newScore ){
 				activeRecord.score = newScore;
-				new MangaDBUpdateTask( ba.getHelper(),ba.getApplicationContext(), bus ).execute(activeRecord);
+				mangaUpdateTaskProvider.get().setRecord(activeRecord).start();
 			}
 			break;
 		}
@@ -458,8 +458,6 @@ public class MangaDetailFragment extends RoboFragment implements
 
 	@Override
 	public void onClick(View v) {
-		BaseActivity ba = (BaseActivity) getActivity();
-		
 		FragmentManager fm = getActivity().getSupportFragmentManager();
 		
 		switch (v.getId()) {
@@ -469,8 +467,7 @@ public class MangaDetailFragment extends RoboFragment implements
 				activeRecord.chapters_read = activeRecord.chapters;
 				// save
 			}
-			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
-				.execute(activeRecord);
+			mangaUpdateTaskProvider.get().setRecord(activeRecord).start();
 			checkComplete();
 			break;
 		case R.id.plus_one_volume:
@@ -479,8 +476,7 @@ public class MangaDetailFragment extends RoboFragment implements
 				activeRecord.volumes_read = activeRecord.volumes;
 				// save
 			}
-			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus)
-				.execute(activeRecord);
+			mangaUpdateTaskProvider.get().setRecord(activeRecord).start();
 			checkComplete();
 			break;
 		case R.id.chapter_panel:
@@ -511,9 +507,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			
 		case R.id.add_button:
 			activeRecord.read_status = MangaReadStatus.values()[addSpinner.getSelectedItemPosition()];
-
-			new MangaDBUpdateTask(ba.getHelper(), ba.getApplicationContext(), bus, true)
-					.execute(activeRecord);
+			//TODO: add add task
 			break;
 		case R.id.spin_offs:
 			createMangaPickerDialog( activeRecord.related_manga ).show();
@@ -574,8 +568,7 @@ public class MangaDetailFragment extends RoboFragment implements
 					//we can have a mismatch between volumes and chapters so well bash it here
 					activeRecord.chapters_read = activeRecord.chapters;
 					activeRecord.volumes_read = activeRecord.volumes;
-					BaseActivity ba = (BaseActivity)getActivity();
-					new MangaDBUpdateTask( ba.getHelper(), ba.getApplicationContext(), bus ).execute(activeRecord);
+					mangaUpdateTaskProvider.get().setRecord(activeRecord).start();
 				}
 			})
 			.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

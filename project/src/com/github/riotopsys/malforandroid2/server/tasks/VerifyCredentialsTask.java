@@ -1,4 +1,4 @@
-package com.github.riotopsys.malforandroid2.server.background_tasks;
+package com.github.riotopsys.malforandroid2.server.tasks;
 
 import java.net.HttpURLConnection;
 import java.sql.SQLException;
