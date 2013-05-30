@@ -14,8 +14,8 @@ import de.greenrobot.event.EventBus;
 
 public abstract class AbstractBackgroundTask implements Runnable {
 	
-	@Inject 
-	private EventBus bus;
+	@Inject
+	protected EventBus bus;
 	
 	@Inject
 	private Context ctx;

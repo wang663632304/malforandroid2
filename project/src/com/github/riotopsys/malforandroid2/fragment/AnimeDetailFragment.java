@@ -64,6 +64,7 @@ import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.MangaCrossReferance;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
+import com.github.riotopsys.malforandroid2.server.tasks.AnimeAddTask;
 import com.github.riotopsys.malforandroid2.server.tasks.AnimeUpdateTask;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -188,6 +189,9 @@ public class AnimeDetailFragment extends RoboFragment implements
 	
 	@Inject
 	private Provider<AnimeUpdateTask> animeUpdateTaskProvider;
+	
+	@Inject
+	private Provider<AnimeAddTask> animeAddTaskProvider;
 
 	private int idToDisplay;
 
@@ -488,7 +492,7 @@ public class AnimeDetailFragment extends RoboFragment implements
 			break;
 		case R.id.add_button:
 			activeRecord.watched_status = AnimeWatchedStatus.values()[addSpinner.getSelectedItemPosition()];
-			//TODO: add task needed
+			animeAddTaskProvider.get().setRecord(activeRecord).start();
 			break;
 		case R.id.prequel:
 			createAnimePickerDialog( activeRecord.prequels ).show();

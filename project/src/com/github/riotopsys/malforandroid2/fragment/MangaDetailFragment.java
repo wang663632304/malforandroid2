@@ -64,6 +64,7 @@ import com.github.riotopsys.malforandroid2.model.MangaCrossReferance;
 import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
 import com.github.riotopsys.malforandroid2.model.MangaRecord;
 import com.github.riotopsys.malforandroid2.server.MangaServerInterface;
+import com.github.riotopsys.malforandroid2.server.tasks.MangaAddTask;
 import com.github.riotopsys.malforandroid2.server.tasks.MangaUpdateTask;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -179,6 +180,9 @@ public class MangaDetailFragment extends RoboFragment implements
 	
 	@Inject
 	private Provider<MangaUpdateTask> mangaUpdateTaskProvider;
+	
+	@Inject
+	private Provider<MangaAddTask> mangaAddTaskProvider;
 
 	private int idToDisplay;
 
@@ -507,7 +511,7 @@ public class MangaDetailFragment extends RoboFragment implements
 			break;
 		case R.id.add_button:
 			activeRecord.read_status = MangaReadStatus.values()[addSpinner.getSelectedItemPosition()];
-			//TODO: add add task
+			mangaAddTaskProvider.get().setRecord(activeRecord).start();
 			break;
 		case R.id.spin_offs:
 			createMangaPickerDialog( activeRecord.related_manga ).show();

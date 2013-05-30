@@ -14,7 +14,7 @@ import com.github.riotopsys.malforandroid2.server.retrofit.MangaInterconnect;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.Dao;
 
-public class MangaUpdateTask extends AbstractJournalizedTask {
+public class MangaAddTask extends AbstractJournalizedTask {
 	
 	@Inject
 	private MangaInterconnect mangaInterconnect;
@@ -31,7 +31,7 @@ public class MangaUpdateTask extends AbstractJournalizedTask {
 		return (Dao)getHelper().getDao(MangaRecord.class);
 	}
 
-	public MangaUpdateTask setRecord(MangaRecord record){
+	public MangaAddTask setRecord(MangaRecord record){
 		this.record = record;
 		return this;
 	}
@@ -40,10 +40,11 @@ public class MangaUpdateTask extends AbstractJournalizedTask {
 	protected Response doServerSideAction( Dao<BaseJournalEntry, Integer> journalDao) throws SQLException {
 		bus.post(new MangaUpdateEvent(record.id));
 		journalUpdate(journalDao, new MangaJournalEntry(record.id,
-				UpdateType.UPDATED));
+				UpdateType.ADD_TO_LIST));
 		MangaRecord manga = (MangaRecord) record;
-		return mangaInterconnect.update(generateCredentials(), manga.id,
-				manga.read_status.getServerKey(), manga.chapters_read, manga.volumes_read,
-				manga.score);
+		return mangaInterconnect.add(generateCredentials(),
+				manga.id, manga.read_status.getServerKey(),
+				manga.chapters_read, manga.volumes_read, manga.score);
 	}
+	
 }

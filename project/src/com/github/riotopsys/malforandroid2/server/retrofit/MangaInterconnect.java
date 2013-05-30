@@ -46,7 +46,7 @@ public interface MangaInterconnect {
 	public List<AnimeRecord> search(@Query("q") String query);
 
 	@FormUrlEncoded
-	@POST("/mangalist/manga/{id}")
+	@POST("/mangalist/manga")
 	public Response add(
 			@Header("Authorization") String auth,
 			@Field("manga_id") int id, 

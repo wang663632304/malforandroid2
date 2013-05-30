@@ -45,7 +45,7 @@ public interface AnimeInterconnect {
 	public List<AnimeRecord> search(@Query("q") String query);
 
 	@FormUrlEncoded
-	@POST("/animelist/anime/{id}")
+	@POST("/animelist/anime")
 	public Response add(
 			@Header("Authorization") String auth,
 			@Field("anime_id") int id, 

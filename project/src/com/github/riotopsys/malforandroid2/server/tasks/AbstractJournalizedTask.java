@@ -8,14 +8,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.GlobalState;
-import com.github.riotopsys.malforandroid2.event.AnimeUpdateEvent;
-import com.github.riotopsys.malforandroid2.event.MangaUpdateEvent;
-import com.github.riotopsys.malforandroid2.model.AnimeJournalEntry;
-import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.BaseJournalEntry;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
-import com.github.riotopsys.malforandroid2.model.MangaJournalEntry;
-import com.github.riotopsys.malforandroid2.model.MangaRecord;
 import com.github.riotopsys.malforandroid2.model.UpdateType;
 import com.github.riotopsys.malforandroid2.server.retrofit.AnimeInterconnect;
 import com.github.riotopsys.malforandroid2.server.retrofit.MangaInterconnect;
@@ -24,20 +18,19 @@ import com.j256.ormlite.dao.Dao;
 
 import de.greenrobot.event.EventBus;
 
-public abstract class BaseUpdateTask extends AbstractBackgroundTask {
 
-	private static final String TAG = BaseUpdateTask.class.getSimpleName();
-	
-	@Inject
-	private AnimeInterconnect animeInterconnect;
-	
-	@Inject 
-	private MangaInterconnect mangaInterconnect;
+public abstract class AbstractJournalizedTask extends AbstractBackgroundTask {
+
+	private static final String TAG = AbstractJournalizedTask.class.getSimpleName();
+
+//	@Inject 
+//	protected MangaInterconnect mangaInterconnect;
 	
 	protected BaseRecord record;
 	
 	protected abstract Dao<BaseJournalEntry, Integer> getJournalDao() throws SQLException;
 	protected abstract Dao<BaseRecord, Integer> getRecordDao() throws SQLException;
+	protected abstract Response doServerSideAction( Dao<BaseJournalEntry, Integer> journalDao ) throws SQLException;
 	
 	@Override
 	protected void runInBackground(Context ctx, EventBus bus, GlobalState state) {
@@ -47,32 +40,14 @@ public abstract class BaseUpdateTask extends AbstractBackgroundTask {
 
 			dao.update(record);
 
-			Response responce;
-			if (record instanceof AnimeRecord) {
-				bus.post(new AnimeUpdateEvent(record.id));
-				journalUpdate(journalDao, new AnimeJournalEntry(record.id,
-						UpdateType.UPDATED));
-				AnimeRecord anime = (AnimeRecord) record;
-				responce = animeInterconnect.update(generateCredentials(),
-						anime.id, anime.watched_status.getServerKey(),
-						anime.watched_episodes, anime.score);
-			} else {
-				bus.post(new MangaUpdateEvent(record.id));
-				journalUpdate(journalDao, new MangaJournalEntry(record.id,
-						UpdateType.UPDATED));
-				MangaRecord manga = (MangaRecord) record;
-				responce = mangaInterconnect.update(generateCredentials(),
-						manga.id, manga.read_status.getServerKey(),
-						manga.chapters_read, manga.volumes_read, manga.score);
-			}
-
+			Response responce = doServerSideAction(journalDao);
+			
 			if (responce.getStatus() == HttpURLConnection.HTTP_OK) {
 				journalDao.deleteById(record.id);
 			}
 		} catch (SQLException e) {
 			Log.e(TAG, "", e);
 		}
-
 	}
 	
 	protected void journalUpdate(Dao<BaseJournalEntry, Integer> journalDao, BaseJournalEntry journalEntry) throws SQLException {

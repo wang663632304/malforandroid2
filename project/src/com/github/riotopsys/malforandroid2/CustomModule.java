@@ -26,12 +26,16 @@ import retrofit.converter.GsonConverter;
 import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
+import com.github.riotopsys.malforandroid2.server.provider.AnimeAddTaskProvider;
 import com.github.riotopsys.malforandroid2.server.provider.AnimeUpdateTaskProvider;
+import com.github.riotopsys.malforandroid2.server.provider.MangaAddTaskProvider;
 import com.github.riotopsys.malforandroid2.server.provider.MangaUpdateTaskProvider;
 import com.github.riotopsys.malforandroid2.server.provider.VerifyCredentialsTaskProvider;
 import com.github.riotopsys.malforandroid2.server.retrofit.AnimeInterconnect;
 import com.github.riotopsys.malforandroid2.server.retrofit.MangaInterconnect;
+import com.github.riotopsys.malforandroid2.server.tasks.AnimeAddTask;
 import com.github.riotopsys.malforandroid2.server.tasks.AnimeUpdateTask;
+import com.github.riotopsys.malforandroid2.server.tasks.MangaAddTask;
 import com.github.riotopsys.malforandroid2.server.tasks.MangaUpdateTask;
 import com.github.riotopsys.malforandroid2.server.tasks.VerifyCredentialsTask;
 import com.github.riotopsys.malforandroid2.util.AnimeWatchedStatusTypeAdapter;
@@ -54,7 +58,9 @@ public class CustomModule extends AbstractModule {
 		bind(new TypeLiteral<Comparator<BaseRecord>>(){}).to(RecordTitleComparator.class);
 		bind(VerifyCredentialsTask.class).toProvider(VerifyCredentialsTaskProvider.class);
 		bind(AnimeUpdateTask.class).toProvider(AnimeUpdateTaskProvider.class);
+		bind(AnimeAddTask.class).toProvider(AnimeAddTaskProvider.class);
 		bind(MangaUpdateTask.class).toProvider(MangaUpdateTaskProvider.class);
+		bind(MangaAddTask.class).toProvider(MangaAddTaskProvider.class);
 	}
 
 	@Provides

@@ -14,7 +14,7 @@ import com.github.riotopsys.malforandroid2.server.retrofit.AnimeInterconnect;
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.Dao;
 
-public class AnimeUpdateTask extends AbstractJournalizedTask {
+public class AnimeAddTask extends AbstractJournalizedTask {
 
 	@Inject
 	private AnimeInterconnect animeInterconnect;
@@ -32,7 +32,7 @@ public class AnimeUpdateTask extends AbstractJournalizedTask {
 		return (Dao)getHelper().getDao(AnimeRecord.class);
 	}
 
-	public AnimeUpdateTask setRecord(AnimeRecord record) {
+	public AnimeAddTask setRecord(AnimeRecord record) {
 		this.record = record;
 		return this;
 	}
@@ -41,9 +41,9 @@ public class AnimeUpdateTask extends AbstractJournalizedTask {
 	protected Response doServerSideAction( Dao<BaseJournalEntry, Integer> journalDao) throws SQLException {
 		bus.post(new AnimeUpdateEvent(record.id));
 		journalUpdate(journalDao, new AnimeJournalEntry(record.id,
-				UpdateType.UPDATED));
+				UpdateType.ADD_TO_LIST));
 		AnimeRecord anime = (AnimeRecord) record;
-		return animeInterconnect.update(generateCredentials(), anime.id,
+		return animeInterconnect.add(generateCredentials(), anime.id,
 				anime.watched_status.getServerKey(), anime.watched_episodes,
 				anime.score);
 	}
