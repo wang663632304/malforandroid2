@@ -29,7 +29,11 @@ public class UrlBuilder {
 	}
 
 	public URL getAnimeListUrl(String username) throws MalformedURLException {
-		return new URL( String.format("%s/animelist/%s", baseUrl, username));
+		return new URL( String.format("http://myanimelist.net/malappinfo.php?u=%s&status=all&type=anime", username));
+	}
+	
+	public URL getMangaListUrl(String username) throws MalformedURLException {
+		return new URL( String.format("http://myanimelist.net/malappinfo.php?u=%s&status=all&type=manga", username));
 	}
 
 	//same structure required for delete
@@ -63,10 +67,6 @@ public class UrlBuilder {
 
 	public URL getMangaRecordUrl(int id) throws MalformedURLException {
 		return new URL( String.format("%s/manga/%d?mine=1", baseUrl, id));
-	}
-
-	public URL getMangaListUrl(String user) throws MalformedURLException {
-		return new URL( String.format("%s/mangalist/%s", baseUrl, user));
 	}
 
 	public URL getMangaSearchUrl(String criteria) throws MalformedURLException, UnsupportedEncodingException {

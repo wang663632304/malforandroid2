@@ -88,6 +88,8 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 	@Inject
 	private GlobalState state;
 	
+	private DatabaseHelper databaseHelper = null;
+	
 	protected abstract Class<?> getRecordClass();
 	protected abstract Dao<BaseRecord, Integer> getRecordDao() throws SQLException;
 	protected abstract Dao<BaseJournalEntry, Integer> getJournalDao() throws SQLException;
@@ -103,8 +105,6 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 	public void onCreate() {
 		super.onCreate();
 	}
-
-	private DatabaseHelper databaseHelper = null;
 
 	@Override
 	public void onDestroy() {
@@ -332,19 +332,19 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 		Log.v(TAG, String.format("getList: journal size before, %d ",  journalDao.countOf()));
 		//push outstanding journal entries to server
 		List<BaseJournalEntry> journal = journalDao.queryForAll();
-		for( BaseJournalEntry je : journal ){
-			switch (je.updateType) {
-			case ADD_TO_LIST:
-				addRecord(je.recordId);
-				break;
-			case DELETE_FROM_LIST:
-				removeRecord(je.recordId);
-				break;
-			case UPDATED:
-				updateRecord(je.recordId);
-				break;
-			}
-		}
+//		for( BaseJournalEntry je : journal ){
+//			switch (je.updateType) {
+//			case ADD_TO_LIST:
+//				addRecord(je.recordId);
+//				break;
+//			case DELETE_FROM_LIST:
+//				removeRecord(je.recordId);
+//				break;
+//			case UPDATED:
+//				updateRecord(je.recordId);
+//				break;
+//			}
+//		}
 		Log.v(TAG, String.format("getList: journal size after, %d ",  journalDao.countOf()));
 		
 		URL url;
@@ -359,6 +359,7 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 		
 		//get list from server
 		RestResult<String> result = restHelper.get(url);
+		
 		if (result.code == 200) {
 
 			@SuppressWarnings("unchecked")
@@ -392,14 +393,14 @@ public abstract class AbstractServerInterface extends RoboIntentService {
 			}
 			
 			//any items still in deletedIds need to be cleared
-			for ( int id : deletedIds){
-				BaseRecord arOriginal = dao.queryForId(id);
-				removeFromList(arOriginal);
-				
-				dao.createOrUpdate(arOriginal);
-				journalDao.deleteById(id);
-				sendUpdateEvent(id);
-			}
+//			for ( int id : deletedIds){
+//				BaseRecord arOriginal = dao.queryForId(id);
+//				removeFromList(arOriginal);
+//				
+//				dao.createOrUpdate(arOriginal);
+//				journalDao.deleteById(id);
+//				sendUpdateEvent(id);
+//			}
 		}
 		
 		state.setBusy(getRecordClass(), false);

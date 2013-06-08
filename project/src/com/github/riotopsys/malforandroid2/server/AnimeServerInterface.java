@@ -17,19 +17,23 @@
 package com.github.riotopsys.malforandroid2.server;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONObject;
+import org.json.XML;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.github.riotopsys.malforandroid2.model.AnimeJournalEntry;
-import com.github.riotopsys.malforandroid2.model.AnimeListResponse;
 import com.github.riotopsys.malforandroid2.model.AnimeRecord;
 import com.github.riotopsys.malforandroid2.model.BaseRecord;
 import com.j256.ormlite.dao.Dao;
 
 public class AnimeServerInterface extends AbstractServerInterface {
-
+	
 	@Override
 	protected Class<?> getRecordClass() {
 		return AnimeRecord.class;
@@ -49,7 +53,17 @@ public class AnimeServerInterface extends AbstractServerInterface {
 
 	@Override
 	protected List<?> processListResponse(String raw) {
-		return gson.fromJson(raw, AnimeListResponse.class).anime;
+		try {
+			
+			String s = XML.toJSONObject(raw).toString();
+			
+			Log.i("bob", s);
+			
+			List<AnimeRecord> result = new ArrayList<AnimeRecord>();
+			return result;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
