@@ -37,16 +37,21 @@ import android.widget.SearchView.OnQueryTextListener;
 
 import com.github.riotopsys.malforandroid2.GlobalState;
 import com.github.riotopsys.malforandroid2.R;
-import com.github.riotopsys.malforandroid2.adapter.AnimePagerAdapter;
-import com.github.riotopsys.malforandroid2.adapter.MangaPagerAdapter;
+import com.github.riotopsys.malforandroid2.adapter.DynamicPagerAdapter;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs;
 import com.github.riotopsys.malforandroid2.database.ReadNameValuePairs.Callback;
 import com.github.riotopsys.malforandroid2.event.AnimeChangeDetailViewRequest;
 import com.github.riotopsys.malforandroid2.event.ListRetreivalStatusEvent;
 import com.github.riotopsys.malforandroid2.fragment.AnimeDetailFragment;
+import com.github.riotopsys.malforandroid2.fragment.AnimeListFragment;
+import com.github.riotopsys.malforandroid2.fragment.AnimeSearchListFragment;
 import com.github.riotopsys.malforandroid2.fragment.LoginFragment;
 import com.github.riotopsys.malforandroid2.fragment.MangaDetailFragment;
+import com.github.riotopsys.malforandroid2.fragment.MangaListFragment;
+import com.github.riotopsys.malforandroid2.fragment.MangaSearchListFragment;
 import com.github.riotopsys.malforandroid2.fragment.PlacardFragment;
+import com.github.riotopsys.malforandroid2.model.AnimeWatchedStatus;
+import com.github.riotopsys.malforandroid2.model.MangaReadStatus;
 import com.github.riotopsys.malforandroid2.model.NameValuePair;
 import com.github.riotopsys.malforandroid2.server.AnimeServerInterface;
 import com.github.riotopsys.malforandroid2.server.BootReciever;
@@ -70,10 +75,10 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	private ViewPager mangaListPager;
 
 	@Inject
-	private AnimePagerAdapter animeAdapter;
+	private DynamicPagerAdapter animeAdapter;
 	
 	@Inject
-	private MangaPagerAdapter mangaAdapter;
+	private DynamicPagerAdapter mangaAdapter;
 	
 	@Inject 
 	private GlobalState state;
@@ -107,12 +112,8 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	            this
 	            );
 
-		animeListPager.setAdapter(animeAdapter);
-		animeListPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
-		
-		mangaListPager.setAdapter(mangaAdapter);
-		mangaListPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
-		
+		setupAnimeAdapter();
+		setupMangaAdapter();
 		
 		new ReadNameValuePairs(getHelper(), this).execute("USER","PASS");
 		
@@ -132,17 +133,57 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 		apprater.onAppOpened(this);
 	}
 	
+	private void setupMangaAdapter() {
+		mangaListPager.setAdapter(mangaAdapter);
+		mangaListPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
+		for( MangaReadStatus filter : MangaReadStatus.values() ){
+			Log.i(TAG, filter.getServerKey());
+			Bundle args = new Bundle();
+			args.putSerializable("filter", filter );
+			Fragment f = new MangaListFragment();
+			f.setArguments(args);
+			mangaAdapter.addFragment(getString(filter.getResource()), f);
+		}
+		Bundle args = new Bundle();
+		args.putSerializable("filter", null );
+		Fragment f = new MangaListFragment();
+		f.setArguments(args);
+		mangaAdapter.addFragment(getString(R.string.all), f);
+		
+		if (!state.getMangaSearchResults().isEmpty()){
+			mangaAdapter.addFragment(getString(R.string.search),new MangaSearchListFragment());
+		}
+	}
+
+	private void setupAnimeAdapter() {
+		animeListPager.setAdapter(animeAdapter);
+		animeListPager.setPageMargin(getResources().getDimensionPixelSize(R.dimen.standard_padding));
+		for( AnimeWatchedStatus filter : AnimeWatchedStatus.values() ){
+			Log.i(TAG, filter.getServerKey());
+			Bundle args = new Bundle();
+			args.putSerializable("filter", filter );
+			Fragment f = new AnimeListFragment();
+			f.setArguments(args);
+			animeAdapter.addFragment(getString(filter.getResource()), f);
+		}
+		Bundle args = new Bundle();
+		args.putSerializable("filter", null );
+		Fragment f = new AnimeListFragment();
+		f.setArguments(args);
+		animeAdapter.addFragment(getString(R.string.all), f);
+		
+		if (!state.getAnimeSearchResults().isEmpty()){
+			animeAdapter.addFragment(getString(R.string.search),new AnimeSearchListFragment());
+		}
+		
+	}
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		
 		outState.putInt("MODE", getActionBar().getSelectedNavigationIndex());
 		
 		super.onSaveInstanceState(outState);
-	}
-	
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		return super.onMenuItemSelected(featureId, item);
 	}
 
 	@Override
@@ -193,12 +234,25 @@ public class HubActivity extends BaseDetailActivity implements Callback, OnQuery
 	@Override
 	public boolean onQueryTextSubmit(String query) {
 		searchItem.collapseActionView();
+		String searchTtile = getString(R.string.search);
 		if ( getActionBar().getSelectedNavigationIndex() == ANIME_POSITION ){
+			state.setAnimeSearchResults(null);
 			AnimeServerInterface.searchAnime(this, query);
-			animeListPager.setCurrentItem(animeAdapter.getCount()-1,true);
+			int position = animeAdapter.getPosition(searchTtile);
+			if ( position == -1 ){
+				animeAdapter.addFragment(searchTtile,new AnimeSearchListFragment());
+				position = animeAdapter.getPosition(searchTtile);
+			}
+			animeListPager.setCurrentItem(position, true);
 		} else {
+			state.setMangaSearchResults(null);
 			MangaServerInterface.searchManga(this, query);
-			mangaListPager.setCurrentItem(mangaAdapter.getCount()-1,true);
+			int position = mangaAdapter.getPosition(searchTtile);
+			if ( position == -1 ){
+				mangaAdapter.addFragment(searchTtile,new MangaSearchListFragment());
+				position = mangaAdapter.getPosition(searchTtile);
+			}
+			mangaListPager.setCurrentItem(position, true);
 		}
 		return true;
 	}
